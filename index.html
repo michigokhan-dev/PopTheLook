@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pop-The-Look | Women's Fashion</title>
+  <meta name="description" content="Discover timeless women's fashion at Pop-The-Look.">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: #29251f;
+      background: #faf8f4;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 7%;
+      border-bottom: 1px solid #e8e1d7;
+    }
+
+    .logo {
+      font-family: Georgia, serif;
+      font-size: 25px;
+      letter-spacing: -1px;
+    }
+
+    nav { display: flex; gap: 24px; }
+
+    nav a {
+      color: #29251f;
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .hero {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      padding: 8%;
+      background:
+        linear-gradient(90deg, #e9dfd1 0%, #e9dfd1cc 48%, transparent 100%),
+        url("https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1800&q=85")
+        center 35% / cover;
+    }
+
+    .hero-content { max-width: 420px; }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(44px, 7vw, 76px);
+      font-weight: normal;
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .button {
+      display: inline-block;
+      background: #29251f;
+      color: white;
+      padding: 16px 27px;
+      text-decoration: none;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+    }
+
+    .collection {
+      padding: 70px 7%;
+      text-align: center;
+    }
+
+    .collection h2 {
+      font-family: Georgia, serif;
+      font-size: 36px;
+      font-weight: normal;
+      margin-bottom: 12px;
+    }
+
+    .collection p {
+      color: #777067;
+      font-size: 14px;
+    }
+
+    footer {
+      padding: 28px;
+      text-align: center;
+      border-top: 1px solid #e8e1d7;
+      font-size: 12px;
+      color: #777067;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 20px 5%; }
+      .logo { font-size: 21px; }
+      nav { gap: 12px; }
+      nav a { font-size: 11px; }
+      .hero {
+        min-height: 70vh;
+        background-position: 60% center;
+      }
+      .hero-content { max-width: 290px; }
+      .collection { padding: 55px 5%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Pop-The-Look.</div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#shop">Shop</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <div class="eyebrow">The new collection</div>
+        <h1>Style that<br>speaks softly.</h1>
+        <p>Timeless pieces. Effortless elegance. Discover your next favourite look.</p>
+        <a class="button" href="#shop">EXPLORE THE COLLECTION</a>
+      </div>
+    </section>
+
+    <section class="collection" id="shop">
+      <h2>Curated for you</h2>
+      <p>Beautiful everyday essentials are coming soon.</p>
+    </section>
+  </main>
+
+  <footer id="about">
+    © 2026 Pop-The-Look. All rights reserved.
+  </footer>
+</body>
+</html>
