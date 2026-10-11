@@ -2,151 +2,392 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pop The Look | Women's Fashion</title>
-  <meta name="description" content="Discover timeless women's fashion at Pop The Look">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f0e7">
+  <meta name="description" content="Discover timeless women's fashion at POP THE LOOK.">
+  <title>POP THE LOOK | Women's Fashion</title>
 
-    body {
-      font-family: Arial, sans-serif;
-      color: #29251f;
-      background: #faf8f4;
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --cream: #f5f0e7;
+      --ink: #211e19;
+      --muted: #796b58;
+      --line: #ded5c7;
     }
 
-    header {
-      display: flex;
-      justify-content: space-between;
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: "DM Sans", Arial, sans-serif;
+    }
+
+    a { color: inherit; }
+
+    /* HEADER */
+    .header {
+      height: 92px;
+      padding: 0 5%;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
-      padding: 24px 7%;
-      border-bottom: 1px solid #e8e1d7;
+      gap: 30px;
+      background: var(--cream);
+      border-bottom: 1px solid rgba(33,30,25,.08);
+      position: relative;
+      z-index: 2;
     }
 
     .logo {
-      font-family: Georgia, serif;
-      font-size: 25px;
-      letter-spacing: -1px;
-    }
-
-    nav { display: flex; gap: 24px; }
-
-    nav a {
-      color: #29251f;
+      justify-self: start;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(25px, 3vw, 43px);
+      font-weight: 800;
+      letter-spacing: -1.7px;
+      line-height: 1;
       text-decoration: none;
-      font-size: 13px;
+      white-space: nowrap;
     }
 
-    .hero {
-      min-height: 75vh;
+    .navigation {
+      height: 100%;
       display: flex;
       align-items: center;
-      padding: 8%;
-      background:
-        linear-gradient(90deg, #e9dfd1 0%, #e9dfd1cc 48%, transparent 100%),
-        url("https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=1800&q=85")
-        center 35% / cover;
+      justify-content: center;
+      gap: clamp(28px, 5vw, 66px);
     }
 
-    .hero-content { max-width: 420px; }
+    .navigation a {
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      border-bottom: 2px solid transparent;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .navigation a.active,
+    .navigation a:hover {
+      border-bottom-color: var(--ink);
+    }
+
+    .header-actions {
+      justify-self: end;
+      display: flex;
+      align-items: center;
+      gap: clamp(16px, 2vw, 27px);
+    }
+
+    .icon-button {
+      width: 25px;
+      height: 35px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+    }
+
+    .icon-button svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      stroke-width: 1.65;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -1px;
+      right: -11px;
+      width: 18px;
+      height: 18px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--ink);
+      color: white;
+      font: 10px Arial, sans-serif;
+    }
+
+    /* HERO */
+    .hero {
+      min-height: min(720px, calc(100svh - 92px));
+      display: flex;
+      align-items: center;
+      padding: 65px 7.2%;
+      background-color: #dfcdb3;
+      background-image:
+        linear-gradient(
+          90deg,
+          rgba(226, 211, 190, .94) 0%,
+          rgba(226, 211, 190, .86) 31%,
+          rgba(226, 211, 190, .50) 43%,
+          rgba(226, 211, 190, 0) 66%
+        ),
+        url("hero.jpg");
+      background-position: center, center 35%;
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 570px;
+    }
 
     .eyebrow {
-      font-size: 11px;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 17px;
+      margin-bottom: 29px;
+      color: #796b58;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 4px;
     }
 
-    h1 {
-      font-family: Georgia, serif;
-      font-size: clamp(44px, 7vw, 76px);
-      font-weight: normal;
-      line-height: 1.05;
-      margin-bottom: 20px;
+    .eyebrow::after {
+      content: "";
+      display: block;
+      width: 65px;
+      height: 1px;
+      background: #95836c;
     }
 
-    .hero p {
-      font-size: 15px;
-      line-height: 1.8;
-      margin-bottom: 30px;
+    .hero h1 {
+      margin: 0 0 24px;
+      font-family: "Playfair Display", Georgia, serif;
+      font-size: clamp(56px, 6.2vw, 82px);
+      font-weight: 600;
+      line-height: 1.06;
+      letter-spacing: -2.7px;
     }
 
-    .button {
-      display: inline-block;
-      background: #29251f;
+    .hero-description {
+      margin: 0 0 32px;
+      font-size: clamp(16px, 1.5vw, 20px);
+      line-height: 1.6;
+    }
+
+    .hero-cta {
+      min-height: 51px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 17px;
+      padding: 0 28px;
+      background: var(--ink);
       color: white;
-      padding: 16px 27px;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 1.1px;
       text-decoration: none;
-      font-size: 11px;
-      letter-spacing: 1.5px;
+      transition: background .2s;
     }
 
-    .collection {
-      padding: 70px 7%;
+    .hero-cta:hover { background: #514537; }
+
+    .hero-cta svg {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    /* BELOW THE HERO */
+    .intro {
+      padding: 76px 20px;
       text-align: center;
     }
 
-    .collection h2 {
-      font-family: Georgia, serif;
-      font-size: 36px;
-      font-weight: normal;
-      margin-bottom: 12px;
+    .intro-label {
+      margin: 0 0 13px;
+      font-size: 11px;
+      letter-spacing: 3px;
     }
 
-    .collection p {
-      color: #777067;
-      font-size: 14px;
+    .intro h2 {
+      margin: 0;
+      font: 600 clamp(28px, 4vw, 40px) "Playfair Display", Georgia, serif;
     }
 
     footer {
-      padding: 28px;
+      padding: 25px 20px;
+      border-top: 1px solid var(--line);
       text-align: center;
-      border-top: 1px solid #e8e1d7;
       font-size: 12px;
-      color: #777067;
     }
 
-    @media (max-width: 600px) {
-      header { padding: 20px 5%; }
-      .logo { font-size: 40px; }
-      nav { gap: 12px; }
-      nav a { font-size: 11px; }
-      .hero {
-        min-height: 70vh;
-        background-position: 60% center;
+    /* MOBILE */
+    @media (max-width: 700px) {
+      .header {
+        height: auto;
+        min-height: 91px;
+        padding: 17px 5% 0;
+        grid-template-columns: minmax(0, 1fr) auto;
+        column-gap: 13px;
+        row-gap: 12px;
       }
-      .hero-content { max-width: 290px; }
-      .collection { padding: 55px 5%; }
+
+      .logo {
+        font-size: clamp(23px, 6vw, 30px);
+        letter-spacing: -1.2px;
+      }
+
+      .header-actions { gap: 17px; }
+
+      .icon-button,
+      .icon-button svg {
+        width: 22px;
+        height: 26px;
+      }
+
+      .navigation {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        height: 46px;
+        gap: clamp(35px, 10vw, 55px);
+      }
+
+      .navigation a { font-size: 14px; }
+
+      .hero {
+        min-height: 690px;
+        min-height: calc(100svh - 137px);
+        padding: 45px 6% 48px;
+        align-items: flex-end;
+        background-image:
+          linear-gradient(
+            0deg,
+            rgba(226, 211, 190, .97) 0%,
+            rgba(226, 211, 190, .88) 36%,
+            rgba(226, 211, 190, .12) 75%
+          ),
+          url("hero.jpg");
+        background-position: center, 58% center;
+      }
+
+      .hero-content { max-width: 100%; }
+
+      .eyebrow {
+        margin-bottom: 20px;
+        font-size: 10px;
+        letter-spacing: 3px;
+        gap: 12px;
+      }
+
+      .eyebrow::after { width: 46px; }
+
+      .hero h1 {
+        font-size: clamp(47px, 11vw, 66px);
+        letter-spacing: -1.8px;
+        margin-bottom: 20px;
+      }
+
+      .hero-description {
+        font-size: 15px;
+        margin-bottom: 27px;
+      }
+
+      .hero-cta {
+        min-height: 49px;
+        padding: 0 17px;
+        gap: 12px;
+        font-size: 10px;
+      }
+
+      .intro { padding: 55px 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">POP THE LOOK </div>
-    <nav>
-      <a href="#home">Home</a>
+  <header class="header">
+    <a class="logo" href="#home">POP THE LOOK</a>
+
+    <nav class="navigation" aria-label="Main navigation">
+      <a class="active" href="#home">Home</a>
       <a href="#shop">Shop</a>
       <a href="#about">About</a>
     </nav>
+
+    <div class="header-actions">
+      <a class="icon-button" href="#shop" aria-label="Search products">
+        <svg viewBox="0 0 24 24">
+          <circle cx="10.8" cy="10.8" r="7.2"/>
+          <path d="m16 16 5 5"/>
+        </svg>
+      </a>
+
+      <a class="icon-button" href="#account" aria-label="Account">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="7.5" r="3.5"/>
+          <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+        </svg>
+      </a>
+
+      <a class="icon-button" href="#cart" aria-label="Shopping cart">
+        <svg viewBox="0 0 24 24">
+          <path d="M4 8h16l-1 13H5L4 8Z"/>
+          <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+        </svg>
+        <span class="cart-count">0</span>
+      </a>
+    </div>
   </header>
 
   <main>
     <section class="hero" id="home">
       <div class="hero-content">
-        <div class="eyebrow">The new collection</div>
+        <div class="eyebrow">THE NEW COLLECTION</div>
+
         <h1>Style that<br>speaks softly.</h1>
-        <p>Timeless pieces. Effortless elegance. Discover your next favourite look.</p>
-        <a class="button" href="#shop">EXPLORE THE COLLECTION</a>
+
+        <p class="hero-description">
+          Timeless pieces. Effortless elegance.<br>
+          Discover your next favourite look.
+        </p>
+
+        <a class="hero-cta" href="#shop">
+          EXPLORE THE COLLECTION
+          <svg viewBox="0 0 24 24">
+            <path d="M4 12h15M13 5l7 7-7 7"/>
+          </svg>
+        </a>
       </div>
     </section>
 
-    <section class="collection" id="shop">
-      <h2>Curated for you</h2>
-      <p>Beautiful everyday essentials are coming soon.</p>
+    <section class="intro" id="shop">
+      <p class="intro-label">POP THE LOOK</p>
+      <h2>Your wardrobe, reimagined.</h2>
     </section>
-  </main>
 
-  <footer id="about">
-    © 2026 Pop-The-Look. All rights reserved.
-  </footer>
+    <footer id="about">
+      © 2026 POP THE LOOK. All rights reserved.
+    </footer>
+  </main>
 </body>
 </html>
