@@ -87,6 +87,9 @@
       }
     }
     await updateAccountIcon();
+    supabase.auth.onAuthStateChange(() => {
+  updateAccountIcon();
+});
     accountIcon.addEventListener("click", async (event) => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
