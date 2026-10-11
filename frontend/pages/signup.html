@@ -162,11 +162,47 @@ button {
     </div>
     <a class="home" href="../../index.html">← Back to homepage</a>
   </main>
-  <script>
-    document.getElementById("signup-form").addEventListener("submit", function(event) {
-      event.preventDefault();
-      alert("Account creation will be activated when we connect the secure backend.");
+
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const supabase = createClient(
+    "https://imkkafqtlvuzloalcfvk.supabase.co",
+    "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
+  );
+
+  document.getElementById("signup-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = this.querySelector('button[type="submit"]');
+    button.disabled = true;
+    button.textContent = "CREATING ACCOUNT...";
+
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name },
+        emailRedirectTo: "https://michigokhan-dev.github.io/PopTheLook/"
+      }
     });
-  </script>
+
+    if (error) {
+      alert(error.message);
+      button.disabled = false;
+      button.textContent = "CREATE ACCOUNT";
+      return;
+    }
+
+    alert("Please check your email for the confirmation link.");
+    button.disabled = false;
+    button.textContent = "CREATE ACCOUNT";
+  });
+</script>
+
 </body>
 </html>
