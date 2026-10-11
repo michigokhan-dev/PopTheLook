@@ -81,5 +81,21 @@
       © 2026 POP THE LOOK. All rights reserved.
     </footer>
   </main>
+  <script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const supabase = createClient(
+    "https://imkkafqtlvuzloalcfvk.supabase.co",
+    "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
+  );
+
+  const accountLink = document.getElementById("account-link");
+  const { data: { session } } = await supabase.auth.getSession();
+
+  if (session) {
+    accountLink.textContent = "MY ACCOUNT";
+    accountLink.href = "frontend/pages/signin.html";
+  }
+</script>
 </body>
 </html>
