@@ -93,7 +93,6 @@
   const { data: { session } } = await supabase.auth.getSession();
 
   if (session) {
-    accountLink.textContent = "MY ACCOUNT";
     accountLink.href = "frontend/pages/signin.html";
   }
 </script>
