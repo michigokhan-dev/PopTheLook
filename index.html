@@ -92,18 +92,24 @@ supabase.auth.onAuthStateChange(() => {
 updateAccountIcon();
 });
 
-accountIcon.addEventListener(“click”, async (event) => {
-event.preventDefault();
 
-const { error } = await supabase.auth.signOut();
+accountIcon.addEventListener("click", async (event) => {
+  event.preventDefault();
 
-if (error) {
-alert(error.message);
-return;
-}
+  const { data: { session } } = await supabase.auth.getSession();
 
-window.location.href = “frontend/pages/signin.html”;
+  if (session) {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+  }
+
+  window.location.href = "frontend/pages/signin.html";
 });
+
   </script>
 </body>
 </html>
