@@ -111,16 +111,24 @@
         required
       >
       <label for="password">Create password</label>
-      <input
-        id="password"
-        name="password"
-        type="password"
-        autocomplete="new-password"
-        minlength="8"
-        placeholder="At least 8 characters"
-        required
-      >
-      <button type="submit">CREATE ACCOUNT</button>
+<div class="password-wrapper">
+  <input
+    id="password"
+    name="password"
+    type="password"
+    autocomplete="new-password"
+    minlength="8"
+    placeholder="At least 8 characters"
+    required
+  >
+  <button
+    type="button"
+    class="toggle-password"
+    onclick="const p=document.getElementById('password'); p.type=p.type==='password'?'text':'password'; this.textContent=p.type==='password'?'Show':'Hide';"
+  >Show</button>
+</div>
+
+<button type="submit">CREATE ACCOUNT</button>
     </form>
     <div class="signin">
       Already have an account?
