@@ -20,6 +20,7 @@
       <a href="#about">About</a>
     </nav>
     <div class="header-actions">
+      
       <a class="icon-button" href="#shop" aria-label="Search products">
         <svg viewBox="0 0 24 24">
           <circle cx="10.8" cy="10.8" r="7.2"/>
@@ -75,19 +76,17 @@
     const accountIcon = document.getElementById("account-icon");
     async function updateAccountIcon() {
       const { data: { session } } = await supabase.auth.getSession();
-      accountIcon.href = session
-        ? "#signout"
-        : "frontend/pages/signin.html";
-      accountIcon.setAttribute(
-        "aria-label",
-        session ? "Sign out" : "Sign in or create an account"
-      );
-      accountIcon.title = session ? "Sign out" : "Sign in or create an account";
+      if (session) {
+        accountIcon.href = "#signout";
+        accountIcon.setAttribute("aria-label", "Sign out");
+        accountIcon.title = "Sign out";
+      } else {
+        accountIcon.href = "frontend/pages/signin.html";
+        accountIcon.setAttribute("aria-label", "Sign in or create an account");
+        accountIcon.title = "Sign in or create an account";
+      }
     }
     await updateAccountIcon();
-    supabase.auth.onAuthStateChange(() => {
-      updateAccountIcon();
-    });
     accountIcon.addEventListener("click", async (event) => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session) {
