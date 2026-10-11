@@ -284,7 +284,7 @@
             rgba(226, 211, 190, .88) 36%,
             rgba(226, 211, 190, .12) 75%
           ),
-          url("hero.jpg");
+         url("../../hero.jpg");
         background-position: center, 58% center;
       }
 
