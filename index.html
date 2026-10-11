@@ -86,11 +86,13 @@
         accountIcon.title = "Sign in or create an account";
       }
     }
-    await updateAccountIcon();
-    supabase.auth.onAuthStateChange(() => {
-  updateAccountIcon();
+   await updateAccountIcon();
+
+supabase.auth.onAuthStateChange(() => {
+updateAccountIcon();
 });
-   accountIcon.addEventListener(“click”, async (event) => {
+
+accountIcon.addEventListener(“click”, async (event) => {
 event.preventDefault();
 
 const { error } = await supabase.auth.signOut();
