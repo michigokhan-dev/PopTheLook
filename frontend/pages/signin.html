@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In | POP THE LOOK</title>
+  <meta name="description" content="Sign in to your POP THE LOOK customer account.">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #f7f3ed;
+      color: #29251f;
+      font-family: Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .signin {
+      width: 100%;
+      max-width: 430px;
+      background: #fffdf9;
+      padding: 42px;
+      border: 1px solid #e8dfd2;
+    }
+    .brand {
+      text-align: center;
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 3px;
+      margin-bottom: 38px;
+    }
+    h1 {
+      font-family: Georgia, serif;
+      font-weight: 500;
+      text-align: center;
+      font-size: 34px;
+      margin-bottom: 10px;
+    }
+    .intro {
+      text-align: center;
+      color: #777067;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin: 18px 0 8px;
+    }
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d9d0c4;
+      background: white;
+      font-size: 15px;
+    }
+    input:focus {
+      outline: 1px solid #665541;
+      border-color: #665541;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      margin-top: 25px;
+      border: 0;
+      background: #29251f;
+      color: white;
+      font-size: 12px;
+      letter-spacing: 2px;
+      cursor: pointer;
+    }
+    .signup {
+      text-align: center;
+      font-size: 14px;
+      margin-top: 25px;
+      line-height: 1.8;
+    }
+    a { color: inherit; }
+    .home {
+      display: block;
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: #777067;
+    }
+    @media (max-width: 480px) {
+      .signin { padding: 30px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="signin">
+    <div class="brand">POP THE LOOK</div>
+    <h1>Welcome back</h1>
+    <p class="intro">Sign in to your account</p>
+    <form id="signin-form">
+      <label for="email">Email address</label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        placeholder="you@example.com"
+        required
+      >
+      <label for="password">Password</label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Enter your password"
+        required
+      >
+      <button type="submit">SIGN IN</button>
+    </form>
+    <div class="signup">
+      New to POP THE LOOK?<br>
+      <a href="signup.html">Create an account</a>
+    </div>
+    <a class="home" href="../../index.html">← Back to homepage</a>
+  </main>
+  <script>
+    document.getElementById("signin-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      alert("Customer sign-in will be activated when we connect the secure backend.");
+    });
+  </script>
+</body>
+</html>
