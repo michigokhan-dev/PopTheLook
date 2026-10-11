@@ -6,41 +6,32 @@
   <meta name="theme-color" content="#f5f0e7">
   <meta name="description" content="Discover timeless women's fashion at POP THE LOOK.">
   <title>POP THE LOOK | Women's Fashion</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="frontend/styles/style.css">
 </head>
-
 <body>
   <header class="header">
     <a class="logo" href="#home">POP THE LOOK</a>
-
     <nav class="navigation" aria-label="Main navigation">
       <a class="active" href="#home">Home</a>
       <a href="#shop">Shop</a>
       <a href="#about">About</a>
-      <a class="icon-button" id="account-icon" href="frontend/pages/signin.html" aria-label="Sign in or create an account">
     </nav>
-
     <div class="header-actions">
-      
       <a class="icon-button" href="#shop" aria-label="Search products">
         <svg viewBox="0 0 24 24">
           <circle cx="10.8" cy="10.8" r="7.2"/>
           <path d="m16 16 5 5"/>
         </svg>
       </a>
-
-      <a class="icon-button" href="frontend/pages/signin.html" aria-label="Sign in or create an account">
+      <a class="icon-button" id="account-icon" href="frontend/pages/signin.html" aria-label="Sign in or create an account">
         <svg viewBox="0 0 24 24">
           <circle cx="12" cy="7.5" r="3.5"/>
           <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
         </svg>
       </a>
-
       <a class="icon-button" href="#cart" aria-label="Shopping cart">
         <svg viewBox="0 0 24 24">
           <path d="M4 8h16l-1 13H5L4 8Z"/>
@@ -50,19 +41,15 @@
       </a>
     </div>
   </header>
-
   <main>
     <section class="hero" id="home">
       <div class="hero-content">
         <div class="eyebrow">THE NEW COLLECTION</div>
-
         <h1>Style that<br>speaks softly.</h1>
-
         <p class="hero-description">
           Timeless pieces. Effortless elegance.<br>
           Discover your next favourite look.
         </p>
-
         <a class="hero-cta" href="#shop">
           EXPLORE THE COLLECTION
           <svg viewBox="0 0 24 24">
@@ -71,30 +58,48 @@
         </a>
       </div>
     </section>
-
     <section class="intro" id="shop">
       <p class="intro-label">POP THE LOOK</p>
       <h2>Your wardrobe, reimagined.</h2>
     </section>
-
     <footer id="about">
       © 2026 POP THE LOOK. All rights reserved.
     </footer>
   </main>
   <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  const supabase = createClient(
-    "https://imkkafqtlvuzloalcfvk.supabase.co",
-    "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
-  );
-
-  const accountLink = document.getElementById("account-link");
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (session) {
-  accountLink.style.display = "none";
-}
-</script>
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+    const supabase = createClient(
+      "https://imkkafqtlvuzloalcfvk.supabase.co",
+      "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
+    );
+    const accountIcon = document.getElementById("account-icon");
+    async function updateAccountIcon() {
+      const { data: { session } } = await supabase.auth.getSession();
+      accountIcon.href = session
+        ? "#signout"
+        : "frontend/pages/signin.html";
+      accountIcon.setAttribute(
+        "aria-label",
+        session ? "Sign out" : "Sign in or create an account"
+      );
+      accountIcon.title = session ? "Sign out" : "Sign in or create an account";
+    }
+    await updateAccountIcon();
+    supabase.auth.onAuthStateChange(() => {
+      updateAccountIcon();
+    });
+    accountIcon.addEventListener("click", async (event) => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        event.preventDefault();
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          alert(error.message);
+          return;
+        }
+        window.location.href = "frontend/pages/signin.html";
+      }
+    });
+  </script>
 </body>
 </html>
