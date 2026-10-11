@@ -156,11 +156,41 @@
     </div>
     <a class="home" href="../../index.html">← Back to homepage</a>
   </main>
-  <script>
-    document.getElementById("signin-form").addEventListener("submit", function(event) {
-      event.preventDefault();
-      alert("Customer sign-in will be activated when we connect the secure backend.");
+  
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+  const supabase = createClient(
+    "https://imkkafqtlvuzloalcfvk.supabase.co",
+    "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
+  );
+
+  document.getElementById("signin-form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const button = this.querySelector('button[type="submit"]');
+    button.disabled = true;
+    button.textContent = "SIGNING IN...";
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
     });
-  </script>
+
+    if (error) {
+      alert(error.message);
+      button.disabled = false;
+      button.textContent = "SIGN IN";
+      return;
+    }
+
+    alert("You are signed in successfully!");
+    window.location.href = "../../index.html";
+  });
+</script>
+
 </body>
 </html>
