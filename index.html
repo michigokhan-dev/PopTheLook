@@ -67,49 +67,77 @@
       © 2026 POP THE LOOK. All rights reserved.
     </footer>
   </main>
-  <script type="module">
-    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-    const supabase = createClient(
-      "https://imkkafqtlvuzloalcfvk.supabase.co",
-      "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
-    );
-    const accountIcon = document.getElementById("account-icon");
-    async function updateAccountIcon() {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        accountIcon.href = "#signout";
-        accountIcon.setAttribute("aria-label", "Sign out");
-        accountIcon.title = "Sign out";
-      } else {
-        accountIcon.href = "frontend/pages/signin.html";
-        accountIcon.setAttribute("aria-label", "Sign in or create an account");
-        accountIcon.title = "Sign in or create an account";
-      }
-    }
-   await updateAccountIcon();
+  
+<script type="module">
+  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
-supabase.auth.onAuthStateChange(() => {
-updateAccountIcon();
-});
+  const supabase = createClient(
+    "https://imkkafqtlvuzloalcfvk.supabase.co",
+    "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
+  );
 
+  const accountIcon = document.getElementById("account-icon");
 
-accountIcon.addEventListener("click", async (event) => {
-  event.preventDefault();
+  let dropdown = document.getElementById("account-dropdown");
+
+  if (!dropdown) {
+    dropdown = document.createElement("div");
+    dropdown.id = "account-dropdown";
+    dropdown.textContent = "Sign Out";
+    Object.assign(dropdown.style, {
+      display: "none",
+      position: "absolute",
+      right: "0",
+      top: "100%",
+      padding: "12px 18px",
+      background: "#fff",
+      color: "#222",
+      cursor: "pointer",
+      zIndex: "1000",
+      boxShadow: "0 4px 12px #0002"
+    });
+    accountIcon.parentElement.style.position = "relative";
+    accountIcon.parentElement.appendChild(dropdown);
+  }
 
   const { data: { session } } = await supabase.auth.getSession();
 
   if (session) {
+    accountIcon.href = "#";
+    accountIcon.setAttribute("aria-label", "Account menu");
+    dropdown.style.display = "none";
+  }
+
+  accountIcon.addEventListener("click", async (event) => {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    event.preventDefault();
+    dropdown.style.display =
+      dropdown.style.display === "none" ? "block" : "none";
+  });
+
+  dropdown.addEventListener("click", async () => {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
       alert(error.message);
       return;
     }
-  }
 
-  window.location.href = "frontend/pages/signin.html";
-});
+    window.location.href = "frontend/pages/signin.html";
+  });
 
-  </script>
+  supabase.auth.onAuthStateChange((_event, session) => {
+    if (!session) {
+      accountIcon.href = "frontend/pages/signin.html";
+      dropdown.style.display = "none";
+    } else {
+      accountIcon.href = "#";
+    }
+  });
+</script>
+
 </body>
 </html>
