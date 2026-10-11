@@ -324,3 +324,26 @@
       html { scroll-behavior: auto; }
       * { transition: none !important; }
     }
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 65px;
+  box-sizing: border-box;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #6b5b4b;
+  padding: 5px;
+}
+
