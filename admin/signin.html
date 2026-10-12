@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign In | POP THE LOOK</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #f5f0e7;
+      color: #211e19;
+      font-family: Arial, sans-serif;
+    }
+    .signin-card {
+      width: 100%;
+      max-width: 420px;
+      padding: 40px 32px;
+      background: #fffdf9;
+      border: 1px solid #ded5c7;
+      border-radius: 12px;
+    }
+    .brand {
+      margin: 0 0 8px;
+      text-align: center;
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .subtitle {
+      margin: 0 0 32px;
+      color: #796b58;
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 2px;
+    }
+    h2 {
+      margin-bottom: 8px;
+      font-size: 24px;
+    }
+    .intro {
+      margin-bottom: 24px;
+      color: #796b58;
+      font-size: 14px;
+    }
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ded5c7;
+      border-radius: 6px;
+      background: white;
+      font-size: 15px;
+    }
+    .password-box {
+      position: relative;
+    }
+    .password-box input {
+      padding-right: 68px;
+    }
+    .toggle-password {
+      position: absolute;
+      top: 50%;
+      right: 10px;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: #796b58;
+      cursor: pointer;
+    }
+    .forgot {
+      display: block;
+      margin-top: 12px;
+      color: #796b58;
+      text-align: right;
+      font-size: 13px;
+    }
+    .submit-button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px;
+      border: 0;
+      border-radius: 6px;
+      background: #211e19;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+    .submit-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+    .message {
+      margin-top: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    .signup {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 14px;
+    }
+    a {
+      color: #796b58;
+    }
+  </style>
+</head>
+<body>
+  <main class="signin-card">
+    <p class="brand">POP THE LOOK</p>
+    <p class="subtitle">ADMINISTRATION</p>
+    <h2>Admin Sign In</h2>
+    <p class="intro">Sign in with your administrator account.</p>
+    <form id="admin-signin-form">
+      <label for="email">Email address</label>
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        placeholder="Admin email"
+        required
+      >
+      <label for="password">Password</label>
+      <div class="password-box">
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Enter your password"
+          required
+        >
+        <button
+          class="toggle-password"
+          id="toggle-password"
+          type="button"
+        >Show</button>
+      </div>
+      <a
+        class="forgot"
+        href="../frontend/pages/forgot-password.html"
+      >Forgot Password?</a>
+      <button class="submit-button" id="submit-button" type="submit">
+        Sign In
+      </button>
+      <p class="message" id="message" role="status" aria-live="polite"></p>
+    </form>
+    <p class="signup">
+      Need an account?
+      <a href="../frontend/pages/signup.html">Create Account</a>
+    </p>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../frontend/scripts/supabase.js"></script>
+  <script>
+    const form = document.getElementById("admin-signin-form");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const toggleButton = document.getElementById("toggle-password");
+    const submitButton = document.getElementById("submit-button");
+    const message = document.getElementById("message");
+    toggleButton.addEventListener("click", () => {
+      const showing = passwordInput.type === "text";
+      passwordInput.type = showing ? "password" : "text";
+      toggleButton.textContent = showing ? "Show" : "Hide";
+    });
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      message.textContent = "";
+      submitButton.disabled = true;
+      submitButton.textContent = "Signing in...";
+      try {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+          email: emailInput.value.trim(),
+          password: passwordInput.value
+        });
+        if (error) throw error;
+        const { data: admin, error: adminError } = await supabaseClient
+          .from("admin_users")
+          .select("user_id")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+        if (adminError) throw adminError;
+        if (!admin) {
+          await supabaseClient.auth.signOut();
+          message.textContent =
+            "This account does not have administrator access.";
+          return;
+        }
+        window.location.href = "./index.html";
+      } catch (error) {
+        message.textContent = error.message || "Sign in failed.";
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Sign In";
+      }
+    });
+  </script>
+</body>
+</html>
