@@ -319,10 +319,9 @@
         const { data, error } = await supabaseClient.auth.getUser();
         if (error) throw error;
         if (!data.user) {
-          statusMessage.textContent =
-            "Please sign in with your admin account before managing products.";
-          return;
-        }
+  window.location.replace("./signin.html");
+  return;
+}
         const { data: adminRecord, error: adminError } = await supabaseClient
           .from("admin_users")
           .select("user_id")
