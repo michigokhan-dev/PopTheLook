@@ -149,6 +149,12 @@
   <header>
     <h1>POP THE LOOK</h1>
     <span>ADMIN PANEL</span>
+    <div class="admin-auth-links">
+  <a href="../frontend/pages/signin.html">Sign In</a>
+  <a href="../frontend/pages/forgot-password.html">Forgot Password?</a>
+  <a href="../frontend/pages/signup.html">Create Account</a>
+  <button id="sign-out-button" type="button">Sign Out</button>
+</div>
   </header>
   <main>
     <h2>Dashboard</h2>
@@ -341,5 +347,16 @@
     }
     initializeAdminPanel();
   </script>
+  <script>
+  const signOutButton = document.getElementById("sign-out-button");
+  signOutButton.addEventListener("click", async () => {
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+      alert("Sign out failed: " + error.message);
+      return;
+    }
+    window.location.reload();
+  });
+</script>
 </body>
 </html>
