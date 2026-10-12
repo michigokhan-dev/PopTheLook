@@ -314,31 +314,48 @@
       }
     });
     refreshButton.addEventListener("click", loadProducts);
-    async function initializeAdminPanel() {
-      try {
-        const { data, error } = await supabaseClient.auth.getUser();
-        if (error) throw error;
-        if (!data.user) {
-  window.location.replace("./signin.html");
-  return;
-}
-        const { data: adminRecord, error: adminError } = await supabaseClient
-          .from("admin_users")
-          .select("user_id")
-          .eq("user_id", data.user.id)
-          .maybeSingle();
-        if (adminError) throw adminError;
-        if (!adminRecord) {
-          statusMessage.textContent =
-            "Access denied. This account is not an administrator.";
-          return;
-        }
-        statusMessage.textContent = "Admin access verified. Supabase connected.";
-        await loadProducts();
-      } catch (error) {
-        statusMessage.textContent = "Connection error: " + error.message;
-      }
+    
+async function initializeAdminPanel() {
+  try {
+    const { data: sessionData, error: sessionError } =
+      await supabaseClient.auth.getSession();
+
+    if (sessionError) throw sessionError;
+
+    if (!sessionData.session) {
+      window.location.replace("./signin.html");
+      return;
     }
+
+    const user = sessionData.session.user;
+
+    const { data: adminRecord, error: adminError } =
+      await supabaseClient
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+    if (adminError) throw adminError;
+
+    if (!adminRecord) {
+      statusMessage.textContent =
+        "Access denied. This account is not an administrator.";
+      await supabaseClient.auth.signOut();
+      window.location.replace("./signin.html");
+      return;
+    }
+
+    statusMessage.textContent =
+      "Admin access verified. Supabase connected.";
+
+    await loadProducts();
+  } catch (error) {
+    statusMessage.textContent =
+      "Connection error: " + error.message;
+  }
+}
+
     initializeAdminPanel();
   </script>
   <script>
