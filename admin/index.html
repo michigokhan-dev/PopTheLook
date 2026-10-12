@@ -28,12 +28,9 @@
       font-size: 25px;
       letter-spacing: 2px;
     }
-    header span {
-      font-size: 13px;
-    }
     main {
       max-width: 1100px;
-      margin: 40px auto;
+      margin: 35px auto;
       padding: 0 20px;
     }
     h2 {
@@ -41,15 +38,93 @@
       font-weight: normal;
       font-size: 30px;
     }
-    .notice {
-      padding: 20px;
+    .panel {
       background: #fffdf9;
       border: 1px solid #ded5c7;
-      margin-top: 25px;
+      padding: 22px;
+      margin: 22px 0;
     }
-    .status {
-      color: #796b58;
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ded5c7;
+      background: white;
+      font: inherit;
+      border-radius: 2px;
+    }
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
+    .full-width {
+      grid-column: 1 / -1;
+    }
+    button {
+      padding: 12px 18px;
+      border: 1px solid #211e19;
+      background: #211e19;
+      color: white;
+      cursor: pointer;
+      font: inherit;
+    }
+    button:hover {
+      opacity: 0.85;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: wait;
+    }
+    .delete-button {
+      padding: 8px 10px;
+      background: #fffdf9;
+      color: #8b2e2e;
+      border-color: #8b2e2e;
+    }
+    #status {
       font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+    .product-list {
+      display: grid;
+      gap: 12px;
+    }
+    .product {
+      border: 1px solid #ded5c7;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+    .product h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .product p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: #796b58;
+      overflow-wrap: anywhere;
+    }
+    .product img {
+      width: 65px;
+      height: 80px;
+      object-fit: cover;
+      background: #f5f0e7;
+      margin-bottom: 8px;
+    }
+    .product-info {
+      min-width: 0;
     }
     @media (max-width: 600px) {
       header h1 {
@@ -57,6 +132,15 @@
       }
       main {
         margin-top: 25px;
+      }
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .full-width {
+        grid-column: auto;
+      }
+      .product {
+        align-items: flex-start;
       }
     }
   </style>
@@ -68,30 +152,194 @@
   </header>
   <main>
     <h2>Dashboard</h2>
-    <p>Welcome to your store management panel.</p>
-    <section class="notice">
-      <h3>Product Management</h3>
-     <p class="status" id="connection-status">Supabase bağlantısı kontrol ediliyor...</p>
+    <p>Manage your store products.</p>
+    <section class="panel">
+      <h2>Add Product</h2>
+      <form id="product-form">
+        <div class="form-grid">
+          <div>
+            <label for="name">Product Name *</label>
+            <input id="name" name="name" required maxlength="150">
+          </div>
+          <div>
+            <label for="price">Price (GBP) *</label>
+            <input id="price" name="price" type="number"
+              min="0" step="0.01" required>
+          </div>
+          <div>
+            <label for="stock">Stock Quantity *</label>
+            <input id="stock" name="stock" type="number"
+              min="0" step="1" value="0" required>
+          </div>
+          <div>
+            <label for="category">Category</label>
+            <input id="category" name="category" maxlength="100">
+          </div>
+          <div class="full-width">
+            <label for="image_url">Image URL</label>
+            <input id="image_url" name="image_url" type="url"
+              placeholder="https://example.com/image.jpg">
+          </div>
+          <div class="full-width">
+            <label for="description">Description</label>
+            <textarea id="description" name="description"
+              maxlength="2000"></textarea>
+          </div>
+          <div class="full-width">
+            <button id="add-button" type="submit">Add Product</button>
+          </div>
+        </div>
+      </form>
+      <p id="status" role="status" aria-live="polite">
+        Connecting to Supabase...
+      </p>
+    </section>
+    <section class="panel">
+      <h2>Products</h2>
+      <button id="refresh-button" type="button">Refresh Products</button>
+      <div id="product-list" class="product-list">
+        <p>Loading products...</p>
+      </div>
     </section>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../frontend/scripts/supabase.js"></script>
-<script>
-  async function testSupabaseConnection() {
-    const status = document.getElementById("connection-status");
-    status.textContent = "Checking Supabase connection...";
-    try {
-      const { error } = await supabaseClient
-        .from("products")
-        .select("id")
-        .limit(1);
-      if (error) throw error;
-      status.textContent = "Supabase connection successful.";
-    } catch (error) {
-      status.textContent = "Connection error: " + error.message;
+  <script src="../frontend/scripts/supabase.js"></script>
+  <script>
+    const form = document.getElementById("product-form");
+    const statusMessage = document.getElementById("status");
+    const productList = document.getElementById("product-list");
+    const addButton = document.getElementById("add-button");
+    const refreshButton = document.getElementById("refresh-button");
+    async function loadProducts() {
+      productList.replaceChildren();
+      const loading = document.createElement("p");
+      loading.textContent = "Loading products...";
+      productList.appendChild(loading);
+      try {
+        const { data, error } = await supabaseClient
+          .from("products")
+          .select("id, name, price, stock, category, image_url, is_active")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        productList.replaceChildren();
+        if (!data || data.length === 0) {
+          const empty = document.createElement("p");
+          empty.textContent = "No products found.";
+          productList.appendChild(empty);
+          return;
+        }
+        data.forEach((product) => {
+          const card = document.createElement("article");
+          card.className = "product";
+          const info = document.createElement("div");
+          info.className = "product-info";
+          if (product.image_url) {
+            const image = document.createElement("img");
+            image.src = product.image_url;
+            image.alt = product.name || "Product image";
+            image.loading = "lazy";
+            image.onerror = () => image.remove();
+            info.appendChild(image);
+          }
+          const name = document.createElement("h3");
+          name.textContent = product.name;
+          info.appendChild(name);
+          const details = document.createElement("p");
+          details.textContent =
+            "£" + Number(product.price).toFixed(2) +
+            " · Stock: " + product.stock +
+            " · " + (product.category || "Uncategorised");
+          info.appendChild(details);
+          const active = document.createElement("p");
+          active.textContent = product.is_active ? "Active" : "Inactive";
+          info.appendChild(active);
+          const deleteButton = document.createElement("button");
+          deleteButton.type = "button";
+          deleteButton.className = "delete-button";
+          deleteButton.textContent = "Delete";
+          deleteButton.addEventListener("click", async () => {
+            if (!confirm("Delete this product?")) return;
+            deleteButton.disabled = true;
+            try {
+              const { error } = await supabaseClient
+                .from("products")
+                .delete()
+                .eq("id", product.id);
+              if (error) throw error;
+              statusMessage.textContent = "Product deleted.";
+              await loadProducts();
+            } catch (error) {
+              statusMessage.textContent = "Delete failed: " + error.message;
+              deleteButton.disabled = false;
+            }
+          });
+          card.append(info, deleteButton);
+          productList.appendChild(card);
+        });
+      } catch (error) {
+        productList.replaceChildren();
+        const message = document.createElement("p");
+        message.textContent = "Could not load products: " + error.message;
+        productList.appendChild(message);
+      }
     }
-  }
-  testSupabaseConnection();
-</script>
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      addButton.disabled = true;
+      statusMessage.textContent = "Saving product...";
+      const formData = new FormData(form);
+      const product = {
+        name: String(formData.get("name")).trim(),
+        price: Number(formData.get("price")),
+        stock: Number(formData.get("stock")),
+        category: String(formData.get("category") || "").trim() || null,
+        image_url: String(formData.get("image_url") || "").trim() || null,
+        description: String(formData.get("description") || "").trim() || null,
+        is_active: true
+      };
+      try {
+        const { error } = await supabaseClient
+          .from("products")
+          .insert(product);
+        if (error) throw error;
+        statusMessage.textContent = "Product added successfully.";
+        form.reset();
+        document.getElementById("stock").value = "0";
+        await loadProducts();
+      } catch (error) {
+        statusMessage.textContent = "Could not add product: " + error.message;
+      } finally {
+        addButton.disabled = false;
+      }
+    });
+    refreshButton.addEventListener("click", loadProducts);
+    async function initializeAdminPanel() {
+      try {
+        const { data, error } = await supabaseClient.auth.getUser();
+        if (error) throw error;
+        if (!data.user) {
+          statusMessage.textContent =
+            "Please sign in with your admin account before managing products.";
+          return;
+        }
+        const { data: adminRecord, error: adminError } = await supabaseClient
+          .from("admin_users")
+          .select("user_id")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+        if (adminError) throw adminError;
+        if (!adminRecord) {
+          statusMessage.textContent =
+            "Access denied. This account is not an administrator.";
+          return;
+        }
+        statusMessage.textContent = "Admin access verified. Supabase connected.";
+        await loadProducts();
+      } catch (error) {
+        statusMessage.textContent = "Connection error: " + error.message;
+      }
+    }
+    initializeAdminPanel();
+  </script>
 </body>
 </html>
