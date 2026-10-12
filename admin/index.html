@@ -149,6 +149,7 @@
   <header>
     <h1>POP THE LOOK</h1>
     <span>ADMIN PANEL</span>
+    <button id="sign-out-button" type="button">Sign Out</button>
   </header>
   <main>
     <h2>Dashboard</h2>
@@ -349,7 +350,7 @@
       alert("Sign out failed: " + error.message);
       return;
     }
-    window.location.reload();
+    window.location.href = "./signin.html";
   });
 </script>
 </body>
