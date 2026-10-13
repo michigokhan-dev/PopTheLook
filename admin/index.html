@@ -210,6 +210,7 @@
     const statusMessage = document.getElementById("status");
     const productList = document.getElementById("product-list");
     const addButton = document.getElementById("add-button");
+    let editingProductId = null;
     const refreshButton = document.getElementById("refresh-button");
     async function loadProducts() {
       productList.replaceChildren();
@@ -260,6 +261,9 @@ editButton.textContent = "Edit";
 editButton.className = "edit-button";
 
 editButton.addEventListener("click", () => {
+  editingProductId = product.id;
+  addButton.textContent = "Save Changes";
+
   form.elements.namedItem("name").value = product.name || "";
   form.elements.namedItem("price").value = product.price ?? "";
   form.elements.namedItem("stock").value = product.stock ?? 0;
