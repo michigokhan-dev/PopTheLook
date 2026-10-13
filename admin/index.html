@@ -219,7 +219,7 @@
       try {
         const { data, error } = await supabaseClient
           .from("products")
-          .select("id, name, price, stock, category, image_url, is_active")
+          .select("id, name, price, stock, category, image_url, description, is_active")
           .order("created_at", { ascending: false });
         if (error) throw error;
         productList.replaceChildren();
