@@ -321,11 +321,26 @@ editButton.addEventListener("click", () => {
         is_active: true
       };
       try {
-        const { error } = await supabaseClient
-          .from("products")
-          .insert(product);
-        if (error) throw error;
-        statusMessage.textContent = "Product added successfully.";
+        if (editingProductId) {
+  const { error } = await supabaseClient
+    .from("products")
+    .update(product)
+    .eq("id", editingProductId);
+
+  if (error) throw error;
+
+  statusMessage.textContent = "Product updated successfully.";
+  editingProductId = null;
+  addButton.textContent = "Add Product";
+} else {
+  const { error } = await supabaseClient
+    .from("products")
+    .insert(product);
+
+  if (error) throw error;
+
+  statusMessage.textContent = "Product added successfully.";
+}
         form.reset();
         document.getElementById("stock").value = "0";
         await loadProducts();
