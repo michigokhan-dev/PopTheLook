@@ -348,7 +348,7 @@ async function initializeAdminPanel() {
 
     statusMessage.textContent =
       "Admin access verified. Supabase connected.";
-
+document.getElementById("admin-content").hidden = false;
     await loadProducts();
   } catch (error) {
     statusMessage.textContent =
