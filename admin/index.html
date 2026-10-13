@@ -296,6 +296,7 @@ editButton.addEventListener("click", () => {
               deleteButton.disabled = false;
             }
           });
+          editButton.className = deleteButton.className;
           card.append(info, editButton, deleteButton);
           productList.appendChild(card);
         });
