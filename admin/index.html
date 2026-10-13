@@ -254,6 +254,24 @@
           const active = document.createElement("p");
           active.textContent = product.is_active ? "Active" : "Inactive";
           info.appendChild(active);
+          const editButton = document.createElement("button");
+editButton.type = "button";
+editButton.textContent = "Edit";
+editButton.className = "edit-button";
+
+editButton.addEventListener("click", () => {
+  form.elements.namedItem("name").value = product.name || "";
+  form.elements.namedItem("price").value = product.price ?? "";
+  form.elements.namedItem("stock").value = product.stock ?? 0;
+  form.elements.namedItem("category").value = product.category || "";
+  form.elements.namedItem("image_url").value = product.image_url || "";
+  form.elements.namedItem("description").value = product.description || "";
+
+  statusMessage.textContent =
+    "Editing product: " + product.name +
+    ". Update the fields above, then save your changes.";
+  form.scrollIntoView({ behavior: "smooth", block: "start" });
+});
           const deleteButton = document.createElement("button");
           deleteButton.type = "button";
           deleteButton.className = "delete-button";
