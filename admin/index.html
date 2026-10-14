@@ -367,20 +367,20 @@ async function uploadProductImages(files) {
 
       const formData = new FormData(form);
       
-const selectedFiles = Array.from(productImageInput.files);
-let uploadedImageUrls = [];
+try {
+  const selectedFiles = Array.from(productImageInput.files);
+  let uploadedImageUrls = [];
 
-if (selectedFiles.length > 0) {
-  statusMessage.textContent = "Uploading product photos...";
-  uploadedImageUrls = await uploadProductImages(selectedFiles);
-}
-
+  if (selectedFiles.length > 0) {
+    statusMessage.textContent = "Uploading product photos...";
+    uploadedImageUrls = await uploadProductImages(selectedFiles);
+  }
       const product = {
         name: String(formData.get("name")).trim(),
         price: Number(formData.get("price")),
         stock: Number(formData.get("stock")),
         category: String(formData.get("category") || "").trim() || null,
-        image_url: String(formData.get("image_url") || "").trim() || null,
+        image_url: uploadedImageUrls[0] || null,
         description: String(formData.get("description") || "").trim() || null,
         is_active: true
       };
