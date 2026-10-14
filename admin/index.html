@@ -7,70 +7,242 @@
   <style>
     * { box-sizing: border-box; }
     :root {
-      --cream: #f5f0e7; --ink: #211e19; --muted: #796b58;
-      --line: #ded5c7; --white: #fffdf9; --danger: #8b2e2e;
+      --cream: #f5f0e7;
+      --ink: #211e19;
+      --muted: #796b58;
+      --line: #ded5c7;
+      --white: #fffdf9;
+      --danger: #8b2e2e;
     }
-    body { margin: 0; font-family: Arial, sans-serif; background: var(--cream); color: var(--ink); }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+    }
     [hidden] { display: none !important; }
     header {
-      padding: 20px 5%; background: var(--ink); color: var(--cream);
-      display: flex; justify-content: space-between; align-items: center;
-      gap: 15px; flex-wrap: wrap;
+      padding: 20px 5%;
+      background: var(--ink);
+      color: var(--cream);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
     }
-    header h1 { margin: 0; font-family: Georgia, serif; font-size: 25px; letter-spacing: 2px; }
-    main { max-width: 1100px; margin: 30px auto; padding: 0 18px; }
-    h2 { font-family: Georgia, serif; font-size: 28px; font-weight: normal; }
-    .panel { background: var(--white); border: 1px solid var(--line); padding: 22px; margin: 22px 0; }
-    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
-    label { display: block; font-size: 13px; margin-bottom: 6px; }
+    header h1 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-size: 25px;
+      letter-spacing: 2px;
+    }
+    main {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 18px;
+    }
+    h2 {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: normal;
+    }
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--line);
+      padding: 22px;
+      margin: 22px 0;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
     input, textarea, select {
-      width: 100%; padding: 12px; border: 1px solid var(--line);
-      background: white; color: var(--ink); font: inherit; border-radius: 2px;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--ink);
+      font: inherit;
+      border-radius: 2px;
     }
     input[type="file"] { padding: 9px; }
-    input[type="checkbox"] { width: auto; }
-    textarea { min-height: 85px; resize: vertical; }
+    input[type="checkbox"] {
+      width: auto;
+    }
+    textarea {
+      min-height: 85px;
+      resize: vertical;
+    }
     .full-width { grid-column: 1 / -1; }
     button {
-      padding: 11px 16px; border: 1px solid var(--ink); background: var(--ink);
-      color: white; cursor: pointer; font: inherit;
+      padding: 11px 16px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: white;
+      cursor: pointer;
+      font: inherit;
     }
     button:hover { opacity: .86; }
-    button:disabled { opacity: .5; cursor: wait; }
-    .secondary-button { background: var(--white); color: var(--ink); }
-    .delete-button { background: var(--white); color: var(--danger); border-color: var(--danger); }
-    #status { font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }
-    .hint { display: block; color: var(--muted); font-size: 12px; line-height: 1.5; margin-top: 6px; }
-    .section-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .section-heading h3 { margin: 0; font-family: Georgia, serif; font-weight: normal; font-size: 22px; }
-    .variant-card { border: 1px solid var(--line); padding: 16px; margin-top: 15px; background: #fff; min-width: 0; }
-    .variant-title { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .variant-title h4 { margin: 0; font-size: 16px; }
-    .size-row { display: grid; grid-template-columns: minmax(0, 1fr) 120px auto; align-items: end; gap: 10px; margin-top: 10px; }
-    .size-row label { margin-bottom: 5px; }
-    .size-row button { padding: 10px 12px; margin-bottom: 0; }
-    .image-preview { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-    .image-preview img { width: 75px; height: 95px; object-fit: cover; border: 1px solid var(--line); }
-    .existing-photo { position: relative; display: inline-flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--muted); }
-    .existing-photo button { padding: 4px 6px; font-size: 11px; background: var(--white); color: var(--danger); border-color: var(--danger); }
-    .product-list { display: grid; gap: 12px; margin-top: 16px; }
-    .product {
-      border: 1px solid var(--line); padding: 15px; display: flex;
-      align-items: flex-start; justify-content: space-between; gap: 15px;
+    button:disabled {
+      opacity: .5;
+      cursor: wait;
     }
-    .product-info { min-width: 0; flex: 1; }
-    .product h3 { margin: 0 0 8px; font-size: 16px; }
-    .product p { margin: 4px 0; font-size: 13px; color: var(--muted); overflow-wrap: anywhere; line-height: 1.5; }
-    .product img { width: 65px; height: 80px; object-fit: cover; background: var(--cream); margin: 0 8px 8px 0; }
-    .product-actions { display: flex; gap: 8px; flex-shrink: 0; }
-    .summary { background: var(--cream); border: 1px solid var(--line); padding: 12px; margin-top: 15px; font-size: 13px; line-height: 1.6; }
+    .secondary-button {
+      background: var(--white);
+      color: var(--ink);
+    }
+    .delete-button {
+      background: var(--white);
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+    #status {
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    .hint {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .section-heading h3 {
+      margin: 0;
+      font-family: Georgia, serif;
+      font-weight: normal;
+      font-size: 22px;
+    }
+    .variant-card {
+      border: 1px solid var(--line);
+      padding: 16px;
+      margin-top: 15px;
+      background: #fff;
+      min-width: 0;
+    }
+    .variant-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .variant-title h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+    .size-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 120px auto;
+      align-items: end;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .size-row label { margin-bottom: 5px; }
+    .size-row button {
+      padding: 10px 12px;
+      margin-bottom: 0;
+    }
+    .image-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .image-preview img {
+      width: 75px;
+      height: 95px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+    }
+    .existing-photo {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+    .existing-photo button {
+      padding: 4px 6px;
+      font-size: 11px;
+      background: var(--white);
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+    .product-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .product {
+      border: 1px solid var(--line);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+    .product-info { min-width: 0; }
+    .product h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .product p {
+      margin: 4px 0;
+      font-size: 13px;
+      color: var(--muted);
+      overflow-wrap: anywhere;
+    }
+    .product img {
+      width: 65px;
+      height: 80px;
+      object-fit: cover;
+      background: var(--cream);
+      margin: 0 8px 8px 0;
+    }
+    .product-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .summary {
+      background: var(--cream);
+      border: 1px solid var(--line);
+      padding: 12px;
+      margin-top: 15px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
     @media (max-width: 600px) {
-      header h1 { font-size: 19px; } main { margin-top: 20px; } .panel { padding: 15px; }
-      .form-grid { grid-template-columns: 1fr; } .full-width { grid-column: auto; }
-      .size-row { grid-template-columns: minmax(0, 1fr) 90px auto; gap: 6px; }
-      .size-row input { padding: 10px 7px; } .size-row button { padding: 10px 8px; }
-      .product { align-items: flex-start; flex-direction: column; }
-      .product-actions { flex-direction: row; }
+      header h1 { font-size: 19px; }
+      main { margin-top: 20px; }
+      .panel { padding: 15px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .full-width { grid-column: auto; }
+      .size-row {
+        grid-template-columns: minmax(0, 1fr) 90px auto;
+        gap: 6px;
+      }
+      .size-row input { padding: 10px 7px; }
+      .size-row button { padding: 10px 8px; }
+      .product { align-items: flex-start; }
+      .product-actions { flex-direction: column; }
     }
   </style>
 </head>
@@ -80,60 +252,89 @@
   <span>ADMIN PANEL</span>
   <button id="sign-out-button" type="button">Sign Out</button>
 </header>
-<p id="connection-status" style="padding:12px 5%;color:#8b2e2e">Checking admin connection...</p>
-
+  <p id="connection-status" style="padding:12px 5%;color:#8b2e2e">
+  Checking admin connection...
+</p>
 <main id="admin-content" hidden>
   <h2>Dashboard</h2>
   <p>Manage your store products, colours, sizes and stock.</p>
-
   <section class="panel">
     <h2 id="form-heading">Add Product</h2>
     <form id="product-form">
       <div class="form-grid">
-        <div><label for="name">Product Name *</label><input id="name" name="name" required maxlength="150"></div>
-        <div><label for="price">Price (GBP) *</label><input id="price" name="price" type="number" min="0" step="0.01" required></div>
+        <div>
+          <label for="name">Product Name *</label>
+          <input id="name" name="name" required maxlength="150">
+        </div>
+        <div>
+          <label for="price">Price (GBP) *</label>
+          <input id="price" name="price" type="number"
+            min="0" step="0.01" required>
+        </div>
         <div>
           <label for="stock">General Stock</label>
-          <input id="stock" name="stock" type="number" min="0" step="1" value="0">
-          <small class="hint">When sizes are added, stock is calculated from their quantities.</small>
+          <input id="stock" name="stock" type="number"
+            min="0" step="1" value="0">
+          <small class="hint">
+            When sizes are added, stock is calculated from their quantities.
+          </small>
         </div>
-        <div><label for="category">Category</label><input id="category" name="category" maxlength="100" placeholder="e.g. Dresses"></div>
+        <div>
+          <label for="category">Category</label>
+          <input id="category" name="category" maxlength="100"
+            placeholder="e.g. Dresses">
+        </div>
         <div class="full-width">
           <label for="product-image">Main Product Photo</label>
           <input id="product-image" type="file" accept="image/*">
-          <small class="hint">This photo is used as the main product image in the product list. Colour photos are managed separately below.</small>
+          <small class="hint">
+            This photo is used as the main product image in the product list.
+            Colour photos are managed separately below.
+          </small>
           <div id="image-preview" class="image-preview"></div>
         </div>
-        <div class="full-width"><label for="description">Description</label><textarea id="description" name="description" maxlength="2000"></textarea></div>
+        <div class="full-width">
+          <label for="description">Description</label>
+          <textarea id="description" name="description"
+            maxlength="2000"></textarea>
+        </div>
       </div>
       <div class="section-heading" style="margin-top:28px">
-        <h3>Colours, Sizes &amp; Stock</h3>
-        <button id="add-colour-button" class="secondary-button" type="button">+ Add Colour</button>
+        <h3>Colours, Sizes & Stock</h3>
+        <button id="add-colour-button" class="secondary-button"
+          type="button">+ Add Colour</button>
       </div>
-      <p class="hint">Add a colour, upload photos for it, then enter each size and its available stock. Repeat for every colour.</p>
+      <p class="hint">
+        Add a colour, upload photos for it, then enter each size and its
+        available stock. Repeat for every colour.
+      </p>
       <div id="colour-list"></div>
-      <div id="stock-summary" class="summary">No size stock entered yet.</div>
+      <div id="stock-summary" class="summary">
+        No size stock entered yet.
+      </div>
       <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
         <button id="add-button" type="submit">Add Product</button>
-        <button id="cancel-edit-button" class="secondary-button" type="button" hidden>Cancel Edit</button>
+        <button id="cancel-edit-button" class="secondary-button"
+          type="button" hidden>Cancel Edit</button>
       </div>
     </form>
-    <p id="status" role="status" aria-live="polite">Connecting to Supabase...</p>
+    <p id="status" role="status" aria-live="polite">
+      Connecting to Supabase...
+    </p>
   </section>
-
   <section class="panel">
     <h2>Products</h2>
     <button id="refresh-button" type="button">Refresh Products</button>
-    <div id="product-list" class="product-list"><p>Loading products...</p></div>
+    <div id="product-list" class="product-list">
+      <p>Loading products...</p>
+    </div>
   </section>
 </main>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../frontend/scripts/supabase.js"></script>
 <script>
 (() => {
   "use strict";
-
   const form = document.getElementById("product-form");
   const productImageInput = document.getElementById("product-image");
   const imagePreview = document.getElementById("image-preview");
@@ -145,29 +346,29 @@
   const refreshButton = document.getElementById("refresh-button");
   const cancelEditButton = document.getElementById("cancel-edit-button");
   const addColourButton = document.getElementById("add-colour-button");
-
   let editingProductId = null;
   let editingImageUrl = null;
   let originalVariants = [];
   let nextColourId = 1;
-
   function setStatus(message) {
-    statusMessage.textContent = message;
-    const visibleStatus = document.getElementById("connection-status");
-    if (visibleStatus) visibleStatus.textContent = message;
-  }
+  statusMessage.textContent = message;
 
+  const visibleStatus = document.getElementById("connection-status");
+  if (visibleStatus) {
+    visibleStatus.textContent = message;
+  }
+}
   function makeElement(tag, className, text) {
     const element = document.createElement(tag);
     if (className) element.className = className;
     if (text !== undefined) element.textContent = text;
     return element;
   }
-
   function revokePreviewUrls(container) {
-    container.querySelectorAll('img[data-object-url]').forEach((img) => URL.revokeObjectURL(img.src));
+    container.querySelectorAll('img[data-object-url]').forEach((img) => {
+      URL.revokeObjectURL(img.src);
+    });
   }
-
   function showImagePreview(files, container) {
     revokePreviewUrls(container);
     container.replaceChildren();
@@ -180,23 +381,28 @@
       container.appendChild(img);
     });
   }
-
-  productImageInput.addEventListener("change", () => showImagePreview(productImageInput.files, imagePreview));
-
+  productImageInput.addEventListener("change", () => {
+    showImagePreview(productImageInput.files, imagePreview);
+  });
   async function uploadImages(files) {
     const urls = [];
     for (const file of Array.from(files || [])) {
-      if (!file.type.startsWith("image/")) throw new Error("Please select image files only.");
+      if (!file.type.startsWith("image/")) {
+        throw new Error("Please select image files only.");
+      }
       const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "-");
       const filePath = `${crypto.randomUUID()}-${safeName}`;
-      const { error } = await supabaseClient.storage.from("product-images").upload(filePath, file, { upsert: false });
+      const { error } = await supabaseClient.storage
+        .from("product-images")
+        .upload(filePath, file, { upsert: false });
       if (error) throw error;
-      const { data } = supabaseClient.storage.from("product-images").getPublicUrl(filePath);
+      const { data } = supabaseClient.storage
+        .from("product-images")
+        .getPublicUrl(filePath);
       urls.push(data.publicUrl);
     }
     return urls;
   }
-
   function createSizeRow(size = "", stock = 0) {
     const row = makeElement("div", "size-row");
     const sizeWrap = makeElement("div");
@@ -209,7 +415,6 @@
     sizeInput.value = size;
     sizeInput.required = true;
     sizeWrap.append(sizeLabel, sizeInput);
-
     const stockWrap = makeElement("div");
     const stockLabel = makeElement("label", "", "Stock");
     const stockInput = makeElement("input");
@@ -220,30 +425,37 @@
     stockInput.value = String(stock);
     stockInput.required = true;
     stockWrap.append(stockLabel, stockInput);
-
-    const removeButton = makeElement("button", "delete-button", "Remove");
+    const removeButton = makeElement(
+      "button", "delete-button", "Remove"
+    );
     removeButton.type = "button";
-    removeButton.addEventListener("click", () => { row.remove(); updateStockSummary(); });
-
+    removeButton.addEventListener("click", () => {
+      row.remove();
+      updateStockSummary();
+    });
     row.append(sizeWrap, stockWrap, removeButton);
     sizeInput.addEventListener("input", updateStockSummary);
     stockInput.addEventListener("input", updateStockSummary);
     return row;
   }
-
   function createColourCard(data = {}) {
     const colourId = nextColourId++;
     const card = makeElement("section", "variant-card");
     card.dataset.colourId = String(colourId);
-
     const title = makeElement("div", "variant-title");
-    const heading = makeElement("h4", "", data.color_name || `Colour ${colourId}`);
+    const heading = makeElement(
+      "h4", "", data.color_name || `Colour ${colourId}`
+    );
     heading.className = "colour-heading";
-    const removeColour = makeElement("button", "delete-button", "Remove Colour");
+    const removeColour = makeElement(
+      "button", "delete-button", "Remove Colour"
+    );
     removeColour.type = "button";
-    removeColour.addEventListener("click", () => { card.remove(); updateStockSummary(); });
+    removeColour.addEventListener("click", () => {
+      card.remove();
+      updateStockSummary();
+    });
     title.append(heading, removeColour);
-
     const nameLabel = makeElement("label", "", "Colour Name *");
     const nameInput = makeElement("input");
     nameInput.className = "colour-name";
@@ -251,26 +463,40 @@
     nameInput.maxLength = 80;
     nameInput.placeholder = "e.g. Black";
     nameInput.value = data.color_name || "";
-    nameInput.addEventListener("input", () => { heading.textContent = nameInput.value.trim() || `Colour ${colourId}`; });
-
-    const photoLabel = makeElement("label", "", "Photos for this Colour");
+    nameInput.addEventListener("input", () => {
+      heading.textContent =
+        nameInput.value.trim() || `Colour ${colourId}`;
+    });
+    const photoLabel = makeElement(
+      "label", "", "Photos for this Colour"
+    );
     photoLabel.style.marginTop = "16px";
     const photoInput = makeElement("input");
     photoInput.type = "file";
     photoInput.accept = "image/*";
     photoInput.multiple = true;
     photoInput.className = "colour-photos";
-    const photoHint = makeElement("small", "hint", "Select multiple photos. Existing photos are kept unless removed.");
-    const photosPreview = makeElement("div", "image-preview existing-photos");
+    const photoHint = makeElement(
+      "small", "hint",
+      "Select multiple photos. Existing photos are kept unless removed."
+    );
+    const photosPreview = makeElement("div", "image-preview");
+    photosPreview.className = "image-preview existing-photos";
     const newPhotosPreview = makeElement("div", "image-preview");
-    const sizesHeading = makeElement("h4", "", "Sizes and quantities");
+    const sizesHeading = makeElement(
+      "h4", "", "Sizes and quantities"
+    );
     sizesHeading.style.margin = "20px 0 8px";
     const sizesContainer = makeElement("div", "sizes-container");
-    const addSizeButton = makeElement("button", "secondary-button", "+ Add Size");
+    const addSizeButton = makeElement(
+      "button", "secondary-button", "+ Add Size"
+    );
     addSizeButton.type = "button";
     addSizeButton.style.marginTop = "12px";
-    addSizeButton.addEventListener("click", () => { sizesContainer.appendChild(createSizeRow()); updateStockSummary(); });
-
+    addSizeButton.addEventListener("click", () => {
+      sizesContainer.appendChild(createSizeRow());
+      updateStockSummary();
+    });
     const savedImages = Array.isArray(data.images)
       ? data.images.map((item) => ({
           url: typeof item === "string" ? item : item.image_url,
@@ -279,71 +505,110 @@
           remove: false
         })).filter((item) => item.url)
       : [];
-
     savedImages.forEach((photo) => {
       const wrapper = makeElement("div", "existing-photo");
       const img = document.createElement("img");
       img.src = photo.url;
       img.alt = `${data.color_name || "Colour"} photo`;
       img.onerror = () => img.remove();
-      const removePhoto = makeElement("button", "", "Remove Photo");
+      const removePhoto = makeElement(
+        "button", "", "Remove Photo"
+      );
       removePhoto.type = "button";
-      removePhoto.addEventListener("click", () => { photo.remove = true; wrapper.remove(); updateStockSummary(); });
+      removePhoto.addEventListener("click", () => {
+        photo.remove = true;
+        wrapper.remove();
+        updateStockSummary();
+      });
       wrapper.append(img, removePhoto);
       photosPreview.appendChild(wrapper);
     });
-
-    photoInput.addEventListener("change", () => showImagePreview(photoInput.files, newPhotosPreview));
-
-    const sizes = Array.isArray(data.sizes) && data.sizes.length ? data.sizes : [{ size: "", stock: 0 }];
-    sizes.forEach((item) => sizesContainer.appendChild(createSizeRow(item.size || "", item.stock ?? 0)));
-
+    photoInput.addEventListener("change", () => {
+      showImagePreview(photoInput.files, newPhotosPreview);
+    });
+    const sizes = Array.isArray(data.sizes) && data.sizes.length
+      ? data.sizes
+      : [{ size: "", stock: 0 }];
+    sizes.forEach((item) => {
+      sizesContainer.appendChild(
+        createSizeRow(item.size || "", item.stock ?? 0)
+      );
+    });
     card._savedImages = savedImages;
     card._photoInput = photoInput;
-    card.append(title, nameLabel, nameInput, photoLabel, photoInput, photoHint, photosPreview, newPhotosPreview, sizesHeading, sizesContainer, addSizeButton);
+    card.append(
+      title,
+      nameLabel,
+      nameInput,
+      photoLabel,
+      photoInput,
+      photoHint,
+      photosPreview,
+      newPhotosPreview,
+      sizesHeading,
+      sizesContainer,
+      addSizeButton
+    );
     colourList.appendChild(card);
     updateStockSummary();
     return card;
   }
-
-  addColourButton.addEventListener("click", () => createColourCard());
-
+  addColourButton.addEventListener("click", () => {
+    createColourCard();
+  });
   function collectColourData() {
     const colours = [];
     for (const card of colourList.querySelectorAll(".variant-card")) {
       const name = card.querySelector(".colour-name").value.trim();
-      if (!name) throw new Error("Please enter a name for every colour.");
+      if (!name) {
+        throw new Error("Please enter a name for every colour.");
+      }
       const sizes = [];
       const seenSizes = new Set();
-
       for (const row of card.querySelectorAll(".size-row")) {
         const size = row.querySelector(".size-input").value.trim();
         const stockValue = row.querySelector(".size-stock").value;
-        if (!size) throw new Error(`Enter a size for colour "${name}".`);
-        if (stockValue === "" || !Number.isInteger(Number(stockValue)) || Number(stockValue) < 0) {
-          throw new Error(`Enter a valid stock quantity for ${name}, size ${size}.`);
+        if (!size) {
+          throw new Error(`Enter a size for colour "${name}".`);
+        }
+        if (stockValue === "" || !Number.isInteger(Number(stockValue)) ||
+            Number(stockValue) < 0) {
+          throw new Error(
+            `Enter a valid stock quantity for ${name}, size ${size}.`
+          );
         }
         const normalizedSize = size.toLowerCase();
-        if (seenSizes.has(normalizedSize)) throw new Error(`Size "${size}" appears more than once for colour "${name}".`);
+        if (seenSizes.has(normalizedSize)) {
+          throw new Error(
+            `Size "${size}" appears more than once for colour "${name}".`
+          );
+        }
         seenSizes.add(normalizedSize);
         sizes.push({ size, stock: Number(stockValue) });
       }
-
-      if (!sizes.length) throw new Error(`Add at least one size for colour "${name}".`);
+      if (!sizes.length) {
+        throw new Error(`Add at least one size for colour "${name}".`);
+      }
       const selectedFiles = Array.from(card._photoInput.files || []);
-      const retainedImages = (card._savedImages || []).filter((photo) => !photo.remove);
-      colours.push({ name, sizes, selectedFiles, retainedImages });
+      const retainedImages = (card._savedImages || [])
+        .filter((photo) => !photo.remove);
+      colours.push({
+        name,
+        sizes,
+        selectedFiles,
+        retainedImages
+      });
     }
-
     const seenColours = new Set();
     colours.forEach((colour) => {
       const key = colour.name.toLowerCase();
-      if (seenColours.has(key)) throw new Error(`Colour "${colour.name}" has been added twice.`);
+      if (seenColours.has(key)) {
+        throw new Error(`Colour "${colour.name}" has been added twice.`);
+      }
       seenColours.add(key);
     });
     return colours;
   }
-
   function updateStockSummary() {
     let total = 0;
     let sizeCount = 0;
@@ -354,12 +619,18 @@
         sizeCount++;
       }
     });
-    stockSummary.textContent = sizeCount ? `Total stock across entered sizes: ${total}` : "No size stock entered yet.";
+    stockSummary.textContent = sizeCount
+      ? `Total stock across entered sizes: ${total}`
+      : "No size stock entered yet.";
   }
-
   function resetProductForm() {
     revokePreviewUrls(imagePreview);
-    colourList.querySelectorAll(".image-preview").forEach(revokePreviewUrls);
+    colourList.querySelectorAll(".existing-photos").forEach(
+      revokePreviewUrls
+    );
+    colourList.querySelectorAll(".image-preview").forEach((container) => {
+      revokePreviewUrls(container);
+    });
     form.reset();
     productImageInput.value = "";
     imagePreview.replaceChildren();
@@ -374,33 +645,40 @@
     cancelEditButton.hidden = true;
     updateStockSummary();
   }
-
-  cancelEditButton.addEventListener("click", () => { resetProductForm(); setStatus("Edit cancelled."); });
-
+  cancelEditButton.addEventListener("click", () => {
+    resetProductForm();
+    setStatus("Edit cancelled.");
+  });
   async function getProductVariants(productId) {
-    const { data: variants, error } = await supabaseClient.from("product_variants")
+    const { data: variants, error } = await supabaseClient
+      .from("product_variants")
       .select("id, product_id, color_name, size, stock, image_urls")
-      .eq("product_id", productId).order("id", { ascending: true });
+      .eq("product_id", productId)
+      .order("id", { ascending: true });
     if (error) throw error;
     const ids = (variants || []).map((variant) => variant.id);
     let images = [];
     if (ids.length) {
-      const { data, error: imageError } = await supabaseClient.from("product_variant_images")
+      const { data, error: imageError } = await supabaseClient
+        .from("product_variant_images")
         .select("id, variant_id, image_url, sort_order")
-        .in("variant_id", ids).order("sort_order", { ascending: true });
+        .in("variant_id", ids)
+        .order("sort_order", { ascending: true });
       if (imageError) throw imageError;
       images = data || [];
     }
     return { variants: variants || [], images };
   }
-
   function parseImageUrls(value) {
     if (!value) return [];
     if (Array.isArray(value)) return value.filter(Boolean);
-    try { const parsed = JSON.parse(value); return Array.isArray(parsed) ? parsed.filter(Boolean) : []; }
-    catch { return []; }
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+    } catch {
+      return [];
+    }
   }
-
   async function editProduct(product) {
     try {
       setStatus("Loading product options...");
@@ -413,75 +691,76 @@
       form.elements.namedItem("price").value = product.price ?? "";
       form.elements.namedItem("stock").value = product.stock ?? 0;
       form.elements.namedItem("category").value = product.category || "";
-      form.elements.namedItem("description").value = product.description || "";
-
+      form.elements.namedItem("description").value =
+        product.description || "";
       if (product.image_url) {
         const img = document.createElement("img");
         img.src = product.image_url;
         img.alt = "Current main product photo";
         imagePreview.appendChild(img);
       }
-
       const grouped = new Map();
       variants.forEach((variant) => {
         const key = variant.color_name || "Default";
         if (!grouped.has(key)) grouped.set(key, []);
         grouped.get(key).push(variant);
       });
-
       for (const [colorName, colourVariants] of grouped) {
         const firstVariant = colourVariants[0];
-        const photoRecords = images.filter((image) => colourVariants.some((variant) => variant.id === image.variant_id));
+        const photoRecords = images.filter((image) =>
+          colourVariants.some((variant) => variant.id === image.variant_id)
+        );
         const uniqueImages = new Map();
-        photoRecords.forEach((photo) => { if (!uniqueImages.has(photo.image_url)) uniqueImages.set(photo.image_url, photo); });
+        photoRecords.forEach((photo) => {
+          if (!uniqueImages.has(photo.image_url)) {
+            uniqueImages.set(photo.image_url, photo);
+          }
+        });
+        // Older records may only have image_urls and no child image rows.
         parseImageUrls(firstVariant.image_urls).forEach((url) => {
-          if (!uniqueImages.has(url)) uniqueImages.set(url, { image_url: url, id: null, variant_id: firstVariant.id });
+          if (!uniqueImages.has(url)) {
+            uniqueImages.set(url, {
+              image_url: url,
+              id: null,
+              variant_id: firstVariant.id
+            });
+          }
         });
         createColourCard({
           color_name: colorName,
-          sizes: colourVariants.map((variant) => ({ size: variant.size, stock: variant.stock })),
+          sizes: colourVariants.map((variant) => ({
+            size: variant.size,
+            stock: variant.stock
+          })),
           images: Array.from(uniqueImages.values())
         });
       }
-
       addButton.textContent = "Save Changes";
       document.getElementById("form-heading").textContent = "Edit Product";
       cancelEditButton.hidden = false;
-      setStatus("Editing product. Existing colour photos are kept unless removed.");
+      setStatus(
+        "Editing product. Existing colour photos are kept unless removed."
+      );
       form.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
       setStatus("Could not open product: " + error.message);
     }
   }
-
-  // Product list now includes colour names and each colour's size-level stock.
   async function loadProducts() {
     productList.replaceChildren();
     productList.appendChild(makeElement("p", "", "Loading products..."));
     try {
       const { data, error } = await supabaseClient
         .from("products")
-        .select("id, name, price, stock, category, image_url, description, is_active")
+        .select(
+          "id, name, price, stock, category, image_url, description, is_active"
+        )
         .order("created_at", { ascending: false });
       if (error) throw error;
       productList.replaceChildren();
       if (!data || data.length === 0) {
         productList.appendChild(makeElement("p", "", "No products found."));
         return;
-      }
-      const productIds = data.map((product) => product.id);
-      const { data: variants, error: variantsError } = await supabaseClient
-        .from("product_variants")
-        .select("product_id, color_name, size, stock")
-        .in("product_id", productIds)
-        .order("id", { ascending: true });
-      if (variantsError) throw variantsError;
-      const variantsByProduct = new Map();
-      for (const variant of variants || []) {
-        if (!variantsByProduct.has(variant.product_id)) {
-          variantsByProduct.set(variant.product_id, []);
-        }
-        variantsByProduct.get(variant.product_id).push(variant);
       }
       for (const product of data) {
         const card = makeElement("article", "product");
@@ -501,29 +780,6 @@
           " · Total stock: " + (product.stock ?? 0) +
           " · " + (product.category || "Uncategorised")
         ));
-        const productVariants = variantsByProduct.get(product.id) || [];
-        const colourGroups = new Map();
-        for (const variant of productVariants) {
-          const colour = (variant.color_name || "Default").trim();
-          if (!colourGroups.has(colour)) colourGroups.set(colour, []);
-          colourGroups.get(colour).push(variant);
-        }
-        if (colourGroups.size > 0) {
-          info.appendChild(makeElement(
-            "p", "", "Colours: " + Array.from(colourGroups.keys()).join(", ")
-          ));
-          for (const [colour, colourVariants] of colourGroups) {
-            const sizeDetails = colourVariants.map((variant) =>
-              `${variant.size || "No size"} (${variant.stock ?? 0} items)`
-            );
-            info.appendChild(makeElement(
-              "p", "", `${colour} sizes: ${sizeDetails.join(", ")}`
-            ));
-          }
-        } else {
-          info.appendChild(makeElement("p", "", "Colours: None added"));
-          info.appendChild(makeElement("p", "", "Sizes: None added"));
-        }
         info.appendChild(makeElement(
           "p", "", product.is_active ? "Active" : "Inactive"
         ));
@@ -531,10 +787,14 @@
         const editButton = makeElement("button", "", "Edit");
         editButton.type = "button";
         editButton.addEventListener("click", () => editProduct(product));
-        const deleteButton = makeElement("button", "delete-button", "Delete");
+        const deleteButton = makeElement(
+          "button", "delete-button", "Delete"
+        );
         deleteButton.type = "button";
         deleteButton.addEventListener("click", async () => {
-          if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) return;
+          if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) {
+            return;
+          }
           deleteButton.disabled = true;
           try {
             const { error } = await supabaseClient
@@ -561,17 +821,20 @@
       ));
     }
   }
-
   async function saveColourVariants(productId, colours) {
+    // Upload the new photos before changing existing variant records.
     const prepared = [];
     for (const colour of colours) {
-      const newUrls = colour.selectedFiles.length ? await uploadImages(colour.selectedFiles) : [];
+      const newUrls = colour.selectedFiles.length
+        ? await uploadImages(colour.selectedFiles)
+        : [];
       const retainedUrls = colour.retainedImages.map((photo) => photo.url);
       const urls = [...new Set([...retainedUrls, ...newUrls])];
       prepared.push({ ...colour, urls });
     }
-
     const oldIds = originalVariants.map((variant) => variant.id);
+    // Create all replacement variants first. If an insert fails, existing
+    // variant rows remain in place.
     const rows = [];
     for (const colour of prepared) {
       for (const size of colour.sizes) {
@@ -584,45 +847,68 @@
         });
       }
     }
-
     let insertedVariants = [];
     if (rows.length) {
-      const { data, error } = await supabaseClient.from("product_variants")
-        .insert(rows).select("id, color_name, size, stock");
+      const { data, error } = await supabaseClient
+        .from("product_variants")
+        .insert(rows)
+        .select("id, color_name, size, stock");
       if (error) throw error;
       insertedVariants = data || [];
       if (insertedVariants.length !== rows.length) {
-        throw new Error("Some size variants were not returned by Supabase. Existing variants have not been deleted.");
+        throw new Error(
+          "Some size variants were not returned by Supabase. " +
+          "Existing variants have not been deleted."
+        );
       }
     }
-
+    // Attach every colour photo to each size variant of that colour.
     const imageRows = [];
     for (const variant of insertedVariants) {
-      const colour = prepared.find((item) => item.name === variant.color_name);
+      const colour = prepared.find(
+        (item) => item.name === variant.color_name
+      );
       if (!colour) continue;
-      colour.urls.forEach((url, index) => imageRows.push({
-        variant_id: variant.id, image_url: url, sort_order: index
-      }));
+      colour.urls.forEach((url, index) => {
+        imageRows.push({
+          variant_id: variant.id,
+          image_url: url,
+          sort_order: index
+        });
+      });
     }
-
     try {
       if (imageRows.length) {
-        const { error } = await supabaseClient.from("product_variant_images").insert(imageRows);
+        const { error } = await supabaseClient
+          .from("product_variant_images")
+          .insert(imageRows);
         if (error) throw error;
       }
     } catch (error) {
+      // Roll back newly inserted variants if their images could not be saved.
       if (insertedVariants.length) {
-        await supabaseClient.from("product_variants").delete().in("id", insertedVariants.map((variant) => variant.id));
+        await supabaseClient
+          .from("product_variants")
+          .delete()
+          .in("id", insertedVariants.map((variant) => variant.id));
       }
       throw error;
     }
-
+    // Only after the new variants and their images have been saved do we
+    // remove the previous variant records.
     if (oldIds.length) {
-      const { error } = await supabaseClient.from("product_variants").delete().in("id", oldIds);
-      if (error) throw new Error("New variants were saved, but old variants could not be removed: " + error.message);
+      const { error } = await supabaseClient
+        .from("product_variants")
+        .delete()
+        .in("id", oldIds);
+      if (error) {
+        throw new Error(
+          "New variants were saved, but old variants could not be removed: " +
+          error.message
+        );
+      }
     }
   }
-
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!form.reportValidity()) return;
@@ -630,78 +916,97 @@
     addColourButton.disabled = true;
     refreshButton.disabled = true;
     let productWasSaved = false;
-
     try {
       const formData = new FormData(form);
       const colours = collectColourData();
       const hasVariants = colours.some((colour) => colour.sizes.length > 0);
-      const totalVariantStock = colours.reduce((sum, colour) => sum + colour.sizes.reduce((sizeSum, size) => sizeSum + size.stock, 0), 0);
+      const totalVariantStock = colours.reduce(
+        (sum, colour) => sum + colour.sizes.reduce(
+          (sizeSum, size) => sizeSum + size.stock, 0
+        ), 0
+      );
       let mainImageUrl = editingImageUrl;
-
       if (productImageInput.files.length) {
         setStatus("Uploading main product photo...");
-        mainImageUrl = (await uploadImages([productImageInput.files[0]]))[0];
+        const urls = await uploadImages([productImageInput.files[0]]);
+        mainImageUrl = urls[0];
       }
-
       const product = {
         name: String(formData.get("name") || "").trim(),
         price: Number(formData.get("price")),
-        stock: hasVariants ? totalVariantStock : Number(formData.get("stock") || 0),
+        stock: hasVariants
+          ? totalVariantStock
+          : Number(formData.get("stock") || 0),
         category: String(formData.get("category") || "").trim() || null,
         image_url: mainImageUrl || null,
         description: String(formData.get("description") || "").trim() || null,
         is_active: true
       };
-
-      if (!product.name) throw new Error("Product name is required.");
-      if (!Number.isFinite(product.price) || product.price < 0) throw new Error("Enter a valid product price.");
-
+      if (!product.name) {
+        throw new Error("Product name is required.");
+      }
+      if (!Number.isFinite(product.price) || product.price < 0) {
+        throw new Error("Enter a valid product price.");
+      }
       let productId = editingProductId;
       if (editingProductId) {
         setStatus("Saving product details...");
-        const { error } = await supabaseClient.from("products").update(product).eq("id", editingProductId);
+        const { error } = await supabaseClient
+          .from("products")
+          .update(product)
+          .eq("id", editingProductId);
         if (error) throw error;
         productWasSaved = true;
       } else {
         setStatus("Creating product...");
-        const { data, error } = await supabaseClient.from("products").insert(product).select("id").single();
+        const { data, error } = await supabaseClient
+          .from("products")
+          .insert(product)
+          .select("id")
+          .single();
         if (error) throw error;
         productId = data.id;
         productWasSaved = true;
       }
-
       setStatus("Saving colour, size and stock options...");
       await saveColourVariants(productId, colours);
       setStatus("Product saved successfully.");
       resetProductForm();
       await loadProducts();
     } catch (error) {
-      setStatus((productWasSaved ? "Product details were saved, but options may need attention: " : "Could not save product: ") + error.message);
+      setStatus(
+        (productWasSaved
+          ? "Product details were saved, but options may need attention: "
+          : "Could not save product: ") + error.message
+      );
     } finally {
       addButton.disabled = false;
       addColourButton.disabled = false;
       refreshButton.disabled = false;
     }
   });
-
   refreshButton.addEventListener("click", loadProducts);
-
   async function initializeAdminPanel() {
     try {
       if (typeof supabaseClient === "undefined" || !supabaseClient) {
-        throw new Error("Supabase client was not found. Check frontend/scripts/supabase.js.");
+        throw new Error(
+          "Supabase client was not found. Check frontend/scripts/supabase.js."
+        );
       }
-
-      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
+      const { data: sessionData, error: sessionError } =
+        await supabaseClient.auth.getSession();
       if (sessionError) throw sessionError;
       if (!sessionData.session) {
         window.location.replace("./signin.html");
         return;
       }
-
       const user = sessionData.session.user;
-      const { data: adminRecord, error: adminError } = await supabaseClient.from("admin_users")
-        .select("user_id").eq("user_id", user.id).maybeSingle();
+      const { data: adminRecord, error: adminError } =
+        await supabaseClient
+          .from("admin_users")
+          .select("user_id")
+          .eq("user_id", user.id)
+          .maybeSingle();
       if (adminError) throw adminError;
       if (!adminRecord) {
         setStatus("Access denied. This account is not an administrator.");
@@ -709,7 +1014,6 @@
         window.location.replace("./signin.html");
         return;
       }
-
       document.getElementById("admin-content").hidden = false;
       setStatus("Admin access verified. Supabase connected.");
       await loadProducts();
@@ -717,16 +1021,15 @@
       setStatus("Connection error: " + error.message);
     }
   }
-
-  document.getElementById("sign-out-button").addEventListener("click", async () => {
-    const { error } = await supabaseClient.auth.signOut();
-    if (error) {
-      alert("Sign out failed: " + error.message);
-      return;
-    }
-    window.location.href = "./signin.html";
-  });
-
+  document.getElementById("sign-out-button")
+    .addEventListener("click", async () => {
+      const { error } = await supabaseClient.auth.signOut();
+      if (error) {
+        alert("Sign out failed: " + error.message);
+        return;
+      }
+      window.location.href = "./signin.html";
+    });
   initializeAdminPanel();
 })();
 </script>
