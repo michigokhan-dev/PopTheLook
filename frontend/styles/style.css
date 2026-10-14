@@ -405,7 +405,7 @@
   color: var(--muted);
   font-size: 14px;
 }
-@media (max-width: 1000px) {
+@media (max-width: 950px) {
   .products-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px 12px;
