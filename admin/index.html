@@ -366,6 +366,15 @@ async function uploadProductImages(files) {
 }
 
       const formData = new FormData(form);
+      
+const selectedFiles = Array.from(productImageInput.files);
+let uploadedImageUrls = [];
+
+if (selectedFiles.length > 0) {
+  statusMessage.textContent = "Uploading product photos...";
+  uploadedImageUrls = await uploadProductImages(selectedFiles);
+}
+
       const product = {
         name: String(formData.get("name")).trim(),
         price: Number(formData.get("price")),
