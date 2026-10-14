@@ -252,6 +252,9 @@
   <span>ADMIN PANEL</span>
   <button id="sign-out-button" type="button">Sign Out</button>
 </header>
+  <p id="connection-status" style="padding:12px 5%;color:#8b2e2e">
+  Checking admin connection...
+</p>
 <main id="admin-content" hidden>
   <h2>Dashboard</h2>
   <p>Manage your store products, colours, sizes and stock.</p>
@@ -348,8 +351,13 @@
   let originalVariants = [];
   let nextColourId = 1;
   function setStatus(message) {
-    statusMessage.textContent = message;
+  statusMessage.textContent = message;
+
+  const visibleStatus = document.getElementById("connection-status");
+  if (visibleStatus) {
+    visibleStatus.textContent = message;
   }
+}
   function makeElement(tag, className, text) {
     const element = document.createElement(tag);
     if (className) element.className = className;
