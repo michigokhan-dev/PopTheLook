@@ -77,6 +77,61 @@
     "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
   );
 
+    // Load products on the homepage
+  const productsGrid = document.getElementById("products-grid");
+
+  async function loadStoreProducts() {
+    if (!productsGrid) return;
+
+    const { data: products, error } = await supabase
+      .from("products")
+      .select("id, name, price, category, image_url, is_active")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      console.error("Products could not be loaded:", error);
+      productsGrid.textContent = "Products could not be loaded.";
+      return;
+    }
+
+    productsGrid.replaceChildren();
+
+    if (!products || products.length === 0) {
+      productsGrid.textContent = "New arrivals coming soon.";
+      return;
+    }
+
+    products.forEach((product) => {
+      const card = document.createElement("article");
+      card.className = "product-card";
+
+      if (product.image_url) {
+        const image = document.createElement("img");
+        image.src = product.image_url;
+        image.alt = product.name || "Fashion product";
+        image.loading = "lazy";
+        card.appendChild(image);
+      }
+
+      const name = document.createElement("h3");
+      name.textContent = product.name || "Untitled product";
+      card.appendChild(name);
+
+      const price = document.createElement("p");
+      price.className = "product-price";
+      price.textContent = new Intl.NumberFormat("en-GB", {
+        style: "currency",
+        currency: "GBP"
+      }).format(Number(product.price) || 0);
+
+      card.appendChild(price);
+      productsGrid.appendChild(card);
+    });
+  }
+
+  loadStoreProducts();
+
   const accountIcon = document.getElementById("account-icon");
 
   let dropdown = document.getElementById("account-dropdown");
