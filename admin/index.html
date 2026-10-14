@@ -980,7 +980,7 @@
   refreshButton.addEventListener("click", loadProducts);
   async function initializeAdminPanel() {
     try {
-      if (!window.supabaseClient) {
+      if (typeof supabaseClient === "undefined" || !supabaseClient) {
         throw new Error(
           "Supabase client was not found. Check frontend/scripts/supabase.js."
         );
