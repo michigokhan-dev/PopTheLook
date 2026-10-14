@@ -746,23 +746,31 @@
       setStatus("Could not open product: " + error.message);
     }
   }
-  async function loadProducts() {
+    async function loadProducts() {
     productList.replaceChildren();
     productList.appendChild(makeElement("p", "", "Loading products..."));
     try {
-      const { data, error } = await supabaseClient
+      const { data: products, error: productsError } = await supabaseClient
         .from("products")
         .select(
           "id, name, price, stock, category, image_url, description, is_active"
         )
         .order("created_at", { ascending: false });
-      if (error) throw error;
+      if (productsError) throw productsError;
       productList.replaceChildren();
-      if (!data || data.length === 0) {
+      if (!products || products.length === 0) {
         productList.appendChild(makeElement("p", "", "No products found."));
         return;
       }
-      for (const product of data) {
+      const productIds = products.map((product) => product.id);
+      const { data: variants, error: variantsError } = await supabaseClient
+        .from("product_variants")
+        .select("id, product_id, color_name, size, stock")
+        .in("product_id", productIds)
+        .order("color_name", { ascending: true })
+        .order("size", { ascending: true });
+      if (variantsError) throw variantsError;
+      for (const product of products) {
         const card = makeElement("article", "product");
         const info = makeElement("div", "product-info");
         if (product.image_url) {
@@ -773,26 +781,75 @@
           image.onerror = () => image.remove();
           info.appendChild(image);
         }
-        info.appendChild(makeElement("h3", "", product.name || "Untitled"));
-        info.appendChild(makeElement(
-          "p", "",
-          "£" + Number(product.price).toFixed(2) +
-          " · Total stock: " + (product.stock ?? 0) +
-          " · " + (product.category || "Uncategorised")
-        ));
-        info.appendChild(makeElement(
-          "p", "", product.is_active ? "Active" : "Inactive"
-        ));
+        info.appendChild(
+          makeElement("h3", "", product.name || "Untitled")
+        );
+        info.appendChild(
+          makeElement(
+            "p",
+            "",
+            "£" + Number(product.price).toFixed(2) +
+            " · Total stock: " + (product.stock ?? 0) +
+            " · " + (product.category || "Uncategorised")
+          )
+        );
+        const productVariants = (variants || []).filter(
+          (variant) => variant.product_id === product.id
+        );
+        const colourGroups = new Map();
+        for (const variant of productVariants) {
+          const colour = variant.color_name || "Default";
+          if (!colourGroups.has(colour)) {
+            colourGroups.set(colour, []);
+          }
+          colourGroups.get(colour).push(variant);
+        }
+        if (colourGroups.size > 0) {
+          const colourNames = Array.from(colourGroups.keys()).join(", ");
+          info.appendChild(
+            makeElement("p", "", "Colours: " + colourNames)
+          );
+          for (const [colour, colourVariants] of colourGroups) {
+            const sizeDetails = colourVariants.map(
+              (variant) =>
+                `${variant.size || "No size"} (${variant.stock ?? 0} items)`
+            );
+            info.appendChild(
+              makeElement(
+                "p",
+                "",
+                `${colour} sizes: ${sizeDetails.join(", ")}`
+              )
+            );
+          }
+        } else {
+          info.appendChild(
+            makeElement("p", "", "No colours or sizes added.")
+          );
+        }
+        info.appendChild(
+          makeElement(
+            "p",
+            "",
+            product.is_active ? "Active" : "Inactive"
+          )
+        );
         const actions = makeElement("div", "product-actions");
         const editButton = makeElement("button", "", "Edit");
         editButton.type = "button";
         editButton.addEventListener("click", () => editProduct(product));
         const deleteButton = makeElement(
-          "button", "delete-button", "Delete"
+          "button",
+          "delete-button",
+          "Delete"
         );
         deleteButton.type = "button";
         deleteButton.addEventListener("click", async () => {
-          if (!confirm(`Delete "${product.name}"? This cannot be undone.`)) {
+          if (
+            !confirm(
+              `Delete "${product.name}"? This cannot be undone.`
+            )
+          ) {
             return;
           }
           deleteButton.disabled = true;
@@ -803,7 +860,9 @@
               .eq("id", product.id);
             if (error) throw error;
             setStatus("Product deleted.");
-            if (editingProductId === product.id) resetProductForm();
+            if (editingProductId === product.id) {
+              resetProductForm();
+            }
             await loadProducts();
           } catch (error) {
             setStatus("Delete failed: " + error.message);
@@ -816,9 +875,13 @@
       }
     } catch (error) {
       productList.replaceChildren();
-      productList.appendChild(makeElement(
-        "p", "", "Could not load products: " + error.message
-      ));
+      productList.appendChild(
+        makeElement(
+          "p",
+          "",
+          "Could not load products: " + error.message
+        )
+      );
     }
   }
   async function saveColourVariants(productId, colours) {
