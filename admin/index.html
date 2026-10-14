@@ -176,11 +176,19 @@
             <label for="category">Category</label>
             <input id="category" name="category" maxlength="100">
           </div>
-          <div class="full-width">
-            <label for="image_url">Image URL</label>
-            <input id="image_url" name="image_url" type="url"
-              placeholder="https://example.com/image.jpg">
-          </div>
+          
+<div class="full-width">
+  <label for="product-image">Product Photos</label>
+  <input
+    id="product-image"
+    type="file"
+    accept="image/*"
+    multiple
+  >
+  <small>Select one or more product photos from your device.</small>
+  <div id="image-preview" class="image-preview"></div>
+</div>
+
           <div class="full-width">
             <label for="description">Description</label>
             <textarea id="description" name="description"
