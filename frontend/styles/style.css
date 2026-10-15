@@ -451,12 +451,18 @@
   min-width: 0 !important;
   width: 100% !important;
 }
-#products-grid .product-card img {
+#products-grid .product-image-box {
+  width: 100% !important;
+  aspect-ratio: 1 / 2 !important;
+  overflow: hidden !important;
+  background: #f5f0e7 !important;
+}
+
+#products-grid .product-image-box img {
   display: block !important;
   width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 1 / 2 !important;
+  height: 100% !important;
+  aspect-ratio: auto !important;
   object-fit: contain !important;
   object-position: center !important;
-  background: #f5f0e7 !important;
 }
