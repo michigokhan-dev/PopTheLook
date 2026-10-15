@@ -10,6 +10,24 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="frontend/styles/style.css">
+  <style>
+    .product-prices {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      flex-wrap: wrap;
+    }
+    .product-price-old {
+      color: #796b58;
+      text-decoration: line-through;
+      opacity: 0.8;
+    }
+    .product-price-current {
+      color: #211e19;
+      font-weight: 600;
+    }
+  </style>
 </head>
 <body>
   <header class="header">
@@ -20,7 +38,6 @@
       <a href="#about">About</a>
     </nav>
     <div class="header-actions">
-      
       <a class="icon-button" href="#shop" aria-label="Search products">
         <svg viewBox="0 0 24 24">
           <circle cx="10.8" cy="10.8" r="7.2"/>
@@ -68,7 +85,7 @@
       © 2026 POP THE LOOK. All rights reserved.
     </footer>
   </main>
-  
+
 <script type="module">
   import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
@@ -77,73 +94,104 @@
     "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
   );
 
-    // Load products on the homepage
   const productsGrid = document.getElementById("products-grid");
 
-    async function loadStoreProducts() {
+  const formatPrice = value => new Intl.NumberFormat("en-GB", {
+    style: "currency",
+    currency: "GBP"
+  }).format(Number(value) || 0);
+
+  async function loadStoreProducts() {
     if (!productsGrid) return;
+
     const { data: products, error } = await supabase
       .from("products")
-      .select("id, name, price, category, image_url, is_active")
+      .select("id, name, price, compare_at_price, category, image_url, is_active")
       .eq("is_active", true)
       .order("created_at", { ascending: false });
+
     if (error) {
       console.error("Products error:", error);
       productsGrid.textContent = "Products could not be loaded.";
       return;
     }
+
     productsGrid.replaceChildren();
+
     if (!products || products.length === 0) {
       productsGrid.textContent = "New arrivals coming soon.";
       return;
     }
+
     const { data: variants, error: variantsError } = await supabase
       .from("product_variants")
       .select("id, product_id, color_name, size, stock, image_urls")
-      .in("product_id", products.map(p => p.id));
+      .in("product_id", products.map(product => product.id));
+
     if (variantsError) {
       console.error("Variants error:", variantsError);
     }
+
     const allVariants = variants || [];
-    const variantIds = allVariants.map(v => v.id);
+    const variantIds = allVariants.map(variant => variant.id);
     let variantImages = [];
+
     if (variantIds.length > 0) {
       const { data, error: imagesError } = await supabase
         .from("product_variant_images")
         .select("variant_id, image_url, sort_order")
         .in("variant_id", variantIds)
         .order("sort_order", { ascending: true });
+
       if (imagesError) {
         console.warn("Variant images:", imagesError);
       } else {
         variantImages = data || [];
       }
     }
+
     products.forEach(product => {
       const card = document.createElement("article");
-card.className = "product-card";
-card.style.cursor = "pointer";
+      card.className = "product-card";
+      card.style.cursor = "pointer";
 
-card.addEventListener("click", () => {
-  window.location.href =
-    `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
-});
       const image = document.createElement("img");
       image.alt = product.name || "Fashion product";
       image.loading = "lazy";
       image.src = product.image_url || "";
       if (product.image_url) card.appendChild(image);
+
       const name = document.createElement("h3");
       name.textContent = product.name || "Untitled product";
       card.appendChild(name);
-      const price = document.createElement("p");
-      price.className = "product-price";
-      price.textContent = new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: "GBP"
-      }).format(Number(product.price) || 0);
-      card.appendChild(price);
-      productsGrid.appendChild(card);
+
+      const prices = document.createElement("div");
+      prices.className = "product-prices";
+
+      const currentPrice = Number(product.price) || 0;
+      const compareAtPrice = Number(product.compare_at_price);
+      if (product.compare_at_price !== null &&
+          product.compare_at_price !== "" &&
+          Number.isFinite(compareAtPrice) &&
+          compareAtPrice > currentPrice) {
+        const oldPrice = document.createElement("span");
+        oldPrice.className = "product-price-old";
+        oldPrice.textContent = formatPrice(compareAtPrice);
+        oldPrice.setAttribute("aria-label", "Old price");
+        prices.appendChild(oldPrice);
+      }
+
+      const currentPriceElement = document.createElement("span");
+      currentPriceElement.className = "product-price-current";
+      currentPriceElement.textContent = formatPrice(currentPrice);
+      currentPriceElement.setAttribute("aria-label", "Now price");
+      prices.appendChild(currentPriceElement);
+      card.appendChild(prices);
+
+      const productVariants = allVariants.filter(
+        variant => variant.product_id === product.id
+      );
+
       const colors = new Map();
       productVariants.forEach(variant => {
         const color = variant.color_name || "Default";
@@ -155,41 +203,66 @@ card.addEventListener("click", () => {
           size: variant.size || "One size",
           stock: Number(variant.stock) || 0
         });
+
         if (Array.isArray(variant.image_urls)) {
           colorData.photos.push(...variant.image_urls);
         }
+
         variantImages
-          .filter(img => img.variant_id === variant.id)
-          .forEach(img => colorData.photos.push(img.image_url));
+          .filter(item => item.variant_id === variant.id)
+          .forEach(item => colorData.photos.push(item.image_url));
       });
+
       colors.forEach(data => {
         data.photos = [...new Set(data.photos.filter(Boolean))];
         data.sizes = data.sizes.filter(
-          (item, index, arr) =>
-            arr.findIndex(other => other.size === item.size) === index
+          (item, index, array) =>
+            array.findIndex(other => other.size === item.size) === index
         );
       });
+
       if (colors.size > 0) {
         const colorLabel = document.createElement("label");
         colorLabel.textContent = "Color: ";
         const colorSelect = document.createElement("select");
         colorSelect.setAttribute("aria-label", "Choose color");
+
         colors.forEach((_, color) => {
           const option = document.createElement("option");
           option.value = color;
           option.textContent = color;
           colorSelect.appendChild(option);
         });
+
         colorLabel.appendChild(colorSelect);
         card.appendChild(colorLabel);
+
         const sizeLabel = document.createElement("label");
         sizeLabel.textContent = "Size: ";
         const sizeSelect = document.createElement("select");
         sizeSelect.setAttribute("aria-label", "Choose size");
         const stockMessage = document.createElement("p");
         stockMessage.className = "product-price";
+
+        function updateStock() {
+          const selectedColor = colors.get(colorSelect.value);
+          const selectedSize = selectedColor?.sizes.find(
+            item => item.size === sizeSelect.value
+          );
+
+          if (!selectedSize) {
+            stockMessage.textContent = "Size unavailable";
+          } else if (selectedSize.stock <= 0) {
+            stockMessage.textContent = "Out of stock";
+          } else {
+            stockMessage.textContent = `In stock: ${selectedSize.stock}`;
+          }
+        }
+
         function updateColorOptions() {
           const selectedColor = colors.get(colorSelect.value);
+          if (!selectedColor) return;
+
           if (selectedColor.photos.length > 0) {
             image.src = selectedColor.photos[0];
             if (!image.isConnected) {
@@ -198,6 +271,7 @@ card.addEventListener("click", () => {
           } else if (product.image_url) {
             image.src = product.image_url;
           }
+
           sizeSelect.replaceChildren();
           selectedColor.sizes.forEach(item => {
             const option = document.createElement("option");
@@ -208,27 +282,22 @@ card.addEventListener("click", () => {
           });
           updateStock();
         }
-        function updateStock() {
-          const selectedColor = colors.get(colorSelect.value);
-          const selectedSize = selectedColor.sizes.find(
-            item => item.size === sizeSelect.value
-          );
-          if (!selectedSize) {
-            stockMessage.textContent = "Size unavailable";
-          } else if (selectedSize.stock <= 0) {
-            stockMessage.textContent = "Out of stock";
-          } else {
-            stockMessage.textContent =
-              `In stock: ${selectedSize.stock}`;
-          }
-        }
+
         sizeLabel.appendChild(sizeSelect);
         card.appendChild(sizeLabel);
         card.appendChild(stockMessage);
+
         colorSelect.addEventListener("change", updateColorOptions);
         sizeSelect.addEventListener("change", updateStock);
         updateColorOptions();
       }
+
+      card.addEventListener("click", event => {
+        if (event.target.closest("select, label")) return;
+        window.location.href =
+          `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
+      });
+
       productsGrid.appendChild(card);
     });
   }
@@ -236,10 +305,9 @@ card.addEventListener("click", () => {
   loadStoreProducts();
 
   const accountIcon = document.getElementById("account-icon");
-
   let dropdown = document.getElementById("account-dropdown");
 
-  if (!dropdown) {
+  if (!dropdown && accountIcon?.parentElement) {
     dropdown = document.createElement("div");
     dropdown.id = "account-dropdown";
     dropdown.textContent = "Sign Out";
@@ -261,23 +329,23 @@ card.addEventListener("click", () => {
 
   const { data: { session } } = await supabase.auth.getSession();
 
-  if (session) {
+  if (session && accountIcon) {
     accountIcon.href = "#";
     accountIcon.setAttribute("aria-label", "Account menu");
-    dropdown.style.display = "none";
   }
 
-  accountIcon.addEventListener("click", async (event) => {
-    const { data: { session } } = await supabase.auth.getSession();
-
-    if (!session) return;
+  accountIcon?.addEventListener("click", async event => {
+    const { data: { session: currentSession } } = await supabase.auth.getSession();
+    if (!currentSession) return;
 
     event.preventDefault();
-    dropdown.style.display =
-      dropdown.style.display === "none" ? "block" : "none";
+    if (dropdown) {
+      dropdown.style.display =
+        dropdown.style.display === "none" ? "block" : "none";
+    }
   });
 
-  dropdown.addEventListener("click", async () => {
+  dropdown?.addEventListener("click", async () => {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
@@ -289,14 +357,14 @@ card.addEventListener("click", () => {
   });
 
   supabase.auth.onAuthStateChange((_event, session) => {
+    if (!accountIcon) return;
     if (!session) {
       accountIcon.href = "frontend/pages/signin.html";
-      dropdown.style.display = "none";
+      if (dropdown) dropdown.style.display = "none";
     } else {
       accountIcon.href = "#";
     }
   });
 </script>
-
 </body>
 </html>
