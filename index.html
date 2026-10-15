@@ -28,15 +28,21 @@
   display: flex !important;
   flex-direction: column !important;
 }
-    /* Show the whole image, with a taller product-photo frame. */
-    #products-grid .product-card img {
+   /* Keep every product image box the same size */
+#products-grid .product-image-box {
+  width: 100% !important;
+  aspect-ratio: 1 / 2 !important;
+  overflow: hidden;
+  background-color: #f5f0e7;
+}
+
+#products-grid .product-image-box img {
   display: block !important;
   width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 1 / 2 !important;
+  height: 100% !important;
+  max-width: none !important;
   object-fit: contain !important;
   object-position: center !important;
-  background-color: #f5f0e7;
 }
     @media (min-width: 900px) {
       #products-grid.products-grid {
@@ -194,11 +200,19 @@
       card.className = "product-card";
       card.style.cursor = "pointer";
 
-      const image = document.createElement("img");
-      image.alt = product.name || "Fashion product";
-      image.loading = "lazy";
-      image.src = product.image_url || "";
-      if (product.image_url) card.appendChild(image);
+
+const image = document.createElement("img");
+image.alt = product.name || "Fashion product";
+image.loading = "lazy";
+image.src = product.image_url || "";
+
+if (product.image_url) {
+  const imageBox = document.createElement("div");
+  imageBox.className = "product-image-box";
+  imageBox.appendChild(image);
+  card.appendChild(imageBox);
+}
+
 
       const name = document.createElement("h3");
       name.textContent = product.name || "Untitled product";
