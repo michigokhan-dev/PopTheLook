@@ -461,4 +461,19 @@
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
+        
+/* Force 4 products per row on landscape phones */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  body #products-grid.products-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+
+/* Keep 2 products per row on portrait phones */
+@media screen and (orientation: portrait) and (max-width: 700px) {
+  body #products-grid.products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
      
