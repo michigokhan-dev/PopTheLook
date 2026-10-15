@@ -121,7 +121,13 @@
     }
     products.forEach(product => {
       const card = document.createElement("article");
-      card.className = "product-card";
+card.className = "product-card";
+card.style.cursor = "pointer";
+
+card.addEventListener("click", () => {
+  window.location.href =
+    `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
+});
       const image = document.createElement("img");
       image.alt = product.name || "Fashion product";
       image.loading = "lazy";
