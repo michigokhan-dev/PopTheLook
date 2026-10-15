@@ -441,3 +441,23 @@
     padding: 0 12px;
   }
 }
+        /* FORCE ALL PRODUCT IMAGE BOXES TO MATCH */
+#products-grid.products-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  align-items: stretch !important;
+}
+#products-grid .product-card {
+  display: flex !important;
+  flex-direction: column !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#products-grid .product-card img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1 / 2 !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+}
