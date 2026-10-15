@@ -143,9 +143,7 @@ card.addEventListener("click", () => {
         currency: "GBP"
       }).format(Number(product.price) || 0);
       card.appendChild(price);
-      const productVariants = allVariants.filter(
-        v => v.product_id === product.id
-      );
+      productsGrid.appendChild(card);
       const colors = new Map();
       productVariants.forEach(variant => {
         const color = variant.color_name || "Default";
