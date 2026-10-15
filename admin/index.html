@@ -433,8 +433,11 @@
         option.value = name;
         select.appendChild(option);
       });
-      if (colourNames.includes(item.colorName)) select.value = item.colorName;
-      else if (colourNames.length === 1) {
+      if (colourNames.includes(item.colorName)) {
+        select.value = item.colorName;
+      } else if (!item.colorName && colourNames.length === 1) {
+        // Auto-assign only genuinely unassigned photos. Do not overwrite
+        // a saved colour just because its colour card has not been added yet.
         item.colorName = colourNames[0];
         select.value = colourNames[0];
       }
