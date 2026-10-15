@@ -11,18 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="frontend/styles/style.css">
   <style>
-    /* Make homepage product cards wider, in a clean two-column layout. */
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 30px 20px;
-      width: 100%;
-    }
-    .product-card {
-      min-width: 0;
-      width: 100%;
-    }
-    /* Keep the full product photo visible without cropping. */
+    /* Keep the full product photo visible on the homepage without cropping. */
     .product-card img {
       display: block;
       width: 100%;
@@ -31,12 +20,6 @@
       object-fit: contain;
       object-position: center;
       background-color: #f5f0e7;
-    }
-    @media (min-width: 900px) {
-      .products-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 36px 24px;
-      }
     }
     .product-prices {
       display: flex;
