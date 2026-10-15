@@ -274,15 +274,16 @@
           <input id="name" name="name" required maxlength="150">
         </div>
         <div>
-          <label for="price">Price (GBP) *</label>
-          <input id="price" name="price" type="number"
-            min="0" step="0.01" required>
+          <label for="compare-at-price">Old Price (£) — optional</label>
+          <input id="compare-at-price" name="compare_at_price" type="number"
+            min="0" step="0.01" placeholder="e.g. 10.99">
+          <small class="hint">Only fill this in when you want to show a discount.</small>
         </div>
         <div>
-          <label for="compare-at-price">Old Price / Compare-at Price (GBP)</label>
-          <input id="compare-at-price" name="compare_at_price" type="number"
-            min="0" step="0.01" placeholder="Optional original price">
-          <small class="hint">Optional. Must be higher than the current price to show a discount.</small>
+          <label for="price">Now Price (£) *</label>
+          <input id="price" name="price" type="number"
+            min="0" step="0.01" required placeholder="e.g. 5.99">
+          <small class="hint">This is the current price customers will pay.</small>
         </div>
         <div>
           <label for="stock">General Stock</label>
@@ -1047,10 +1048,10 @@
       }
       if (product.compare_at_price !== null &&
           (!Number.isFinite(product.compare_at_price) || product.compare_at_price < 0)) {
-        throw new Error("Enter a valid old price, or leave it empty.");
+        throw new Error("Enter a valid Old Price, or leave it empty.");
       }
       if (product.compare_at_price !== null && product.compare_at_price <= product.price) {
-        throw new Error("The old price must be higher than the current price.");
+        throw new Error("Old Price must be higher than Now Price.");
       }
       let productId = editingProductId;
       if (editingProductId) {
