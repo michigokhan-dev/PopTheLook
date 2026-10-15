@@ -159,16 +159,33 @@
       margin-bottom: 0;
     }
     .image-preview {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 10px;
+      margin-top: 12px;
     }
-    .image-preview img {
-      width: 75px;
-      height: 95px;
+    .photo-item {
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+    .photo-item img {
+      display: block;
+      width: 100%;
+      height: 145px;
       object-fit: cover;
       border: 1px solid var(--line);
+      margin-bottom: 8px;
+    }
+    .photo-item label { margin: 5px 0; }
+    .photo-item select { padding: 8px; font-size: 13px; }
+    .photo-item .photo-name {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 6px;
     }
     .existing-photo {
       position: relative;
@@ -362,6 +379,8 @@
   let editingProductId = null;
   let editingImageUrl = null;
   let editingImageUrls = [];
+  // Every photo is managed in the single Main Product Photos area and linked to one colour.
+  let photoItems = [];
   let originalVariants = [];
   let nextColourId = 1;
   function setStatus(message) {
@@ -382,21 +401,71 @@
       URL.revokeObjectURL(img.src);
     });
   }
-  function showImagePreview(files, container) {
-    revokePreviewUrls(container);
-    container.replaceChildren();
-    Array.from(files || []).forEach((file) => {
-      if (!file.type.startsWith("image/")) return;
+  function getColourNames() {
+    return Array.from(colourList.querySelectorAll(".colour-name"))
+      .map((input) => input.value.trim()).filter(Boolean);
+  }
+  function renderPhotoPreview() {
+    revokePreviewUrls(imagePreview);
+    imagePreview.replaceChildren();
+    const colourNames = getColourNames();
+    photoItems.forEach((item, index) => {
+      const card = makeElement("div", "photo-item");
       const img = document.createElement("img");
-      img.src = URL.createObjectURL(file);
-      img.dataset.objectUrl = "true";
-      img.alt = file.name;
-      container.appendChild(img);
+      img.alt = item.file ? item.file.name : "Product photo";
+      if (item.file) {
+        img.src = URL.createObjectURL(item.file);
+        img.dataset.objectUrl = "true";
+      } else {
+        img.src = item.url;
+      }
+      const filename = makeElement("span", "photo-name",
+        item.file ? item.file.name : `Existing photo ${index + 1}`);
+      const label = makeElement("label", "", "This photo's colour *");
+      const select = document.createElement("select");
+      select.required = colourNames.length > 0;
+      select.dataset.photoIndex = String(index);
+      const placeholder = makeElement("option", "", colourNames.length ? "Choose a colour" : "Add a colour first");
+      placeholder.value = "";
+      select.appendChild(placeholder);
+      colourNames.forEach((name) => {
+        const option = makeElement("option", "", name);
+        option.value = name;
+        select.appendChild(option);
+      });
+      if (colourNames.includes(item.colorName)) select.value = item.colorName;
+      else if (colourNames.length === 1) {
+        item.colorName = colourNames[0];
+        select.value = colourNames[0];
+      }
+      select.addEventListener("change", () => { item.colorName = select.value; });
+      const remove = makeElement("button", "delete-button", "Remove Photo");
+      remove.type = "button";
+      remove.addEventListener("click", () => {
+        photoItems.splice(index, 1);
+        renderPhotoPreview();
+      });
+      card.append(img, filename, label, select, remove);
+      imagePreview.appendChild(card);
     });
+    if (!photoItems.length) {
+      imagePreview.appendChild(makeElement("p", "hint", "No photos selected yet."));
+    }
   }
   productImageInput.addEventListener("change", () => {
-    showImagePreview(productImageInput.files, imagePreview);
+    Array.from(productImageInput.files || []).forEach((file) => {
+      if (file.type.startsWith("image/")) photoItems.push({ file, url: null, colorName: "" });
+    });
+    productImageInput.value = "";
+    renderPhotoPreview();
   });
+  function refreshPhotoColourOptions() {
+    const previous = photoItems.map((item) => item.colorName);
+    renderPhotoPreview();
+    photoItems.forEach((item, index) => {
+      if (previous[index] && getColourNames().includes(previous[index])) item.colorName = previous[index];
+    });
+  }
   async function uploadImages(files) {
     const urls = [];
     for (const file of Array.from(files || [])) {
@@ -467,6 +536,7 @@
     removeColour.addEventListener("click", () => {
       card.remove();
       updateStockSummary();
+      refreshPhotoColourOptions();
     });
     title.append(heading, removeColour);
     const nameLabel = makeElement("label", "", "Colour Name *");
@@ -477,8 +547,8 @@
     nameInput.placeholder = "e.g. Black";
     nameInput.value = data.color_name || "";
     nameInput.addEventListener("input", () => {
-      heading.textContent =
-        nameInput.value.trim() || `Colour ${colourId}`;
+      heading.textContent = nameInput.value.trim() || `Colour ${colourId}`;
+      refreshPhotoColourOptions();
     });
     const sizesHeading = makeElement(
       "h4", "", "Sizes and quantities"
@@ -512,6 +582,7 @@
     );
     colourList.appendChild(card);
     updateStockSummary();
+    refreshPhotoColourOptions();
     return card;
   }
   addColourButton.addEventListener("click", () => {
@@ -592,6 +663,7 @@
     editingProductId = null;
     editingImageUrl = null;
     editingImageUrls = [];
+    photoItems = [];
     originalVariants = [];
     nextColourId = 1;
     addButton.textContent = "Add Product";
@@ -653,13 +725,22 @@
       form.elements.namedItem("category").value = product.category || "";
       form.elements.namedItem("description").value =
         product.description || "";
-      editingImageUrls.forEach((url) => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "Current product photo";
-        imagePreview.appendChild(img);
-      });
       const grouped = new Map();
+      const urlColours = new Map();
+      variants.forEach((variant) => {
+        const colourName = variant.color_name || "Default";
+        const urls = new Set([
+          ...parseImageUrls(variant.image_urls),
+          ...images.filter((image) => image.variant_id === variant.id).map((image) => image.image_url)
+        ]);
+        urls.forEach((url) => {
+          if (url && !urlColours.has(url)) urlColours.set(url, colourName);
+        });
+      });
+      editingImageUrls.forEach((url) => photoItems.push({
+        url, file: null, colorName: urlColours.get(url) || ""
+      }));
+      renderPhotoPreview();
       variants.forEach((variant) => {
         const key = variant.color_name || "Default";
         if (!grouped.has(key)) grouped.set(key, []);
@@ -858,10 +939,13 @@
     }
   }
   async function saveColourVariants(productId, colours, productPhotoUrls) {
-    // Product photos are uploaded in the Main Product Photos field and shared
-    // with the product's colour/size variants for the existing product gallery.
-    const urls = [...new Set((productPhotoUrls || []).filter(Boolean))];
-    const prepared = colours.map((colour) => ({ ...colour, urls }));
+    // Only photos tagged with a colour are saved to that colour's variants.
+    const prepared = colours.map((colour) => ({
+      ...colour,
+      urls: [...new Set(photoItems
+        .filter((item) => item.colorName === colour.name && item.url)
+        .map((item) => item.url))]
+    }));
     const oldIds = originalVariants.map((variant) => variant.id);
     // Create all replacement variants first. If an insert fails, existing
     // variant rows remain in place.
@@ -955,12 +1039,28 @@
           (sizeSum, size) => sizeSum + size.stock, 0
         ), 0
       );
-      let productPhotoUrls = [...editingImageUrls];
-      if (productImageInput.files.length) {
-        setStatus("Uploading product photos...");
-        const uploadedUrls = await uploadImages(productImageInput.files);
-        productPhotoUrls = [...new Set([...productPhotoUrls, ...uploadedUrls])];
+      if (photoItems.length && colours.length === 0) {
+        throw new Error("Add at least one colour, then assign each product photo to its colour.");
       }
+      for (const item of photoItems) {
+        if (colours.length && !colours.some((colour) => colour.name === item.colorName)) {
+          throw new Error("Please choose the correct colour for every photo in Main Product Photos.");
+        }
+      }
+      const filesToUpload = photoItems.filter((item) => item.file);
+      if (filesToUpload.length) {
+        setStatus("Uploading product photos...");
+        const uploadedUrls = await uploadImages(filesToUpload.map((item) => item.file));
+        let uploadedIndex = 0;
+        photoItems.forEach((item) => {
+          if (item.file) {
+            item.url = uploadedUrls[uploadedIndex++];
+            item.file = null;
+          }
+        });
+        renderPhotoPreview();
+      }
+      const productPhotoUrls = [...new Set(photoItems.map((item) => item.url).filter(Boolean))];
       const mainImageUrl = productPhotoUrls[0] || editingImageUrl || null;
       const product = {
         name: String(formData.get("name") || "").trim(),
