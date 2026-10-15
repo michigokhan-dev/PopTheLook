@@ -299,11 +299,10 @@
             placeholder="e.g. Dresses">
         </div>
         <div class="full-width">
-          <label for="product-image">Main Product Photo</label>
-          <input id="product-image" type="file" accept="image/*">
+          <label for="product-image">Main Product Photos</label>
+          <input id="product-image" type="file" accept="image/*" multiple>
           <small class="hint">
-            This photo is used as the main product image in the product list.
-            Colour photos are managed separately below.
+            Select as many product photos as you need, including photos of every colour.
           </small>
           <div id="image-preview" class="image-preview"></div>
         </div>
@@ -317,8 +316,7 @@
         <h3>Colours, Sizes & Stock</h3>
       </div>
       <p class="hint">
-        Add a colour, upload photos for it, then enter each size and its
-        available stock. Repeat for every colour.
+        Add each colour, then enter the sizes and available stock for that colour.
       </p>
       <div id="colour-list"></div>
       <div style="margin-top:14px">
@@ -363,6 +361,7 @@
   const addColourButton = document.getElementById("add-colour-button");
   let editingProductId = null;
   let editingImageUrl = null;
+  let editingImageUrls = [];
   let originalVariants = [];
   let nextColourId = 1;
   function setStatus(message) {
@@ -481,26 +480,6 @@
       heading.textContent =
         nameInput.value.trim() || `Colour ${colourId}`;
     });
-    const photoLabel = makeElement("label", "", "Photos for this Colour");
-    photoLabel.style.marginTop = "16px";
-    const photoPicker = makeElement("div", "colour-photo-picker");
-    const photoInput = makeElement("input");
-    photoInput.type = "file";
-    photoInput.accept = "image/*";
-    photoInput.multiple = true;
-    photoInput.className = "colour-photos";
-    photoInput.id = `colour-photos-${colourId}`;
-    const cameraLabel = makeElement("label", "camera-button", "📷 Choose Photos / Files");
-    cameraLabel.htmlFor = photoInput.id;
-    cameraLabel.style.marginBottom = "0";
-    photoPicker.append(photoInput, cameraLabel);
-    const photoHint = makeElement(
-      "small", "hint",
-      "Select multiple photos. Existing photos are kept unless removed."
-    );
-    const photosPreview = makeElement("div", "image-preview");
-    photosPreview.className = "image-preview existing-photos";
-    const newPhotosPreview = makeElement("div", "image-preview");
     const sizesHeading = makeElement(
       "h4", "", "Sizes and quantities"
     );
@@ -515,35 +494,6 @@
       sizesContainer.appendChild(createSizeRow());
       updateStockSummary();
     });
-    const savedImages = Array.isArray(data.images)
-      ? data.images.map((item) => ({
-          url: typeof item === "string" ? item : item.image_url,
-          id: typeof item === "string" ? null : item.id,
-          variantId: typeof item === "string" ? null : item.variant_id,
-          remove: false
-        })).filter((item) => item.url)
-      : [];
-    savedImages.forEach((photo) => {
-      const wrapper = makeElement("div", "existing-photo");
-      const img = document.createElement("img");
-      img.src = photo.url;
-      img.alt = `${data.color_name || "Colour"} photo`;
-      img.onerror = () => img.remove();
-      const removePhoto = makeElement(
-        "button", "", "Remove Photo"
-      );
-      removePhoto.type = "button";
-      removePhoto.addEventListener("click", () => {
-        photo.remove = true;
-        wrapper.remove();
-        updateStockSummary();
-      });
-      wrapper.append(img, removePhoto);
-      photosPreview.appendChild(wrapper);
-    });
-    photoInput.addEventListener("change", () => {
-      showImagePreview(photoInput.files, newPhotosPreview);
-    });
     const sizes = Array.isArray(data.sizes) && data.sizes.length
       ? data.sizes
       : [{ size: "", stock: 0 }];
@@ -552,17 +502,10 @@
         createSizeRow(item.size || "", item.stock ?? 0)
       );
     });
-    card._savedImages = savedImages;
-    card._photoInput = photoInput;
     card.append(
       title,
       nameLabel,
       nameInput,
-      photoLabel,
-      photoPicker,
-      photoHint,
-      photosPreview,
-      newPhotosPreview,
       sizesHeading,
       sizesContainer,
       addSizeButton
@@ -607,15 +550,7 @@
       if (!sizes.length) {
         throw new Error(`Add at least one size for colour "${name}".`);
       }
-      const selectedFiles = Array.from(card._photoInput.files || []);
-      const retainedImages = (card._savedImages || [])
-        .filter((photo) => !photo.remove);
-      colours.push({
-        name,
-        sizes,
-        selectedFiles,
-        retainedImages
-      });
+      colours.push({ name, sizes });
     }
     const seenColours = new Set();
     colours.forEach((colour) => {
@@ -656,6 +591,7 @@
     document.getElementById("stock").value = "0";
     editingProductId = null;
     editingImageUrl = null;
+    editingImageUrls = [];
     originalVariants = [];
     nextColourId = 1;
     addButton.textContent = "Add Product";
@@ -704,6 +640,11 @@
       resetProductForm();
       editingProductId = product.id;
       editingImageUrl = product.image_url || null;
+      editingImageUrls = [...new Set([
+        ...(product.image_url ? [product.image_url] : []),
+        ...variants.flatMap((variant) => parseImageUrls(variant.image_urls)),
+        ...images.map((image) => image.image_url).filter(Boolean)
+      ])];
       originalVariants = variants;
       form.elements.namedItem("name").value = product.name || "";
       form.elements.namedItem("price").value = product.price ?? "";
@@ -712,12 +653,12 @@
       form.elements.namedItem("category").value = product.category || "";
       form.elements.namedItem("description").value =
         product.description || "";
-      if (product.image_url) {
+      editingImageUrls.forEach((url) => {
         const img = document.createElement("img");
-        img.src = product.image_url;
-        img.alt = "Current main product photo";
+        img.src = url;
+        img.alt = "Current product photo";
         imagePreview.appendChild(img);
-      }
+      });
       const grouped = new Map();
       variants.forEach((variant) => {
         const key = variant.color_name || "Default";
@@ -758,7 +699,7 @@
       document.getElementById("form-heading").textContent = "Edit Product";
       cancelEditButton.hidden = false;
       setStatus(
-        "Editing product. Existing colour photos are kept unless removed."
+        "Editing product. Existing product photos are kept; new photos will be added."
       );
       form.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
@@ -916,17 +857,11 @@
       );
     }
   }
-  async function saveColourVariants(productId, colours) {
-    // Upload the new photos before changing existing variant records.
-    const prepared = [];
-    for (const colour of colours) {
-      const newUrls = colour.selectedFiles.length
-        ? await uploadImages(colour.selectedFiles)
-        : [];
-      const retainedUrls = colour.retainedImages.map((photo) => photo.url);
-      const urls = [...new Set([...retainedUrls, ...newUrls])];
-      prepared.push({ ...colour, urls });
-    }
+  async function saveColourVariants(productId, colours, productPhotoUrls) {
+    // Product photos are uploaded in the Main Product Photos field and shared
+    // with the product's colour/size variants for the existing product gallery.
+    const urls = [...new Set((productPhotoUrls || []).filter(Boolean))];
+    const prepared = colours.map((colour) => ({ ...colour, urls }));
     const oldIds = originalVariants.map((variant) => variant.id);
     // Create all replacement variants first. If an insert fails, existing
     // variant rows remain in place.
@@ -1020,12 +955,13 @@
           (sizeSum, size) => sizeSum + size.stock, 0
         ), 0
       );
-      let mainImageUrl = editingImageUrl;
+      let productPhotoUrls = [...editingImageUrls];
       if (productImageInput.files.length) {
-        setStatus("Uploading main product photo...");
-        const urls = await uploadImages([productImageInput.files[0]]);
-        mainImageUrl = urls[0];
+        setStatus("Uploading product photos...");
+        const uploadedUrls = await uploadImages(productImageInput.files);
+        productPhotoUrls = [...new Set([...productPhotoUrls, ...uploadedUrls])];
       }
+      const mainImageUrl = productPhotoUrls[0] || editingImageUrl || null;
       const product = {
         name: String(formData.get("name") || "").trim(),
         price: Number(formData.get("price")),
@@ -1074,7 +1010,7 @@
         productWasSaved = true;
       }
       setStatus("Saving colour, size and stock options...");
-      await saveColourVariants(productId, colours);
+      await saveColourVariants(productId, colours, productPhotoUrls);
       setStatus("Product saved successfully.");
       resetProductForm();
       await loadProducts();
