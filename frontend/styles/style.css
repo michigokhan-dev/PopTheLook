@@ -397,8 +397,11 @@
 .product-card img {
   display: block;
   width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+  height: auto;
+  aspect-ratio: 1 / 2 !important;
+  object-fit: contain !important;
+  object-position: center;
+  background-color: #f5f0e7;
 }
 
 .product-card h3 {
