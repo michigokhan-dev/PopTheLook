@@ -1174,6 +1174,14 @@
       }
       window.location.href = "./signin.html";
     });
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === "SIGNED_OUT" || !session) {
+      document.getElementById("admin-content").hidden = true;
+      window.location.replace("./signin.html");
+    }
+  });
+
+  initializeAdminPanel();
   initializeAdminPanel();
 })();
 </script>
