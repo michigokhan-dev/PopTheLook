@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,32 +22,21 @@
       box-sizing: border-box !important;
     }
     #products-grid .product-card {
-  min-width: 0 !important;
-  width: 100% !important;
-  max-width: none !important;
-  display: flex !important;
-  flex-direction: column !important;
-}
- #products-grid .product-image-box {
-  display: block !important;
-  position: relative !important;
-  width: 100% !important;
-  height: auto !important;
-  aspect-ratio: 1 / 2 !important;
-  overflow: hidden !important;
-  background-color: #f5f0e7 !important;
-}
-
-#products-grid .product-image-box img {
-  position: absolute !important;
-  inset: 0 !important;
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-width: none !important;
-  object-fit: contain !important;
-  object-position: center !important;
-}
+      min-width: 0 !important;
+      width: 100% !important;
+      max-width: none !important;
+    }
+    /* Show the whole image, with a taller product-photo frame. */
+    #products-grid .product-card img {
+      display: block !important;
+      width: 100% !important;
+      max-width: none !important;
+      aspect-ratio: 2 / 3 !important;
+      height: auto !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      background-color: #f5f0e7;
+    }
     @media (min-width: 900px) {
       #products-grid.products-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -205,19 +193,11 @@
       card.className = "product-card";
       card.style.cursor = "pointer";
 
-
-const image = document.createElement("img");
-image.alt = product.name || "Fashion product";
-image.loading = "lazy";
-image.src = product.image_url || "";
-
-if (product.image_url) {
-  const imageBox = document.createElement("div");
-  imageBox.className = "product-image-box";
-  imageBox.appendChild(image);
-  card.appendChild(imageBox);
-}
-
+      const image = document.createElement("img");
+      image.alt = product.name || "Fashion product";
+      image.loading = "lazy";
+      image.src = product.image_url || "";
+      if (product.image_url) card.appendChild(image);
 
       const name = document.createElement("h3");
       name.textContent = product.name || "Untitled product";
