@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+no<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -28,15 +28,19 @@
   display: flex !important;
   flex-direction: column !important;
 }
-   /* Keep every product image box the same size */
-#products-grid .product-image-box {
+ #products-grid .product-image-box {
+  display: block !important;
+  position: relative !important;
   width: 100% !important;
+  height: auto !important;
   aspect-ratio: 1 / 2 !important;
-  overflow: hidden;
-  background-color: #f5f0e7;
+  overflow: hidden !important;
+  background-color: #f5f0e7 !important;
 }
 
 #products-grid .product-image-box img {
+  position: absolute !important;
+  inset: 0 !important;
   display: block !important;
   width: 100% !important;
   height: 100% !important;
