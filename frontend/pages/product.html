@@ -55,21 +55,22 @@
       gap: clamp(28px, 6vw, 75px);
       align-items: start;
     }
-    .gallery {
-      min-width: 0;
-    }
+    .gallery { min-width: 0; }
     .main-image {
       display: block;
       width: 100%;
       aspect-ratio: 3 / 4;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
       background: var(--cream);
     }
     .thumbnails {
       display: flex;
+      justify-content: flex-start;
       gap: 10px;
       margin-top: 12px;
       overflow-x: auto;
+      padding-bottom: 4px;
     }
     .thumbnail {
       width: 68px;
@@ -77,17 +78,19 @@
       flex: 0 0 auto;
       padding: 0;
       border: 1px solid var(--line);
-      background: white;
+      background: #fffdf9;
       cursor: pointer;
+      overflow: hidden;
     }
     .thumbnail img {
+      display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      object-position: center;
     }
-    .details {
-      padding-top: 12px;
-    }
+    .thumbnail.active { border: 2px solid var(--ink); }
+    .details { padding-top: 12px; }
     .eyebrow {
       color: var(--muted);
       font-size: 11px;
@@ -100,30 +103,21 @@
       font-size: clamp(27px, 4vw, 39px);
       font-weight: 500;
     }
-    .price {
-      margin: 0 0 25px;
-      font-size: 17px;
-    }
+    .price { margin: 0 0 25px; font-size: 17px; }
     .description {
       margin: 0 0 28px;
       color: var(--muted);
       line-height: 1.8;
       white-space: pre-line;
     }
-    .field {
-      margin: 22px 0;
-    }
+    .field { margin: 22px 0; }
     .field-title {
       display: block;
       margin-bottom: 12px;
       font-size: 13px;
       font-weight: 600;
     }
-    .color-options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .color-options { display: flex; flex-wrap: wrap; gap: 10px; }
     .color-option {
       padding: 9px 13px;
       border: 1px solid var(--line);
@@ -163,31 +157,15 @@
       letter-spacing: 1px;
       cursor: pointer;
     }
-    .add-button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-    .status {
-      color: var(--muted);
-      line-height: 1.7;
-    }
+    .add-button:disabled { opacity: .5; cursor: not-allowed; }
+    .status { color: var(--muted); line-height: 1.7; }
     @media (max-width: 700px) {
-      main {
-        width: 100%;
-        margin: 0 auto 45px;
-      }
-      .product-layout {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
+      main { width: 100%; margin: 0 auto 45px; }
+      .product-layout { grid-template-columns: 1fr; gap: 20px; }
       .gallery { width: 100%; }
-      .main-image {
-        aspect-ratio: 4 / 5;
-      }
-      .details {
-        padding: 10px 20px 0;
-      }
-      .thumbnails { padding: 0 15px; }
+      .main-image { aspect-ratio: 4 / 5; }
+      .details { padding: 10px 20px 0; }
+      .thumbnails { padding: 0 15px 4px; }
     }
   </style>
 </head>
@@ -219,9 +197,7 @@
           </select>
         </div>
         <p id="stock-message" class="stock-message" aria-live="polite"></p>
-        <button id="add-to-cart" class="add-button" type="button" disabled>
-          ADD TO CART
-        </button>
+        <button id="add-to-cart" class="add-button" type="button" disabled>ADD TO CART</button>
         <p id="cart-message" class="status" aria-live="polite"></p>
       </section>
     </div>
@@ -241,10 +217,10 @@
     let selectedColor = "";
     let selectedVariant = null;
     let photos = [];
+    let allColorPhotos = [];
     function formatPrice(value) {
       return new Intl.NumberFormat("en-GB", {
-        style: "currency",
-        currency: "GBP"
+        style: "currency", currency: "GBP"
       }).format(Number(value) || 0);
     }
     function showError(message) {
@@ -253,36 +229,44 @@
       $("product-layout").hidden = true;
     }
     function getVariantPhotos(variant) {
-      const urls = Array.isArray(variant.image_urls)
-        ? variant.image_urls
-        : [];
+      const urls = Array.isArray(variant.image_urls) ? variant.image_urls : [];
       const extraImages = variant.extraImages || [];
       return [...new Set([...urls, ...extraImages].filter(Boolean))];
     }
-    function showPhotos(urls) {
-      photos = [...new Set(urls.filter(Boolean))];
-      if (photos.length === 0 && product?.image_url) {
-        photos = [product.image_url];
-      }
-      $("main-image").src = photos[0] || "";
-      $("main-image").alt = product?.name || "Product photo";
+    function setMainPhoto(url) {
+      if (!url) return;
+      $("main-image").src = url;
+      $("main-image").alt = `${product?.name || "Product"} photo`;
+      $("thumbnails").querySelectorAll(".thumbnail").forEach(button => {
+        button.classList.toggle("active", button.dataset.photoUrl === url);
+      });
+    }
+    function showPhotos(urls, { preserveMain = false } = {}) {
+      photos = [...new Set((urls || []).filter(Boolean))];
+      if (!photos.length && product?.image_url) photos = [product.image_url];
+      const currentMain = $("main-image").src;
       const thumbnails = $("thumbnails");
       thumbnails.replaceChildren();
-      photos.forEach(url => {
+      photos.forEach((url, index) => {
         const button = document.createElement("button");
         button.type = "button";
         button.className = "thumbnail";
-        button.setAttribute("aria-label", "View product photo");
+        button.dataset.photoUrl = url;
+        button.setAttribute("aria-label", `View product photo ${index + 1}`);
         const img = document.createElement("img");
         img.src = url;
         img.alt = "";
         img.loading = "lazy";
+        img.onerror = () => button.remove();
         button.appendChild(img);
-        button.addEventListener("click", () => {
-          $("main-image").src = url;
-        });
+        button.addEventListener("click", () => setMainPhoto(url));
         thumbnails.appendChild(button);
       });
+      if (preserveMain && photos.includes(currentMain)) {
+        setMainPhoto(currentMain);
+      } else {
+        setMainPhoto(photos[0] || product?.image_url);
+      }
     }
     function renderSizes() {
       const sizeSelect = $("size-select");
@@ -336,20 +320,16 @@
     }
     function updateButton() {
       const button = $("add-to-cart");
-      const valid = selectedVariant && Number(selectedVariant.stock) > 0;
-      button.disabled = !valid;
+      button.disabled = !(selectedVariant && Number(selectedVariant.stock) > 0);
     }
     $("size-select").addEventListener("change", event => {
-      selectedVariant = variants.find(
-        variant => variant.id === event.target.value
-      ) || null;
+      selectedVariant = variants.find(variant => variant.id === event.target.value) || null;
       if (!selectedVariant) {
         $("stock-message").textContent = "Please choose your size.";
       } else if (Number(selectedVariant.stock) <= 0) {
         $("stock-message").textContent = "Out of stock";
       } else {
-        $("stock-message").textContent =
-          `In stock: ${selectedVariant.stock}`;
+        $("stock-message").textContent = `In stock: ${selectedVariant.stock}`;
       }
       updateButton();
     });
@@ -365,21 +345,15 @@
         image: $("main-image").src,
         quantity: 1
       };
-      // Temporary local cart. We will connect this to the shared cart next.
       let cart = [];
       try {
         cart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
         if (!Array.isArray(cart)) cart = [];
-      } catch {
-        cart = [];
-      }
-      const existing = cart.find(item =>
-        item.variantId === cartItem.variantId
-      );
+      } catch { cart = []; }
+      const existing = cart.find(item => item.variantId === cartItem.variantId);
       if (existing) {
         if (Number(existing.quantity) >= Number(selectedVariant.stock)) {
-          $("cart-message").textContent =
-            "You cannot add more than the available stock.";
+          $("cart-message").textContent = "You cannot add more than the available stock.";
           return;
         }
         existing.quantity = Number(existing.quantity) + 1;
@@ -428,9 +402,7 @@
           (images || []).forEach(image => {
             const variant = variants.find(v => v.id === image.variant_id);
             if (variant) {
-              if (!Array.isArray(variant.extraImages)) {
-                variant.extraImages = [];
-              }
+              if (!Array.isArray(variant.extraImages)) variant.extraImages = [];
               variant.extraImages.push(image.image_url);
             }
           });
@@ -439,19 +411,21 @@
       $("product-name").textContent = product.name || "Untitled product";
       $("product-price").textContent = formatPrice(product.price);
       $("product-description").textContent = product.description || "";
-      colors = [...new Set(
-        variants.map(v => v.color_name || "Default")
-      )];
+      colors = [...new Set(variants.map(v => v.color_name || "Default"))];
+      allColorPhotos = [...new Set([
+        product.image_url,
+        ...colors.flatMap(color => variants
+          .filter(v => (v.color_name || "Default") === color)
+          .flatMap(getVariantPhotos))
+      ].filter(Boolean))];
       $("status").hidden = true;
       $("product-layout").hidden = false;
       if (colors.length) {
+        // Keep the first colour selected for size/stock, but initially show
+        // thumbnails from every colour so shoppers can see all available looks.
         selectedColor = colors[0];
         renderColors();
-        const firstColorVariants = variants.filter(
-          v => (v.color_name || "Default") === selectedColor
-        );
-        const firstPhotos = firstColorVariants.flatMap(getVariantPhotos);
-        showPhotos(firstPhotos.length ? firstPhotos : [product.image_url]);
+        showPhotos(allColorPhotos);
         renderSizes();
       } else {
         showPhotos([product.image_url]);
