@@ -467,14 +467,3 @@
   object-position: center !important;
 }
         
-/* FIX: Equal product photo heights on portrait and landscape screens */
-#products-grid > .product-card > img {
-  display: block !important;
-  width: 100% !important;
-  height: 400px !important;
-  aspect-ratio: auto !important;
-  object-fit: contain !important;
-  object-position: center !important;
-  background-color: #f5f0e7 !important;
-}
-
