@@ -246,12 +246,49 @@
     currency: "GBP"
   }).format(Number(value) || 0);
 
-  menuToggle?.addEventListener("click", () => {
-    const isOpening = menuPanel.hidden;
-    menuPanel.hidden = !isOpening;
-    menuToggle.setAttribute("aria-expanded", String(isOpening));
-    menuToggle.setAttribute("aria-label", isOpening ? "Close shop menu" : "Open shop menu");
-  });
+  
+menuToggle?.addEventListener("click", (event) => {
+  event.stopPropagation();
+
+  const isOpening = menuPanel.hidden;
+  menuPanel.hidden = !isOpening;
+
+  menuToggle.setAttribute("aria-expanded", String(isOpening));
+  menuToggle.setAttribute(
+    "aria-label",
+    isOpening ? "Close shop menu" : "Open shop menu"
+  );
+
+  if (!isOpening) {
+    categoryFilters.hidden = true;
+    categoryFilters.querySelectorAll("details").forEach(group => {
+      group.open = false;
+    });
+  }
+});
+
+menuPanel?.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+document.addEventListener("click", (event) => {
+  if (
+    menuPanel &&
+    menuToggle &&
+    !menuPanel.hidden &&
+    !menuPanel.contains(event.target) &&
+    !menuToggle.contains(event.target)
+  ) {
+    menuPanel.hidden = true;
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Open shop menu");
+    categoryFilters.hidden = true;
+
+    categoryFilters.querySelectorAll("details").forEach(group => {
+      group.open = false;
+    });
+  }
+});
 
   function renderCategoryFilters() {
     if (!categoryFilters) return;
