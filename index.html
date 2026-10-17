@@ -539,20 +539,25 @@ document.addEventListener("click", (event) => {
         });
 
     
+
 if (activeSort === "price-low") {
-  filteredProducts.sort((a, b) => Number(a.price) - Number(b.price));
+  filteredProducts.sort((a, b) => {
+    const priceA = parseFloat(a.price) || 0;
+    const priceB = parseFloat(b.price) || 0;
+    return priceA - priceB;
+  });
 } else if (activeSort === "price-high") {
-  filteredProducts.sort((a, b) => Number(b.price) - Number(a.price));
-} else if (activeSort === "relevant") {
-  filteredProducts.sort((a, b) =>
-    originalProducts.indexOf(a) - originalProducts.indexOf(b)
-  );
-} else if (activeSort === "popular") {
-  // Popularity data is not available yet; keep the default order.
+  filteredProducts.sort((a, b) => {
+    const priceA = parseFloat(a.price) || 0;
+    const priceB = parseFloat(b.price) || 0;
+    return priceB - priceA;
+  });
+} else {
   filteredProducts.sort((a, b) =>
     originalProducts.indexOf(a) - originalProducts.indexOf(b)
   );
 }
+
 
     if (filteredProducts.length === 0) {
       const message = document.createElement("p");
