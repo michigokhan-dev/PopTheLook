@@ -116,6 +116,7 @@
       .product-card img { height: 220px; }
     }
     
+
 .shop-menu-toggle {
   display: inline-flex;
   align-items: center;
@@ -123,12 +124,15 @@
   width: 44px;
   height: 44px;
   padding: 0;
-  background-color: #ffffff !important;
+  background: transparent !important;
   color: #211e19 !important;
-  border: 1px solid #ded5c7;
+  border: none !important;
+  box-shadow: none !important;
   cursor: pointer;
   font-size: 22px;
+  outline: none;
 }
+
     
 /* White background for the opened burger menu */
 .shop-menu-panel {
@@ -287,17 +291,16 @@
           <div id="shop-category-filters" class="shop-category-filters" hidden></div>
         </div>
       </div>
-       <div class="shop-sort">
-  <button id="sort-toggle" type="button" aria-expanded="false">
-    Sort <span>⌄</span>
-  </button>
+       
+<div class="shop-sort">
+  <button id="sort-toggle" type="button" aria-expanded="false">Sort</button>
 
   <div id="sort-options" hidden>
     <button type="button" data-sort="relevant">Most Relevant</button>
     <button type="button" data-sort="popular">Most Popular</button>
     <button type="button" data-sort="price-low">Price: Low - High</button>
     <button type="button" data-sort="price-high">Price: High - Low</button>
-    </div>
+  </div>
 </div>
 </div>
       <div id="products-grid" class="products-grid"></div>
