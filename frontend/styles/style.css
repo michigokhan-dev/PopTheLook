@@ -441,5 +441,33 @@
     padding: 0 12px;
   }
 }
+        
+
+/* White burger button */
+.shop-menu-toggle {
+  background: #ffffff;
+  color: #211e19;
+  border: 1px solid #ded5c7;
+}
+
+/* Dropdown floats over the page */
+.shop-menu {
+  position: relative;
+  z-index: 1000;
+}
+
+.shop-menu-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: min(320px, calc(100vw - 40px));
+  max-height: 70vh;
+  overflow-y: auto;
+  margin-top: 8px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 1001;
+  box-sizing: border-box;
+}
 
    
