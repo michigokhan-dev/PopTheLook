@@ -19,8 +19,8 @@
     }
     .product-card { min-width: 0; width: 100%; }
     .product-card img {
-      display: block; width: 100%; height: 300px; aspect-ratio: auto;
-      object-fit: contain; object-position: center; background-color: #f5f0e7;
+      display: block; width: 100%; height: 400px; aspect-ratio: auto;
+      object-fit: contain; object-position: center; background-color: #ffffff;
     }
     @media (min-width: 900px) {
       .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 24px; }
@@ -115,9 +115,68 @@
       .shop-category-options { padding-right: 4px; padding-left: 4px; }
       .product-card img { height: 220px; }
     }
-    #signin-signup-button { border-radius: 2px; }
-    @media (max-width: 600px) {
-      #signin-signup-button { padding: 8px 9px !important; font-size: 11px !important; }
+
+    .shop-menu-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      background: transparent !important;
+      color: #211e19 !important;
+      border: none !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      font-size: 22px;
+      outline: none;
+    }
+
+    /* White background for the opened burger menu */
+    .shop-menu-panel {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      border-color: #ded5c7;
+    }
+
+    .shop-menu-panel .shop-department-button,
+    .shop-menu-panel .shop-category-group,
+    .shop-menu-panel .shop-category-group summary,
+    .shop-menu-panel .shop-category-button,
+    .shop-menu-panel .shop-category-filters {
+      background-color: #ffffff !important;
+    }
+
+    .shop-menu-panel .shop-department-button:hover,
+    .shop-menu-panel .shop-category-button:hover {
+      background-color: #f5f5f5 !important;
+    }
+
+    .shop-toolbar {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 12px;
+      width: 100%;
+      position: relative;
+    }
+
+    .shop-toolbar .shop-menu {
+      margin: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+
+    .navigation .auth-link {
+      color: inherit;
+      text-decoration: none;
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      white-space: nowrap;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -128,18 +187,13 @@
       <a class="active" href="#home">Home</a>
       <a href="#shop">Shop</a>
       <a href="#about">About</a>
+      <a id="signin-signup-button" class="auth-link" href="frontend/pages/signin.html">Sign in / Sign up</a>
     </nav>
     <div class="header-actions">
       <a class="icon-button" href="#shop" aria-label="Search products">
         <svg viewBox="0 0 24 24">
           <circle cx="10.8" cy="10.8" r="7.2"/>
           <path d="m16 16 5 5"/>
-        </svg>
-      </a>
-      <a class="icon-button" id="account-icon" href="frontend/pages/signin.html" aria-label="Sign in or create an account">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="7.5" r="3.5"/>
-          <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
         </svg>
       </a>
       <a class="icon-button" href="#cart" aria-label="Shopping cart">
@@ -149,7 +203,6 @@
         </svg>
         <span class="cart-count">0</span>
       </a>
-      <a id="signin-signup-button" href="frontend/pages/signin.html" style="display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border:1px solid #211e19;color:#211e19;text-decoration:none;font-size:13px;white-space:nowrap;">Sign in / Sign up</a>
     </div>
   </header>
   <main>
@@ -172,16 +225,18 @@
     <section class="intro" id="shop">
       <p class="intro-label">POP THE LOOK</p>
       <h2>Your wardrobe, reimagined.</h2>
-      <div class="shop-menu">
-        <button id="shop-menu-toggle" class="shop-menu-toggle" type="button"
-          aria-expanded="false" aria-controls="shop-menu-panel" aria-label="Open shop menu">
-          <span aria-hidden="true">☰</span>
-        </button>
-        <div id="shop-menu-panel" class="shop-menu-panel" hidden>
-          <button type="button" class="shop-department-button" data-department="women" aria-pressed="false">Women</button>
-          <button type="button" class="shop-department-button" data-department="men" aria-pressed="false">Men — Coming Soon</button>
-          <button type="button" class="shop-department-button" data-department="kids" aria-pressed="false">Kids — Coming Soon</button>
-          <div id="shop-category-filters" class="shop-category-filters" hidden></div>
+      <div class="shop-toolbar">
+        <div class="shop-menu">
+          <button id="shop-menu-toggle" class="shop-menu-toggle" type="button"
+            aria-expanded="false" aria-controls="shop-menu-panel" aria-label="Open shop menu">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <div id="shop-menu-panel" class="shop-menu-panel" hidden>
+            <button type="button" class="shop-department-button" data-department="women" aria-pressed="false">Women</button>
+            <button type="button" class="shop-department-button" data-department="men" aria-pressed="false">Men — Coming Soon</button>
+            <button type="button" class="shop-department-button" data-department="kids" aria-pressed="false">Kids — Coming Soon</button>
+            <div id="shop-category-filters" class="shop-category-filters" hidden></div>
+          </div>
         </div>
       </div>
       <div id="products-grid" class="products-grid"></div>
@@ -251,28 +306,46 @@
     currency: "GBP"
   }).format(Number(value) || 0);
 
-  function closeShopMenu() {
-    if (menuPanel) menuPanel.hidden = true;
-    if (menuToggle) {
+  menuToggle?.addEventListener("click", (event) => {
+    event.stopPropagation();
+
+    const isOpening = menuPanel.hidden;
+    menuPanel.hidden = !isOpening;
+
+    menuToggle.setAttribute("aria-expanded", String(isOpening));
+    menuToggle.setAttribute(
+      "aria-label",
+      isOpening ? "Close shop menu" : "Open shop menu"
+    );
+
+    if (!isOpening) {
+      categoryFilters.hidden = true;
+      categoryFilters.querySelectorAll("details").forEach(group => {
+        group.open = false;
+      });
+    }
+  });
+
+  menuPanel?.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+
+  document.addEventListener("click", (event) => {
+    if (
+      menuPanel &&
+      menuToggle &&
+      !menuPanel.hidden &&
+      !menuPanel.contains(event.target) &&
+      !menuToggle.contains(event.target)
+    ) {
+      menuPanel.hidden = true;
       menuToggle.setAttribute("aria-expanded", "false");
       menuToggle.setAttribute("aria-label", "Open shop menu");
-    }
-    activeDepartment = "";
-    if (categoryFilters) {
-      categoryFilters.replaceChildren();
       categoryFilters.hidden = true;
-    }
-    departmentButtons.forEach(item => item.setAttribute("aria-pressed", "false"));
-  }
 
-  menuToggle?.addEventListener("click", () => {
-    const isOpening = menuPanel.hidden;
-    if (isOpening) {
-      menuPanel.hidden = false;
-      menuToggle.setAttribute("aria-expanded", "true");
-      menuToggle.setAttribute("aria-label", "Close shop menu");
-    } else {
-      closeShopMenu();
+      categoryFilters.querySelectorAll("details").forEach(group => {
+        group.open = false;
+      });
     }
   });
 
@@ -347,7 +420,7 @@
     productsGrid.replaceChildren();
 
     const filteredProducts = activeCategory === "all"
-      ? allProducts
+      ? [...allProducts]
       : allProducts.filter(product => {
           const category = (product.category || "").trim().toLowerCase();
           const selected = activeCategory.toLowerCase();
@@ -436,64 +509,46 @@
 
   loadStoreProducts();
 
-  const accountIcon = document.getElementById("account-icon");
   const signInSignUpButton = document.getElementById("signin-signup-button");
-  let dropdown = document.getElementById("account-dropdown");
-
-  if (!dropdown && accountIcon?.parentElement) {
-    dropdown = document.createElement("button");
-    dropdown.id = "account-dropdown";
-    dropdown.type = "button";
-    dropdown.textContent = "Sign Out";
-    Object.assign(dropdown.style, {
-      display: "none", position: "absolute", right: "0", top: "100%",
-      padding: "12px 18px", background: "#fff", color: "#222",
-      cursor: "pointer", zIndex: "1000", boxShadow: "0 4px 12px #0002",
-      border: "0", font: "inherit", whiteSpace: "nowrap"
-    });
-    accountIcon.parentElement.style.position = "relative";
-    accountIcon.parentElement.appendChild(dropdown);
-  }
 
   function updateAccountUI(session) {
-    if (!accountIcon) return;
-    const signedIn = Boolean(session);
-    accountIcon.href = signedIn ? "#" : "frontend/pages/signin.html";
-    accountIcon.setAttribute("aria-label", signedIn ? "Account menu" : "Sign in or create an account");
-    if (signInSignUpButton) signInSignUpButton.style.display = signedIn ? "none" : "inline-flex";
-    if (!signedIn && dropdown) dropdown.style.display = "none";
+    if (!signInSignUpButton) return;
+
+    if (session) {
+      signInSignUpButton.textContent = "Sign out";
+      signInSignUpButton.href = "#home";
+      signInSignUpButton.setAttribute("aria-label", "Sign out");
+    } else {
+      signInSignUpButton.textContent = "Sign in / Sign up";
+      signInSignUpButton.href = "frontend/pages/signin.html";
+      signInSignUpButton.setAttribute("aria-label", "Sign in or create an account");
+    }
   }
 
   const { data: { session } } = await supabase.auth.getSession();
   updateAccountUI(session);
 
-  accountIcon?.addEventListener("click", async event => {
+  signInSignUpButton?.addEventListener("click", async event => {
     const { data: { session: currentSession } } = await supabase.auth.getSession();
     if (!currentSession) return;
-    event.preventDefault();
-    if (dropdown) dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
-  });
 
-  dropdown?.addEventListener("click", async event => {
     event.preventDefault();
-    event.stopPropagation();
-    dropdown.disabled = true;
-    dropdown.textContent = "Signing out…";
+    signInSignUpButton.style.pointerEvents = "none";
     const { error } = await supabase.auth.signOut();
+    signInSignUpButton.style.pointerEvents = "";
+
     if (error) {
-      dropdown.disabled = false;
-      dropdown.textContent = "Sign Out";
       alert(error.message);
       return;
     }
-    dropdown.disabled = false;
-    dropdown.textContent = "Sign Out";
-    dropdown.style.display = "none";
+
     updateAccountUI(null);
     window.location.hash = "home";
   });
 
-  supabase.auth.onAuthStateChange((_event, session) => updateAccountUI(session));
+  supabase.auth.onAuthStateChange((_event, session) => {
+    updateAccountUI(session);
+  });
 </script>
 </body>
 </html>
