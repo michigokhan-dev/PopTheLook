@@ -112,13 +112,14 @@
       font: 10px Arial, sans-serif;
     }
 
-/* HERO */
+
+/* HERO — white background */
 .hero {
   min-height: min(720px, calc(100svh - 92px));
   display: flex;
   align-items: center;
   padding: 65px 7.2%;
-  background-color: #e2d3be;
+  background-color: #ffffff;
   background-image: none;
   position: relative;
   isolation: isolate;
@@ -142,10 +143,10 @@
   inset: 0;
   background: linear-gradient(
     90deg,
-    #e2d3be 0%,
-    #e2d3be 37%,
-    rgba(226, 211, 190, 0.85) 45%,
-    rgba(226, 211, 190, 0) 65%
+    #ffffff 0%,
+    #ffffff 37%,
+    rgba(255, 255, 255, 0.85) 45%,
+    rgba(255, 255, 255, 0) 65%
   );
   z-index: -1;
 }
