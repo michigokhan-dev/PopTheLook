@@ -503,5 +503,55 @@
 #search-input::placeholder {
   color: #9b9082;
 }
+        
+/* POP THE LOOK — white search results */
+
+.header-search #search-input:not([hidden]) {
+  background: #ffffff !important;
+  color: #211e19;
+}
+
+/* White product image boxes */
+#search-results-grid .product-card {
+  background: #ffffff !important;
+  border: 1px solid #ded5c7;
+  overflow: hidden;
+}
+
+/* Product images: consistent size, side-by-side grid */
+#search-results-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+}
+
+#search-results-grid .product-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  background: #ffffff !important;
+}
+
+#search-results-grid .product-card h3,
+#search-results-grid .product-card p {
+  margin: 12px;
+  color: #211e19;
+}
+
+@media (max-width: 900px) {
+  #search-results-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  #search-results-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
 
    
