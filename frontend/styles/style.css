@@ -532,10 +532,10 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: auto !important;
+  aspect-ratio: 1 / 2 !important;
   object-fit: contain !important;
   object-position: center;
-  background: #ffffff !important;
+  background-color: #ffffff !important;
 }
 
 #search-results-grid .product-card h3,
