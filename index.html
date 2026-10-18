@@ -575,7 +575,9 @@ if (variantsError) {
 
 renderProducts();
   }
-searchToggle?.addEventListener("click", () => {
+searchToggle?.addEventListener("click", (event) => {
+  event.stopPropagation();
+
   const isOpening = searchInput.hidden;
   searchInput.hidden = !isOpening;
   searchToggle.setAttribute("aria-expanded", String(isOpening));
@@ -583,7 +585,20 @@ searchToggle?.addEventListener("click", () => {
   if (isOpening) searchInput.focus();
 });
 
-searchInput?.addEventListener("keydown", event => {
+searchInput?.addEventListener("click", (event) => {
+  event.stopPropagation();
+});
+
+document.addEventListener("click", (event) => {
+  const searchBox = document.querySelector(".header-search");
+
+  if (searchBox && !searchBox.contains(event.target)) {
+    searchInput.hidden = true;
+    searchToggle.setAttribute("aria-expanded", "false");
+  }
+});
+
+searchInput?.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     event.preventDefault();
 
