@@ -474,11 +474,19 @@ let productColorsById = {};
     const category = (product.category || "").trim().toLowerCase();
     const selected = activeCategory.toLowerCase();
 
+        const productName = (product.name || "").trim().toLowerCase();
+
     const matchesCategory = selected === "all" ||
       category === selected ||
+      productName.includes(selected) ||
       (selected === "all dresses" && category === "dresses") ||
       (selected === "all tops & t-shirts" &&
-        ["tops", "t-shirts", "tops & t-shirts"].includes(category));
+        ["tops", "t-shirts", "tops & t-shirts"].includes(category)) ||
+      (selected === "all jackets" &&
+        ["jackets", "jackets & coats"].includes(category)) ||
+      (selected === "biker jacket" &&
+        (productName.includes("biker jacket") ||
+         category.includes("biker jacket")));
 
     const productText =
       `${product.name || ""} ${product.category || ""}`.toLowerCase();
