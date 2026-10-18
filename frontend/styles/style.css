@@ -556,3 +556,13 @@
     gap: 12px;
   }
 }
+        
+/* POP THE LOOK — white hero background */
+.hero {
+  background-color: #ffffff !important;
+}
+
+.hero::before {
+  background-color: #ffffff !important;
+}
+
