@@ -470,4 +470,38 @@
   box-sizing: border-box;
 }
 
+/* POP THE LOOK — elegant search box */
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#search-input:not([hidden]) {
+  display: block;
+  width: 240px;
+  max-width: 45vw;
+  height: 44px;
+  padding: 0 18px;
+  border: 1px solid #ded5c7;
+  border-radius: 24px;
+  outline: none;
+  background: #fffdf9;
+  color: #211e19;
+  font-family: "DM Sans", sans-serif;
+  font-size: 14px;
+  box-sizing: border-box;
+  box-shadow: 0 3px 12px rgba(33, 30, 25, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#search-input:not([hidden]):focus {
+  border-color: #796b58;
+  box-shadow: 0 0 0 3px rgba(121, 107, 88, 0.10);
+}
+
+#search-input::placeholder {
+  color: #9b9082;
+}
+
    
