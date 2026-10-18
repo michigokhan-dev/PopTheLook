@@ -179,6 +179,22 @@
       white-space: nowrap;
       cursor: pointer;
     }
+    .header-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#search-input:not([hidden]) {
+  display: block;
+  width: 180px;
+  max-width: 45vw;
+  padding: 10px;
+  border: 1px solid #ded5c7;
+  background: #fff;
+  color: #211e19;
+  font: inherit;
+}
   </style>
 </head>
 <body>
@@ -274,6 +290,9 @@
   );
 
   const productsGrid = document.getElementById("products-grid");
+  const searchToggle = document.getElementById("search-toggle");
+const searchInput = document.getElementById("search-input");
+let productColorsById = {};
   const categoryFilters = document.getElementById("shop-category-filters");
   const menuToggle = document.getElementById("shop-menu-toggle");
   const menuPanel = document.getElementById("shop-menu-panel");
@@ -547,9 +566,40 @@
     }
 
     allProducts = products || [];
-    renderProducts();
-  }
 
+const { data: variants, error: variantsError } = await supabase
+  .from("product_variants")
+  .select("product_id, color_name");
+
+if (variantsError) {
+  console.error("Product colours error:", variantsError);
+} else {
+  productColorsById = {};
+
+  (variants || []).forEach(variant => {
+    if (!productColorsById[variant.product_id]) {
+      productColorsById[variant.product_id] = [];
+    }
+
+    if (variant.color_name) {
+      productColorsById[variant.product_id].push(variant.color_name);
+    }
+  });
+}
+
+renderProducts();
+  }
+searchToggle?.addEventListener("click", () => {
+  const isOpening = searchInput.hidden;
+  searchInput.hidden = !isOpening;
+  searchToggle.setAttribute("aria-expanded", String(isOpening));
+
+  if (isOpening) searchInput.focus();
+});
+
+searchInput?.addEventListener("input", () => {
+  renderProducts();
+});
   loadStoreProducts();
 
   const accountIcon = document.getElementById("account-icon");
