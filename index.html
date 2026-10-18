@@ -289,41 +289,50 @@ let productColorsById = {};
   let activeDepartment = "";
 
   const categoryGroups = [
-    { name: "New In", categories: ["New In"] },
-    { name: "Dresses", categories: [
-      "All Dresses", "Midi", "Maxi", "Mini", "Wedding Guest Dresses",
-      "Party Dresses", "Short Sleeve", "Long Sleeve", "Linen Dresses"
-    ]},
-    { name: "Tops & T-Shirts", categories: [
-      "All Tops & T-Shirts", "New In Tops & T-Shirts", "Blouses",
-      "Body suit", "Cardigan", "Jumper", "Shirts", "Tops", "T-Shirts",
-      "Vest Tops", "Short Sleeve", "Long Sleeve", "Sleeveless"
-    ]},
-    { name: "Jackets & Coats", categories: [
-      "Biker & racer jackets", "Bomber jackets", "Denim jackets",
-      "Fleece jackets", "Puffer jackets", "Faux fur coats", "Long coats",
-      "Parkas", "Capes & ponchos", "Blazers"
-    ]},
-    { name: "Knitwears", categories: ["Knitwears"] },
-    { name: "Leggings", categories: ["Leggings"] },
-    { name: "Shorts", categories: ["Shorts"] },
-    { name: "Skirts", categories: ["Skirts"] },
-    { name: "Trousers", categories: ["Trousers"] },
-    { name: "Jeans", categories: [
-      "Boyfriend jeans", "Cropped jeans", "Flared jeans",
-      "High waisted jeans", "Ripped jeans", "Skinny jeans", "Straight jeans"
-    ]},
-    { name: "Nightwears", categories: ["Nightwears"] },
-    { name: "Jumpsuits", categories: ["Jumpsuits"] },
-    { name: "Playsuits", categories: ["Playsuits"] },
-    { name: "Tracksuits", categories: ["Tracksuits"] },
-    { name: "Underwears", categories: ["Underwears"] },
-    { name: "Bags", categories: ["Bags"] },
-    { name: "Accessories & Jewellery", categories: ["Accessories & Jewellery"] },
-    { name: "Sportswear", categories: ["Sportswear"] },
-    { name: "Beauty", categories: ["Beauty"] },
-    { name: "Fragrance", categories: ["Fragrance"] }
-  ];
+  { name: "New In", categories: ["All New In", "New In"] },
+
+  { name: "Dresses", categories: [
+    "All Dresses", "Midi", "Maxi", "Mini", "Wedding Guest Dresses",
+    "Party Dresses", "Short Sleeve", "Long Sleeve", "Linen Dresses"
+  ]},
+
+  { name: "Tops & T-Shirts", categories: [
+    "All Tops & T-Shirts", "New In Tops & T-Shirts", "Blouses",
+    "Body suit", "Cardigan", "Jumper", "Shirts", "Tops", "T-Shirts",
+    "Vest Tops", "Short Sleeve", "Long Sleeve", "Sleeveless"
+  ]},
+
+  { name: "Jackets & Coats", categories: [
+    "All Jackets", "Biker Jacket", "Racer Jackets",
+    "Bomber Jackets", "Denim Jackets", "Fleece Jackets", "Long Jackets,
+    "Puffer Jackets", "Faux Fur Coats", "Long Coats",
+    "Parkas", "Capes", "Ponchos", "Blazers"
+  ]},
+
+  { name: "Knitwears", categories: ["All Knitwears", "Knitwears"] },
+  { name: "Leggings", categories: ["All Leggings", "Leggings"] },
+  { name: "Shorts", categories: ["All Shorts", "Shorts"] },
+  { name: "Skirts", categories: ["All Skirts", "Skirts"] },
+  { name: "Trousers", categories: ["All Trousers", "Trousers"] },
+
+  { name: "Jeans", categories: [
+    "All Jeans", "Boyfriend Jeans", "Cropped Jeans", "Flared Jeans",
+    "High Waisted Jeans", "Ripped Jeans", "Skinny Jeans", "Straight Jeans"
+  ]},
+
+  { name: "Nightwears", categories: ["All Nightwears", "Nightwears"] },
+  { name: "Jumpsuits", categories: ["All Jumpsuits", "Jumpsuits"] },
+  { name: "Playsuits", categories: ["All Playsuits", "Playsuits"] },
+  { name: "Tracksuits", categories: ["All Tracksuits", "Tracksuits"] },
+  { name: "Underwears", categories: ["All Underwears", "Underwears"] },
+  { name: "Bags", categories: ["All Bags", "Bags"] },
+  { name: "Accessories & Jewellery", categories: [
+    "All Accessories & Jewellery", "Accessories & Jewellery"
+  ]},
+  { name: "Sportswear", categories: ["All Sportswear", "Sportswear"] },
+  { name: "Beauty", categories: ["All Beauty", "Beauty"] },
+  { name: "Fragrance", categories: ["All Fragrance", "Fragrance"] }
+];
 
   const formatPrice = value => new Intl.NumberFormat("en-GB", {
     style: "currency",
