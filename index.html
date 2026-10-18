@@ -585,6 +585,13 @@ searchToggle?.addEventListener("click", () => {
 
 searchInput?.addEventListener("input", () => {
   renderProducts();
+
+  if (searchInput.value.trim()) {
+    document.getElementById("shop")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
 });
   loadStoreProducts();
 
