@@ -504,33 +504,37 @@
   color: #9b9082;
 }
         
+
 /* POP THE LOOK — white search results */
 
 .header-search #search-input:not([hidden]) {
   background: #ffffff !important;
-  color: #211e19;
+  color: #211e19 !important;
 }
 
-/* White product image boxes */
+/* White product cards */
 #search-results-grid .product-card {
   background: #ffffff !important;
   border: 1px solid #ded5c7;
   overflow: hidden;
 }
 
-/* Product images: consistent size, side-by-side grid */
+/* Product grid */
 #search-results-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 24px;
 }
 
+/* Product images — match homepage proportions */
 #search-results-grid .product-card img {
   display: block;
   width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  background: #ffffff !important;
+  height: auto;
+  aspect-ratio: 1 / 2 !important;
+  object-fit: contain !important;
+  object-position: center;
+  background-color: #ffffff !important;
 }
 
 #search-results-grid .product-card h3,
@@ -552,6 +556,3 @@
     gap: 12px;
   }
 }
-
-
-   
