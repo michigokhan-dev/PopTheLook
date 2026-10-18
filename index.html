@@ -191,7 +191,19 @@
       <a id="signin-signup-button" class="auth-link" href="frontend/pages/signin.html">Sign in / Sign up</a>
     </nav>
     <div class="header-actions">
-      <a class="icon-button" href="#shop" aria-label="Search products">
+      
+<div class="header-search">
+  <button class="icon-button" id="search-toggle" type="button"
+    aria-label="Search products" aria-expanded="false">
+    <svg viewBox="0 0 24 24">
+      <circle cx="10.8" cy="10.8" r="7.2"/>
+      <path d="m16 16 5 5"/>
+    </svg>
+  </button>
+  <input id="search-input" type="search" placeholder="Search products..."
+    aria-label="Search products" hidden>
+</div>
+
         <svg viewBox="0 0 24 24">
           <circle cx="10.8" cy="10.8" r="7.2"/>
           <path d="m16 16 5 5"/>
@@ -423,78 +435,102 @@
   });
 
   function renderProducts() {
-    if (!productsGrid) return;
-    productsGrid.replaceChildren();
+  if (!productsGrid) return;
+  productsGrid.replaceChildren();
 
-    const filteredProducts = activeCategory === "all"
-      ? [...allProducts]
-      : allProducts.filter(product => {
-          const category = (product.category || "").trim().toLowerCase();
-          const selected = activeCategory.toLowerCase();
+  const query = (searchInput?.value || "").trim().toLowerCase();
+  const colourWords = [
+    "black", "white", "red", "blue", "green", "pink",
+    "beige", "brown", "grey", "gray", "cream", "navy",
+    "yellow", "orange", "purple"
+  ];
 
-          return category === selected ||
-            (selected === "all dresses" && category === "dresses") ||
-            (selected === "all tops & t-shirts" &&
-              ["tops", "t-shirts", "tops & t-shirts"].includes(category));
-        });
+  const words = query.split(/\s+/).filter(Boolean);
+  const colourTerms = words.filter(word => colourWords.includes(word));
+  const textTerms = words.filter(word => !colourWords.includes(word));
 
-    if (filteredProducts.length === 0) {
-      const message = document.createElement("p");
-      message.className = "shop-empty-message";
-      message.textContent = "No products in this category yet.";
-      productsGrid.appendChild(message);
-      return;
+  const filteredProducts = allProducts.filter(product => {
+    const category = (product.category || "").trim().toLowerCase();
+    const selected = activeCategory.toLowerCase();
+
+    const matchesCategory = selected === "all" ||
+      category === selected ||
+      (selected === "all dresses" && category === "dresses") ||
+      (selected === "all tops & t-shirts" &&
+        ["tops", "t-shirts", "tops & t-shirts"].includes(category));
+
+    const productText =
+      `${product.name || ""} ${product.category || ""}`.toLowerCase();
+
+    const matchesText = textTerms.every(term => productText.includes(term));
+
+    const productColours = productColorsById?.[product.id] || [];
+    const matchesColour = colourTerms.every(term =>
+      productColours.some(colour => colour.toLowerCase().includes(term))
+    );
+
+    return matchesCategory && matchesText && matchesColour;
+  });
+
+  if (filteredProducts.length === 0) {
+    const message = document.createElement("p");
+    message.className = "shop-empty-message";
+    message.textContent = "No matching products found.";
+    productsGrid.appendChild(message);
+    return;
+  }
+
+  filteredProducts.forEach(product => {
+    const card = document.createElement("article");
+    card.className = "product-card";
+    card.style.cursor = "pointer";
+
+    if (product.image_url) {
+      const image = document.createElement("img");
+      image.alt = product.name || "Fashion product";
+      image.loading = "lazy";
+      image.src = product.image_url;
+      card.appendChild(image);
     }
 
-    filteredProducts.forEach(product => {
-      const card = document.createElement("article");
-      card.className = "product-card";
-      card.style.cursor = "pointer";
+    const name = document.createElement("h3");
+    name.textContent = product.name || "Untitled product";
+    card.appendChild(name);
 
-      if (product.image_url) {
-        const image = document.createElement("img");
-        image.alt = product.name || "Fashion product";
-        image.loading = "lazy";
-        image.src = product.image_url;
-        card.appendChild(image);
-      }
+    const prices = document.createElement("div");
+    prices.className = "product-prices";
+    const currentPrice = Number(product.price) || 0;
+    const compareAtPrice = Number(product.compare_at_price);
 
-      const name = document.createElement("h3");
-      name.textContent = product.name || "Untitled product";
-      card.appendChild(name);
+    if (
+      product.compare_at_price !== null &&
+      product.compare_at_price !== "" &&
+      Number.isFinite(compareAtPrice) &&
+      compareAtPrice > currentPrice
+    ) {
+      const oldPrice = document.createElement("span");
+      oldPrice.className = "product-price-old";
+      oldPrice.textContent = formatPrice(compareAtPrice);
+      oldPrice.setAttribute("aria-label", "Old price");
+      prices.appendChild(oldPrice);
+    }
 
-      const prices = document.createElement("div");
-      prices.className = "product-prices";
-      const currentPrice = Number(product.price) || 0;
-      const compareAtPrice = Number(product.compare_at_price);
+    const currentPriceElement = document.createElement("span");
+    currentPriceElement.className = "product-price-current";
+    currentPriceElement.textContent = formatPrice(currentPrice);
+    currentPriceElement.setAttribute("aria-label", "Now price");
+    prices.appendChild(currentPriceElement);
+    card.appendChild(prices);
 
-      if (product.compare_at_price !== null &&
-          product.compare_at_price !== "" &&
-          Number.isFinite(compareAtPrice) &&
-          compareAtPrice > currentPrice) {
-        const oldPrice = document.createElement("span");
-        oldPrice.className = "product-price-old";
-        oldPrice.textContent = formatPrice(compareAtPrice);
-        oldPrice.setAttribute("aria-label", "Old price");
-        prices.appendChild(oldPrice);
-      }
-
-      const currentPriceElement = document.createElement("span");
-      currentPriceElement.className = "product-price-current";
-      currentPriceElement.textContent = formatPrice(currentPrice);
-      currentPriceElement.setAttribute("aria-label", "Now price");
-      prices.appendChild(currentPriceElement);
-      card.appendChild(prices);
-
-      card.addEventListener("click", event => {
-        if (event.target.closest("select, label, button, summary")) return;
-        window.location.href =
-          `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
-      });
-
-      productsGrid.appendChild(card);
+    card.addEventListener("click", event => {
+      if (event.target.closest("select, label, button, summary")) return;
+      window.location.href =
+        `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
     });
-  }
+
+    productsGrid.appendChild(card);
+  });
+}
 
   async function loadStoreProducts() {
     if (!productsGrid) return;
