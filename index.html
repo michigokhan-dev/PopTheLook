@@ -583,14 +583,15 @@ searchToggle?.addEventListener("click", () => {
   if (isOpening) searchInput.focus();
 });
 
-searchInput?.addEventListener("input", () => {
-  renderProducts();
+searchInput?.addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    event.preventDefault();
 
-  if (searchInput.value.trim()) {
-    document.getElementById("shop")?.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    const query = searchInput.value.trim();
+    if (!query) return;
+
+    window.location.href =
+      `frontend/pages/search.html?q=${encodeURIComponent(query)}`;
   }
 });
   loadStoreProducts();
