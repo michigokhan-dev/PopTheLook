@@ -475,18 +475,157 @@ let productColorsById = {};
     const selected = activeCategory.toLowerCase();
 
         const productName = (product.name || "").trim().toLowerCase();
+const selected = activeCategory.trim().toLowerCase();
 
-    const matchesCategory = selected === "all" ||
-      category === selected ||
-      productName.includes(selected) ||
-      (selected === "all dresses" && category === "dresses") ||
-      (selected === "all tops & t-shirts" &&
-        ["tops", "t-shirts", "tops & t-shirts"].includes(category)) ||
-      (selected === "all jackets" &&
-        ["jackets", "jackets & coats"].includes(category)) ||
-      (selected === "biker jacket" &&
-        (productName.includes("biker jacket") ||
-         category.includes("biker jacket")));
+const normalize = value => (value || "")
+  .toLowerCase()
+  .trim()
+  .replace(/&/g, "and")
+  .replace(/[^a-z0-9]+/g, " ")
+  .trim();
+
+const nameText = normalize(product.name);
+const categoryText = normalize(product.category);
+const selectedText = normalize(activeCategory);
+
+const categoryAliases = {
+  "new in": ["new in"],
+  "all new in": ["new in"],
+
+  "all dresses": ["dress", "dresses"],
+  "midi": ["midi dress", "midi dresses"],
+  "maxi": ["maxi dress", "maxi dresses"],
+  "mini": ["mini dress", "mini dresses"],
+  "wedding guest dresses": ["wedding guest dress", "wedding guest dresses"],
+  "party dresses": ["party dress", "party dresses"],
+  "short sleeve": ["short sleeve", "short sleeves"],
+  "long sleeve": ["long sleeve", "long sleeves"],
+  "linen dresses": ["linen dress", "linen dresses"],
+
+  "all tops and t shirts": ["top", "tops", "t shirt", "t shirts"],
+  "new in tops and t shirts": ["new in top", "new in tops"],
+  "blouses": ["blouse", "blouses"],
+  "body suit": ["body suit", "bodysuit", "bodysuits"],
+  "cardigan": ["cardigan", "cardigans"],
+  "jumper": ["jumper", "jumpers"],
+  "shirts": ["shirt", "shirts"],
+  "tops": ["top", "tops"],
+  "t shirts": ["t shirt", "t shirts", "tshirt", "tshirts"],
+  "vest tops": ["vest top", "vest tops"],
+  "sleeveless": ["sleeveless"],
+
+  "all jackets": [
+    "jacket", "jackets", "coat", "coats", "blazer", "blazers",
+    "parka", "parkas", "cape", "capes", "poncho", "ponchos"
+  ],
+  "biker jacket": ["biker jacket", "biker jackets"],
+  "racer jackets": ["racer jacket", "racer jackets"],
+  "bomber jackets": ["bomber jacket", "bomber jackets"],
+  "denim jackets": ["denim jacket", "denim jackets"],
+  "fleece jackets": ["fleece jacket", "fleece jackets"],
+  "long jackets": ["long jacket", "long jackets"],
+  "puffer jackets": ["puffer jacket", "puffer jackets"],
+  "faux fur coats": ["faux fur coat", "faux fur coats"],
+  "long coats": ["long coat", "long coats"],
+  "parkas": ["parka", "parkas"],
+  "capes": ["cape", "capes"],
+  "ponchos": ["poncho", "ponchos"],
+  "blazers": ["blazer", "blazers"],
+
+  "all knitwears": ["knitwear", "knitwears"],
+  "knitwears": ["knitwear", "knitwears"],
+  "all leggings": ["legging", "leggings"],
+  "leggings": ["legging", "leggings"],
+  "all shorts": ["shorts"],
+  "shorts": ["shorts"],
+  "all skirts": ["skirt", "skirts"],
+  "skirts": ["skirt", "skirts"],
+  "all trousers": ["trouser", "trousers"],
+  "trousers": ["trouser", "trousers"],
+
+  "all jeans": ["jean", "jeans"],
+  "boyfriend jeans": ["boyfriend jean", "boyfriend jeans"],
+  "cropped jeans": ["cropped jean", "cropped jeans"],
+  "flared jeans": ["flared jean", "flared jeans"],
+  "high waisted jeans": ["high waisted jean", "high waisted jeans"],
+  "ripped jeans": ["ripped jean", "ripped jeans"],
+  "skinny jeans": ["skinny jean", "skinny jeans"],
+  "straight jeans": ["straight jean", "straight jeans"],
+
+  "all nightwears": ["nightwear", "nightwears"],
+  "nightwears": ["nightwear", "nightwears"],
+  "all jumpsuits": ["jumpsuit", "jumpsuits"],
+  "jumpsuits": ["jumpsuit", "jumpsuits"],
+  "all playsuits": ["playsuit", "playsuits"],
+  "playsuits": ["playsuit", "playsuits"],
+  "all tracksuits": ["tracksuit", "tracksuits"],
+  "tracksuits": ["tracksuit", "tracksuits"],
+  "all underwears": ["underwear"],
+  "underwears": ["underwear"],
+
+  "all bags": ["bag", "bags"],
+  "bags": ["bag", "bags"],
+  "all accessories and jewellery": [
+    "accessory", "accessories", "jewellery", "jewelry"
+  ],
+  "accessories and jewellery": [
+    "accessory", "accessories", "jewellery", "jewelry"
+  ],
+  "all sportswear": ["sportswear"],
+  "sportswear": ["sportswear"],
+  "all beauty": ["beauty"],
+  "beauty": ["beauty"],
+  "all fragrance": ["fragrance", "perfume"],
+  "fragrance": ["fragrance", "perfume"]
+};
+
+const allCategoryGroups = {
+  "all dresses": ["dresses"],
+  "all tops and t shirts": ["tops", "t shirts", "tops and t shirts"],
+  "all jackets": ["jackets", "jackets and coats"],
+  "all knitwears": ["knitwears", "knitwear"],
+  "all leggings": ["leggings"],
+  "all shorts": ["shorts"],
+  "all skirts": ["skirts"],
+  "all trousers": ["trousers"],
+  "all jeans": ["jeans"],
+  "all nightwears": ["nightwears", "nightwear"],
+  "all jumpsuits": ["jumpsuits"],
+  "all playsuits": ["playsuits"],
+  "all tracksuits": ["tracksuits"],
+  "all underwears": ["underwears", "underwear"],
+  "all bags": ["bags"],
+  "all accessories and jewellery": ["accessories and jewellery"],
+  "all sportswear": ["sportswear"],
+  "all beauty": ["beauty"],
+  "all fragrance": ["fragrance"]
+};
+
+const matchesCategory = (() => {
+  if (selected === "all") return true;
+
+  const selectedAliases = categoryAliases[selectedText] || [
+    selectedText
+  ];
+
+  if (selectedText.startsWith("all ")) {
+    const groupAliases = allCategoryGroups[selectedText] || [
+      selectedText.replace(/^all /, "")
+    ];
+
+    return groupAliases.some(group =>
+      categoryText.includes(normalize(group))
+    ) || selectedAliases.some(term =>
+      nameText.includes(normalize(term)) ||
+      categoryText.includes(normalize(term))
+    );
+  }
+
+  return selectedAliases.some(term =>
+    nameText.includes(normalize(term)) ||
+    categoryText.includes(normalize(term))
+  );
+})();
 
     const productText =
       `${product.name || ""} ${product.category || ""}`.toLowerCase();
