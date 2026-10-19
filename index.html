@@ -423,16 +423,8 @@ let productColorsById = {};
         button.textContent = category;
         button.classList.toggle("active", activeCategory === category);
         button.addEventListener("click", () => {
-  activeCategory = category;
-
-  renderCategoryFilters();
-  renderProducts();
-
-  menuPanel.hidden = true;
-  menuToggle.setAttribute("aria-expanded", "false");
-  menuToggle.setAttribute("aria-label", "Open shop menu");
-
-  categoryFilters.hidden = true;
+  window.location.href =
+    `frontend/pages/category.html?category=${encodeURIComponent(category)}`;
 });
         options.appendChild(button);
       });
