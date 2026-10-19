@@ -54,12 +54,19 @@
 </head>
 <body>
   <header>
-    <a class="logo" href="../../index.html">POP THE LOOK</a>
-    <nav class="header-links" aria-label="Product navigation">
-      <a class="back-link" href="../../index.html#shop">← Continue shopping</a>
-      <a class="cart-link" href="cart.html">Cart</a>
-    </nav>
-  </header>
+  <a class="logo" href="../../index.html">POP THE LOOK</a>
+  <nav class="header-links" aria-label="Product navigation">
+    <a class="back-link" href="../../index.html#shop">← Continue shopping</a>
+    <a class="icon-button" href="cart.html" aria-label="Shopping cart">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 8h16l-1 13H5L4 8Z"/>
+        <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+      </svg>
+      <span class="cart-count">0</span>
+    </a>
+  </nav>
+</header>
+
   <main>
     <div id="status" class="status">Loading product...</div>
     <div id="product-layout" class="product-layout" hidden>
