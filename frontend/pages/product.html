@@ -323,7 +323,9 @@
       button.disabled = !(selectedVariant && Number(selectedVariant.stock) > 0);
     }
     $("size-select").addEventListener("change", event => {
-      selectedVariant = variants.find(variant => variant.id === event.target.value) || null;
+      selectedVariant = variants.find(
+  variant => String(variant.id) === event.target.value
+) || null;
       if (!selectedVariant) {
         $("stock-message").textContent = "Please choose your size.";
       } else if (Number(selectedVariant.stock) <= 0) {
