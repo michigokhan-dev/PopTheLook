@@ -191,7 +191,8 @@
       if (!selectedVariant) $("stock-message").textContent = "Please choose your size.";
       else if (Number(selectedVariant.stock) <= 0) $("stock-message").textContent = "Out of stock";
       else $("stock-message").textContent = `In stock: ${selectedVariant.stock}`;
-      
+            updateButton();
+    });
     $("add-to-cart").addEventListener("click", () => {
   if (!product || !selectedVariant) {
     $("cart-message").textContent = "Please choose your size first.";
