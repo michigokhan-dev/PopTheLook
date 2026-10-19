@@ -3,176 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f0e7">
+  <meta name="theme-color" content="#ffffff">
   <title>Product | POP THE LOOK</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --cream: #ffffff;
-      --ink: #211e19;
-      --muted: #796b58;
-      --line: #ded5c7;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #ffffff;
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-    }
-    header {
-      min-height: 76px;
-      padding: 18px 5%;
-      background: #ffffff;
-      border-bottom: 1px solid var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-    }
-    .logo {
-      color: var(--ink);
-      text-decoration: none;
-      font-family: "Playfair Display", serif;
-      font-size: clamp(21px, 3vw, 30px);
-      font-weight: 600;
-      letter-spacing: 1px;
-    }
-    .back-link {
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 14px;
-    }
-    main {
-      width: min(1100px, 92%);
-      margin: 45px auto 70px;
-    }
-    .product-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
-      gap: clamp(28px, 6vw, 75px);
-      align-items: start;
-    }
-    .gallery { min-width: 0; }
-    .main-image {
-      display: block;
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: contain;
-      object-position: center;
-      background: var(--cream);
-    }
-    .thumbnails {
-      display: flex;
-      justify-content: flex-start;
-      gap: 10px;
-      margin-top: 12px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-    .thumbnail {
-      width: 68px;
-      height: 86px;
-      flex: 0 0 auto;
-      padding: 0;
-      border: 1px solid var(--line);
-      background: #fffdf9;
-      cursor: pointer;
-      overflow: hidden;
-    }
-    .thumbnail img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-    .thumbnail.active { border: 2px solid var(--ink); }
-    .details { padding-top: 12px; }
-    .eyebrow {
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-    }
-    h1 {
-      margin: 12px 0;
-      font-family: "Playfair Display", serif;
-      font-size: clamp(27px, 4vw, 39px);
-      font-weight: 500;
-    }
-    .price { margin: 0 0 25px; font-size: 17px; }
-    .description {
-      margin: 0 0 28px;
-      color: var(--muted);
-      line-height: 1.8;
-      white-space: pre-line;
-    }
-    .field { margin: 22px 0; }
-    .field-title {
-      display: block;
-      margin-bottom: 12px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .color-options { display: flex; flex-wrap: wrap; gap: 10px; }
-    .color-option {
-      padding: 9px 13px;
-      border: 1px solid var(--line);
-      background: white;
-      color: var(--ink);
-      cursor: pointer;
-      font: inherit;
-      font-size: 13px;
-    }
-    .color-option.selected {
-      border: 2px solid var(--ink);
-      padding: 8px 12px;
-    }
-    select {
-      width: 100%;
-      min-height: 46px;
-      padding: 0 12px;
-      border: 1px solid var(--line);
-      background: white;
-      color: var(--ink);
-      font: inherit;
-    }
-    .stock-message {
-      min-height: 20px;
-      margin: 12px 0;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .add-button {
-      width: 100%;
-      min-height: 52px;
-      margin-top: 12px;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: white;
-      font: inherit;
-      letter-spacing: 1px;
-      cursor: pointer;
-    }
-    .add-button:disabled { opacity: .5; cursor: not-allowed; }
-    .status { color: var(--muted); line-height: 1.7; }
-    @media (max-width: 700px) {
-      main { width: 100%; margin: 0 auto 45px; }
-      .product-layout { grid-template-columns: 1fr; gap: 20px; }
-      .gallery { width: 100%; }
-      .main-image { aspect-ratio: 4 / 5; }
-      .details { padding: 10px 20px 0; }
-      .thumbnails { padding: 0 15px 4px; }
+    :root { --cream:#ffffff; --ink:#211e19; --muted:#796b58; --line:#ded5c7; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#fff; color:var(--ink); font-family:"DM Sans",sans-serif; }
+    header { min-height:76px; padding:18px 5%; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .logo { color:var(--ink); text-decoration:none; font-family:"Playfair Display",serif; font-size:clamp(21px,3vw,30px); font-weight:600; letter-spacing:1px; }
+    .header-links { display:flex; align-items:center; gap:18px; }
+    .back-link,.cart-link { color:var(--ink); text-decoration:none; font-size:14px; white-space:nowrap; }
+    main { width:min(1100px,92%); margin:45px auto 70px; }
+    .product-layout { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr); gap:clamp(28px,6vw,75px); align-items:start; }
+    .gallery { min-width:0; }
+    .main-image { display:block; width:100%; aspect-ratio:3/4; object-fit:contain; object-position:center; background:var(--cream); }
+    .thumbnails { display:flex; justify-content:flex-start; gap:10px; margin-top:12px; overflow-x:auto; padding-bottom:4px; }
+    .thumbnail { width:68px; height:86px; flex:0 0 auto; padding:0; border:1px solid var(--line); background:#fff; cursor:pointer; overflow:hidden; }
+    .thumbnail img { display:block; width:100%; height:100%; object-fit:contain; object-position:center; }
+    .thumbnail.active { border:2px solid var(--ink); }
+    .details { padding-top:12px; }
+    .eyebrow { color:var(--muted); font-size:11px; letter-spacing:2px; text-transform:uppercase; }
+    h1 { margin:12px 0; font-family:"Playfair Display",serif; font-size:clamp(27px,4vw,39px); font-weight:500; }
+    .price { margin:0 0 25px; font-size:17px; }
+    .description { margin:0 0 28px; color:var(--muted); line-height:1.8; white-space:pre-line; }
+    .field { margin:22px 0; }
+    .field-title { display:block; margin-bottom:12px; font-size:13px; font-weight:600; }
+    .color-options { display:flex; flex-wrap:wrap; gap:10px; }
+    .color-option { padding:9px 13px; border:1px solid var(--line); background:#fff; color:var(--ink); cursor:pointer; font:inherit; font-size:13px; }
+    .color-option.selected { border:2px solid var(--ink); padding:8px 12px; }
+    select { width:100%; min-height:46px; padding:0 12px; border:1px solid var(--line); background:#fff; color:var(--ink); font:inherit; }
+    .stock-message { min-height:20px; margin:12px 0; color:var(--muted); font-size:13px; }
+    .add-button { width:100%; min-height:52px; margin-top:12px; border:1px solid var(--ink); background:var(--ink); color:#fff; font:inherit; letter-spacing:1px; cursor:pointer; }
+    .add-button:disabled { opacity:.5; cursor:not-allowed; }
+    .status { color:var(--muted); line-height:1.7; }
+    @media (max-width:700px) {
+      header { padding:16px 4%; gap:10px; }
+      .header-links { gap:12px; }
+      .back-link,.cart-link { font-size:12px; }
+      main { width:100%; margin:0 auto 45px; }
+      .product-layout { grid-template-columns:1fr; gap:20px; }
+      .gallery { width:100%; }
+      .main-image { aspect-ratio:4/5; }
+      .details { padding:10px 20px 0; }
+      .thumbnails { padding:0 15px 4px; }
     }
   </style>
 </head>
 <body>
   <header>
     <a class="logo" href="../../index.html">POP THE LOOK</a>
-    <a class="back-link" href="../../index.html#shop">← Continue shopping</a>
+    <nav class="header-links" aria-label="Product navigation">
+      <a class="back-link" href="../../index.html#shop">← Continue shopping</a>
+      <a class="cart-link" href="cart.html">Cart</a>
+    </nav>
   </header>
   <main>
     <div id="status" class="status">Loading product...</div>
@@ -186,15 +72,10 @@
         <h1 id="product-name"></h1>
         <p id="product-price" class="price"></p>
         <p id="product-description" class="description"></p>
-        <div class="field">
-          <span class="field-title">Colour</span>
-          <div id="color-options" class="color-options"></div>
-        </div>
+        <div class="field"><span class="field-title">Colour</span><div id="color-options" class="color-options"></div></div>
         <div class="field">
           <label class="field-title" for="size-select">Size</label>
-          <select id="size-select">
-            <option value="">Choose a size</option>
-          </select>
+          <select id="size-select"><option value="">Choose a size</option></select>
         </div>
         <p id="stock-message" class="stock-message" aria-live="polite"></p>
         <button id="add-to-cart" class="add-button" type="button" disabled>ADD TO CART</button>
@@ -204,254 +85,151 @@
   </main>
   <script type="module">
     import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-    const supabase = createClient(
-      "https://imkkafqtlvuzloalcfvk.supabase.co",
-      "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
-    );
+    const supabase = createClient("https://imkkafqtlvuzloalcfvk.supabase.co", "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N");
     const $ = id => document.getElementById(id);
-    const params = new URLSearchParams(window.location.search);
-    const productId = params.get("id");
-    let product = null;
-    let variants = [];
-    let colors = [];
-    let selectedColor = "";
-    let selectedVariant = null;
-    let photos = [];
-    let allColorPhotos = [];
+    const productId = new URLSearchParams(window.location.search).get("id");
+    let product = null, variants = [], colors = [], selectedColor = "", selectedVariant = null, photos = [], allColorPhotos = [];
+
     function formatPrice(value) {
-      return new Intl.NumberFormat("en-GB", {
-        style: "currency", currency: "GBP"
-      }).format(Number(value) || 0);
+      return new Intl.NumberFormat("en-GB", { style:"currency", currency:"GBP" }).format(Number(value) || 0);
     }
     function showError(message) {
-      $("status").hidden = false;
-      $("status").textContent = message;
-      $("product-layout").hidden = true;
+      $("status").hidden = false; $("status").textContent = message; $("product-layout").hidden = true;
     }
     function getVariantPhotos(variant) {
       const urls = Array.isArray(variant.image_urls) ? variant.image_urls : [];
-      const extraImages = variant.extraImages || [];
-      return [...new Set([...urls, ...extraImages].filter(Boolean))];
+      return [...new Set([...urls, ...(variant.extraImages || [])].filter(Boolean))];
     }
     function setMainPhoto(url) {
       if (!url) return;
-      $("main-image").src = url;
-      $("main-image").alt = `${product?.name || "Product"} photo`;
-      $("thumbnails").querySelectorAll(".thumbnail").forEach(button => {
-        button.classList.toggle("active", button.dataset.photoUrl === url);
-      });
+      $("main-image").src = url; $("main-image").alt = `${product?.name || "Product"} photo`;
+      $("thumbnails").querySelectorAll(".thumbnail").forEach(button => button.classList.toggle("active", button.dataset.photoUrl === url));
     }
     function showPhotos(urls, { preserveMain = false } = {}) {
       photos = [...new Set((urls || []).filter(Boolean))];
       if (!photos.length && product?.image_url) photos = [product.image_url];
-      const currentMain = $("main-image").src;
-      const thumbnails = $("thumbnails");
+      const currentMain = $("main-image").src, thumbnails = $("thumbnails");
       thumbnails.replaceChildren();
       photos.forEach((url, index) => {
         const button = document.createElement("button");
-        button.type = "button";
-        button.className = "thumbnail";
-        button.dataset.photoUrl = url;
+        button.type = "button"; button.className = "thumbnail"; button.dataset.photoUrl = url;
         button.setAttribute("aria-label", `View product photo ${index + 1}`);
-        const img = document.createElement("img");
-        img.src = url;
-        img.alt = "";
-        img.loading = "lazy";
-        img.onerror = () => button.remove();
-        button.appendChild(img);
-        button.addEventListener("click", () => setMainPhoto(url));
-        thumbnails.appendChild(button);
+        const img = document.createElement("img"); img.src = url; img.alt = ""; img.loading = "lazy";
+        img.onerror = () => button.remove(); button.appendChild(img);
+        button.addEventListener("click", () => setMainPhoto(url)); thumbnails.appendChild(button);
       });
-      if (preserveMain && photos.includes(currentMain)) {
-        setMainPhoto(currentMain);
-      } else {
-        setMainPhoto(photos[0] || product?.image_url);
-      }
+      if (preserveMain && photos.includes(currentMain)) setMainPhoto(currentMain);
+      else setMainPhoto(photos[0] || product?.image_url);
     }
     function renderSizes() {
-      const sizeSelect = $("size-select");
-      sizeSelect.replaceChildren();
-      const placeholder = document.createElement("option");
-      placeholder.value = "";
-      placeholder.textContent = "Choose a size";
-      sizeSelect.appendChild(placeholder);
-      const colorVariants = variants.filter(
-        variant => (variant.color_name || "Default") === selectedColor
-      );
+      const sizeSelect = $("size-select"); sizeSelect.replaceChildren();
+      const placeholder = document.createElement("option"); placeholder.value = ""; placeholder.textContent = "Choose a size"; sizeSelect.appendChild(placeholder);
+      const colorVariants = variants.filter(v => (v.color_name || "Default") === selectedColor);
       colorVariants.forEach(variant => {
-        const option = document.createElement("option");
-        option.value = variant.id;
-        option.textContent = variant.size || "One size";
-        option.disabled = Number(variant.stock) <= 0;
-        sizeSelect.appendChild(option);
+        const option = document.createElement("option"); option.value = variant.id;
+        option.textContent = variant.size || "One size"; option.disabled = Number(variant.stock) <= 0; sizeSelect.appendChild(option);
       });
       selectedVariant = null;
-      $("stock-message").textContent = colorVariants.length
-        ? "Please choose your size."
-        : "No sizes are configured for this colour.";
+      $("stock-message").textContent = colorVariants.length ? "Please choose your size." : "No sizes are configured for this colour.";
       updateButton();
     }
     function renderColors() {
-      const container = $("color-options");
-      container.replaceChildren();
+      const container = $("color-options"); container.replaceChildren();
       colors.forEach(color => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "color-option";
-        button.textContent = color;
+        const button = document.createElement("button"); button.type = "button"; button.className = "color-option"; button.textContent = color;
         button.setAttribute("aria-pressed", String(color === selectedColor));
         if (color === selectedColor) button.classList.add("selected");
         button.addEventListener("click", () => {
           selectedColor = color;
           container.querySelectorAll("button").forEach(item => {
-            const active = item.textContent === color;
-            item.classList.toggle("selected", active);
-            item.setAttribute("aria-pressed", String(active));
+            const active = item.textContent === color; item.classList.toggle("selected", active); item.setAttribute("aria-pressed", String(active));
           });
-          const colorVariants = variants.filter(
-            variant => (variant.color_name || "Default") === color
-          );
+          const colorVariants = variants.filter(v => (v.color_name || "Default") === color);
           const colorPhotos = colorVariants.flatMap(getVariantPhotos);
-          showPhotos(colorPhotos.length ? colorPhotos : [product.image_url]);
-          renderSizes();
+          showPhotos(colorPhotos.length ? colorPhotos : [product.image_url]); renderSizes();
         });
         container.appendChild(button);
       });
     }
     function updateButton() {
-      const button = $("add-to-cart");
-      button.disabled = !(selectedVariant && Number(selectedVariant.stock) > 0);
+      $("add-to-cart").disabled = !(selectedVariant && Number(selectedVariant.stock) > 0);
     }
     $("size-select").addEventListener("change", event => {
-      selectedVariant = variants.find(
-  variant => String(variant.id) === event.target.value
-) || null;
-      if (!selectedVariant) {
-        $("stock-message").textContent = "Please choose your size.";
-      } else if (Number(selectedVariant.stock) <= 0) {
-        $("stock-message").textContent = "Out of stock";
-      } else {
-        $("stock-message").textContent = `In stock: ${selectedVariant.stock}`;
-      }
+      selectedVariant = variants.find(v => String(v.id) === event.target.value) || null;
+      if (!selectedVariant) $("stock-message").textContent = "Please choose your size.";
+      else if (Number(selectedVariant.stock) <= 0) $("stock-message").textContent = "Out of stock";
+      else $("stock-message").textContent = `In stock: ${selectedVariant.stock}`;
       updateButton();
     });
     $("add-to-cart").addEventListener("click", () => {
       if (!product || !selectedVariant) return;
       const cartItem = {
-        productId: product.id,
-        variantId: selectedVariant.id,
-        name: product.name,
-        price: Number(product.price) || 0,
-        color: selectedVariant.color_name || "Default",
-        size: selectedVariant.size || "One size",
-        image: $("main-image").src,
-        quantity: 1
+        productId:product.id, variantId:selectedVariant.id, name:product.name,
+        price:Number(product.price) || 0, color:selectedVariant.color_name || "Default",
+        size:selectedVariant.size || "One size", image:$("main-image").src, quantity:1
       };
       let cart = [];
       try {
         cart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
         if (!Array.isArray(cart)) cart = [];
       } catch { cart = []; }
-      const existing = cart.find(item => item.variantId === cartItem.variantId);
+      const existing = cart.find(item => String(item.variantId) === String(cartItem.variantId));
       if (existing) {
         if (Number(existing.quantity) >= Number(selectedVariant.stock)) {
-          $("cart-message").textContent = "You cannot add more than the available stock.";
-          return;
+          $("cart-message").textContent = "You cannot add more than the available stock."; return;
         }
         existing.quantity = Number(existing.quantity) + 1;
-      } else {
-        cart.push(cartItem);
+      } else cart.push(cartItem);
+      try {
+        localStorage.setItem("popTheLookCart", JSON.stringify(cart));
+        $("cart-message").textContent = "Added to cart.";
+      } catch (error) {
+        console.error("Cart save error:", error);
+        $("cart-message").textContent = "Could not save your cart. Please try again.";
       }
-      
-      localStorage.setItem("popTheLookCart", JSON.stringify(cart));
-
-      const savedCart = JSON.parse(
-        localStorage.getItem("popTheLookCart") || "[]"
-      );
-
-      $("cart-message").textContent =
-        `Added to cart. Cart items: ${
-          savedCart.reduce((sum, item) => sum + Number(item.quantity || 0), 0)
-        }`;
     });
 
     async function loadProduct() {
-      if (!productId) {
-        showError("No product was selected. Please return to the shop.");
-        return;
-      }
-
-
-async function loadProduct() {
-  if (!productId) {
-    showError("No product was selected. Please return to the shop.");
-    return;
-  }
-      const { data, error } = await supabase
-        .from("products")
+      if (!productId) { showError("No product was selected. Please return to the shop."); return; }
+      const { data, error } = await supabase.from("products")
         .select("id, name, price, category, image_url, description, is_active")
-        .eq("id", productId)
-        .eq("is_active", true)
-        .maybeSingle();
+        .eq("id", productId).eq("is_active", true).maybeSingle();
       if (error || !data) {
-        console.error("Product load error:", error);
-        showError("This product could not be found.");
-        return;
+        console.error("Product load error:", error); showError("This product could not be found."); return;
       }
       product = data;
-      const { data: variantData, error: variantError } = await supabase
-        .from("product_variants")
-        .select("id, product_id, color_name, size, stock, image_urls")
-        .eq("product_id", product.id);
+      const { data: variantData, error: variantError } = await supabase.from("product_variants")
+        .select("id, product_id, color_name, size, stock, image_urls").eq("product_id", product.id);
       if (variantError) {
-        console.error("Variant load error:", variantError);
-        showError("Product options could not be loaded. Please try again.");
-        return;
+        console.error("Variant load error:", variantError); showError("Product options could not be loaded. Please try again."); return;
       }
       variants = variantData || [];
       if (variants.length) {
-        const { data: images, error: imagesError } = await supabase
-          .from("product_variant_images")
-          .select("variant_id, image_url, sort_order")
-          .in("variant_id", variants.map(v => v.id))
-          .order("sort_order", { ascending: true });
-        if (imagesError) {
-          console.warn("Variant images could not be loaded:", imagesError);
-        } else {
-          (images || []).forEach(image => {
-            const variant = variants.find(v => v.id === image.variant_id);
-            if (variant) {
-              if (!Array.isArray(variant.extraImages)) variant.extraImages = [];
-              variant.extraImages.push(image.image_url);
-            }
-          });
-        }
+        const { data: images, error: imagesError } = await supabase.from("product_variant_images")
+          .select("variant_id, image_url, sort_order").in("variant_id", variants.map(v => v.id)).order("sort_order", { ascending:true });
+        if (imagesError) console.warn("Variant images could not be loaded:", imagesError);
+        else (images || []).forEach(image => {
+          const variant = variants.find(v => String(v.id) === String(image.variant_id));
+          if (variant) {
+            if (!Array.isArray(variant.extraImages)) variant.extraImages = [];
+            variant.extraImages.push(image.image_url);
+          }
+        });
       }
       $("product-name").textContent = product.name || "Untitled product";
       $("product-price").textContent = formatPrice(product.price);
       $("product-description").textContent = product.description || "";
       colors = [...new Set(variants.map(v => v.color_name || "Default"))];
-      allColorPhotos = [...new Set([
-        product.image_url,
-        ...colors.flatMap(color => variants
-          .filter(v => (v.color_name || "Default") === color)
-          .flatMap(getVariantPhotos))
-      ].filter(Boolean))];
-      $("status").hidden = true;
-      $("product-layout").hidden = false;
+      allColorPhotos = [...new Set([product.image_url, ...colors.flatMap(color =>
+        variants.filter(v => (v.color_name || "Default") === color).flatMap(getVariantPhotos)
+      )].filter(Boolean))];
+      $("status").hidden = true; $("product-layout").hidden = false;
       if (colors.length) {
-        // Keep the first colour selected for size/stock, but initially show
-        // thumbnails from every colour so shoppers can see all available looks.
-        selectedColor = colors[0];
-        renderColors();
-        showPhotos(allColorPhotos);
-        renderSizes();
+        selectedColor = colors[0]; renderColors(); showPhotos(allColorPhotos); renderSizes();
       } else {
-        showPhotos([product.image_url]);
-        $("color-options").textContent = "No colours configured";
+        showPhotos([product.image_url]); $("color-options").textContent = "No colours configured";
         $("size-select").disabled = true;
-        $("stock-message").textContent =
-          "This product has no sizes or stock variants configured yet.";
+        $("stock-message").textContent = "This product has no sizes or stock variants configured yet.";
         $("add-to-cart").disabled = true;
       }
       document.title = `${product.name} | POP THE LOOK`;
