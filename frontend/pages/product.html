@@ -363,16 +363,22 @@
         cart.push(cartItem);
       }
       localStorage.setItem("popTheLookCart", JSON.stringify(cart));
-      const savedCart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
-$("cart-message").textContent = "Added to cart.";
-      const savedCart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
-$("cart-message").textContent = `Added to cart. Cart items: ${savedCart.reduce((sum, item) => sum + Number(item.quantity || 0), 0)}`;
-    });
-    async function loadProduct() {
-      if (!productId) {
-        showError("No product was selected. Please return to the shop.");
-        return;
-      }
+
+const savedCart = JSON.parse(
+  localStorage.getItem("popTheLookCart") || "[]"
+);
+
+$("cart-message").textContent =
+  `Added to cart. Cart items: ${
+    savedCart.reduce((sum, item) => sum + Number(item.quantity || 0), 0)
+  }`;
+});
+
+async function loadProduct() {
+  if (!productId) {
+    showError("No product was selected. Please return to the shop.");
+    return;
+  }
       const { data, error } = await supabase
         .from("products")
         .select("id, name, price, category, image_url, description, is_active")
