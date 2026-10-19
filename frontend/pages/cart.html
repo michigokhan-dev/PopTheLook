@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Your Bag | POP THE LOOK</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#211e19;--muted:#796b58;--line:#ded5c7}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:"DM Sans",sans-serif}header{padding:18px 5%;min-height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}.logo{font:600 clamp(21px,3vw,30px) "Playfair Display",serif;letter-spacing:1px;text-decoration:none}a{color:inherit}main{width:min(1000px,92%);margin:42px auto 70px}h1{font:500 clamp(30px,4vw,42px) "Playfair Display",serif;margin:0 0 28px}.empty,.meta,.note{color:var(--muted)}.item{display:grid;grid-template-columns:112px minmax(0,1fr) auto;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);align-items:center}.item-image{display:block;width:112px;height:140px;object-fit:contain}.item-info{min-width:0}.item-name{font-weight:600;text-decoration:none}.meta{font-size:14px;line-height:1.7;margin:8px 0}.item-price{margin:8px 0}.quantity{display:flex;align-items:center;margin-top:14px}.quantity button{width:36px;height:34px;background:#fff;border:1px solid var(--line);color:var(--ink);font-size:18px;cursor:pointer}.quantity span{min-width:38px;text-align:center}.remove{margin-left:14px;border:0;background:none;text-decoration:underline;color:var(--muted);cursor:pointer;font:inherit;font-size:13px}.line-total{font-weight:600;white-space:nowrap;align-self:start}.summary{display:flex;justify-content:flex-end;margin-top:28px}.summary-inner{width:min(100%,340px)}.subtotal{display:flex;justify-content:space-between;font-size:18px;font-weight:600}.note{font-size:13px;line-height:1.6}.continue{display:inline-block;margin-top:24px;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:4px}@media(max-width:560px){main{margin-top:28px}.item{grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:start}.item-image{width:84px;height:112px}.line-total{grid-column:2}.item-name{font-size:15px}.remove{margin-left:8px}}
+</style>
+</head>
+<body>
+<header><a class="logo" href="../../index.html">POP THE LOOK</a><a href="../../index.html#shop">Continue shopping</a></header>
+<main><h1>Your Bag</h1><div id="cart-items" aria-live="polite"></div><div id="summary" class="summary" hidden><div class="summary-inner"><div class="subtotal"><span>Subtotal</span><span id="subtotal">£0.00</span></div><p class="note">Shipping and any applicable taxes are calculated at checkout.</p></div></div><a class="continue" href="../../index.html#shop">← Continue shopping</a></main>
+<script>
+const KEY="popTheLookCart",container=document.getElementById("cart-items"),summary=document.getElementById("summary"),subtotalNode=document.getElementById("subtotal");
+const money=v=>new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP"}).format(Number(v)||0);
+function readCart(){try{const c=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(c)?c:[]}catch{return []}}
+function saveCart(c){localStorage.setItem(KEY,JSON.stringify(c))}
+function renderCart(){const cart=readCart();container.replaceChildren();if(!cart.length){const p=document.createElement("p");p.className="empty";p.textContent="Your bag is empty.";container.appendChild(p);summary.hidden=true;return}let subtotal=0;
+cart.forEach((item,index)=>{const qty=Math.max(1,Number(item.quantity)||1),price=Number(item.price)||0;subtotal+=price*qty;
+const row=document.createElement("article");row.className="item";const link=document.createElement("a");link.href="product.html?id="+encodeURIComponent(item.productId||"");const img=document.createElement("img");img.className="item-image";img.src=item.image||"";img.alt=item.name||"Product";link.appendChild(img);
+const info=document.createElement("div");info.className="item-info";const name=document.createElement("a");name.className="item-name";name.href=link.href;name.textContent=item.name||"Product";const meta=document.createElement("p");meta.className="meta";meta.textContent="Colour: "+(item.color||"Default")+" · Size: "+(item.size||"One size");const priceEl=document.createElement("p");priceEl.className="item-price";priceEl.textContent=money(price);
+const controls=document.createElement("div");controls.className="quantity";const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label","Decrease quantity");minus.onclick=()=>{const c=readCart();if(c[index])c[index].quantity=Math.max(1,(Number(c[index].quantity)||1)-1);saveCart(c);renderCart()};const q=document.createElement("span");q.textContent=qty;const plus=document.createElement("button");plus.type="button";plus.textContent="+";plus.setAttribute("aria-label","Increase quantity");plus.onclick=()=>{const c=readCart();if(c[index])c[index].quantity=(Number(c[index].quantity)||1)+1;saveCart(c);renderCart()};const remove=document.createElement("button");remove.type="button";remove.className="remove";remove.textContent="Remove";remove.onclick=()=>{const c=readCart();c.splice(index,1);saveCart(c);renderCart()};controls.append(minus,q,plus,remove);info.append(name,meta,priceEl,controls);const total=document.createElement("div");total.className="line-total";total.textContent=money(price*qty);row.append(link,info,total);container.appendChild(row)});
+subtotalNode.textContent=money(subtotal);summary.hidden=false}
+window.addEventListener("storage",renderCart);renderCart();
+</script>
+</body>
+</html>
