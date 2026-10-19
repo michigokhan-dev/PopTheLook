@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f0e7">
+<title>Shop Category | POP THE LOOK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/style.css">
+<style>
+body{background:#f5f0e7;color:#211e19}.category-page{width:min(1200px,92%);margin:auto;padding:36px 0 64px}.category-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px}.category-brand{color:#211e19;text-decoration:none;font:700 clamp(22px,3vw,34px) "Playfair Display",serif}.category-home{color:#211e19;text-decoration:none;border:1px solid #ded5c7;padding:10px 15px}.category-title{font:600 clamp(28px,4vw,42px) "Playfair Display",serif;margin:18px 0 26px}.category-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 16px}.category-card{min-width:0;cursor:pointer}.category-card img{display:block;width:100%;height:340px;object-fit:contain;background:#fff}.category-card h2{font:500 15px "DM Sans",sans-serif;text-align:center;margin:12px 0 7px}.category-price{text-align:center;font-weight:600}.category-message{color:#796b58;padding:20px 0}@media(max-width:850px){.category-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.category-card img{height:280px}}@media(max-width:600px){.category-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}.category-card img{height:230px}}
+</style>
+</head>
+<body>
+<main class="category-page">
+<div class="category-top"><a class="category-brand" href="../../index.html#home">POP THE LOOK</a><a class="category-home" href="../../index.html#home">Home</a></div>
+<h1 class="category-title" id="category-title">Loading category...</h1>
+<div id="category-products" class="category-grid"><p class="category-message">Loading products...</p></div>
+</main>
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+const supabase=createClient("https://imkkafqtlvuzloalcfvk.supabase.co","sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N");
+const params=new URLSearchParams(location.search);
+const selectedCategory=(params.get("category")||"").trim();
+const title=document.getElementById("category-title");
+const grid=document.getElementById("category-products");
+title.textContent=selectedCategory||"All Products";
+document.title=`${selectedCategory||"All Products"} | POP THE LOOK`;
+function normalize(value){return(value||"").toLowerCase().trim().replace(/&/g,"and").replace(/[^a-z0-9]+/g," ").trim()}
+const aliases={
+"all new in":["new in"],"new in":["new in"],"all dresses":["dress","dresses"],"midi":["midi dress","midi dresses","midi"],"maxi":["maxi dress","maxi dresses","maxi"],"mini":["mini dress","mini dresses","mini"],"wedding guest dresses":["wedding guest dress","wedding guest dresses"],"party dresses":["party dress","party dresses"],
+"all tops and t shirts":["top","tops","t shirt","t shirts"],"new in tops and t shirts":["new in top","new in tops"],
+"all jackets":["jacket","jackets","coat","coats","blazer","blazers","parka","parkas","cape","capes","poncho","ponchos"],"biker jacket":["biker jacket","biker jackets"],"racer jackets":["racer jacket","racer jackets"],"bomber jackets":["bomber jacket","bomber jackets"],"denim jackets":["denim jacket","denim jackets"],"fleece jackets":["fleece jacket","fleece jackets"],"long jackets":["long jacket","long jackets"],"puffer jackets":["puffer jacket","puffer jackets"],"faux fur coats":["faux fur coat","faux fur coats"],"long coats":["long coat","long coats"],"parkas":["parka","parkas"],"capes":["cape","capes"],"ponchos":["poncho","ponchos"],"blazers":["blazer","blazers"],
+"all knitwears":["knitwear","knitwears"],"knitwears":["knitwear","knitwears"],"all leggings":["legging","leggings"],"leggings":["legging","leggings"],"all shorts":["shorts"],"shorts":["shorts"],"all skirts":["skirt","skirts"],"skirts":["skirt","skirts"],"all trousers":["trouser","trousers"],"trousers":["trouser","trousers"],"all jeans":["jean","jeans"],"boyfriend jeans":["boyfriend jean","boyfriend jeans"],"cropped jeans":["cropped jean","cropped jeans"],"flared jeans":["flared jean","flared jeans"],"high waisted jeans":["high waisted jean","high waisted jeans"],"ripped jeans":["ripped jean","ripped jeans"],"skinny jeans":["skinny jean","skinny jeans"],"straight jeans":["straight jean","straight jeans"],
+"all nightwears":["nightwear","nightwears"],"nightwears":["nightwear","nightwears"],"all jumpsuits":["jumpsuit","jumpsuits"],"jumpsuits":["jumpsuit","jumpsuits"],"all playsuits":["playsuit","playsuits"],"playsuits":["playsuit","playsuits"],"all tracksuits":["tracksuit","tracksuits"],"tracksuits":["tracksuit","tracksuits"],"all underwears":["underwear"],"underwears":["underwear"],"all bags":["bag","bags"],"bags":["bag","bags"],"all accessories and jewellery":["accessory","accessories","jewellery","jewelry"],"accessories and jewellery":["accessory","accessories","jewellery","jewelry"],"all sportswear":["sportswear"],"sportswear":["sportswear"],"all beauty":["beauty"],"beauty":["beauty"],"all fragrance":["fragrance","perfume"],"fragrance":["fragrance","perfume"]
+};
+function matchesCategory(product){
+const selected=normalize(selectedCategory);if(!selected||selected==="all products"||selected==="all")return true;
+const name=normalize(product.name),category=normalize(product.category),terms=aliases[selected]||[selected];
+if(selected.startsWith("all ")){const group=normalize(selected.replace(/^all /,""));return terms.some(term=>name.includes(normalize(term))||category.includes(normalize(term)))||name.includes(group)||category.includes(group)}
+return terms.some(term=>name.includes(normalize(term))||category.includes(normalize(term)))
+}
+function formatPrice(value){return new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP"}).format(Number(value)||0)}
+async function loadProducts(){
+const {data:products,error}=await supabase.from("products").select("id,name,price,category,image_url,is_active").eq("is_active",true).order("created_at",{ascending:false});
+if(error){console.error("Category products error:",error);grid.replaceChildren();const p=document.createElement("p");p.className="category-message";p.textContent="Products could not be loaded. Please try again later.";grid.appendChild(p);return}
+const filtered=(products||[]).filter(matchesCategory);grid.replaceChildren();
+if(!filtered.length){const p=document.createElement("p");p.className="category-message";p.textContent=`No products found for "${selectedCategory}".`;grid.appendChild(p);return}
+filtered.forEach(product=>{const card=document.createElement("article");card.className="category-card";if(product.image_url){const img=document.createElement("img");img.src=product.image_url;img.alt=product.name||"Fashion product";img.loading="lazy";card.appendChild(img)}const name=document.createElement("h2");name.textContent=product.name||"Untitled product";card.appendChild(name);const price=document.createElement("p");price.className="category-price";price.textContent=formatPrice(product.price);card.appendChild(price);card.addEventListener("click",()=>{location.href=`product.html?id=${encodeURIComponent(product.id)}`});grid.appendChild(card)})
+}
+loadProducts();
+</script>
+</body>
+</html>
