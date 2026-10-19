@@ -191,35 +191,55 @@
       if (!selectedVariant) $("stock-message").textContent = "Please choose your size.";
       else if (Number(selectedVariant.stock) <= 0) $("stock-message").textContent = "Out of stock";
       else $("stock-message").textContent = `In stock: ${selectedVariant.stock}`;
-      updateButton();
-    });
+      
     $("add-to-cart").addEventListener("click", () => {
-      if (!product || !selectedVariant) return;
-      const cartItem = {
-        productId:product.id, variantId:selectedVariant.id, name:product.name,
-        price:Number(product.price) || 0, color:selectedVariant.color_name || "Default",
-        size:selectedVariant.size || "One size", image:$("main-image").src, quantity:1
-      };
-      let cart = [];
-      try {
-        cart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
-        if (!Array.isArray(cart)) cart = [];
-      } catch { cart = []; }
-      const existing = cart.find(item => String(item.variantId) === String(cartItem.variantId));
-      if (existing) {
-        if (Number(existing.quantity) >= Number(selectedVariant.stock)) {
-          $("cart-message").textContent = "You cannot add more than the available stock."; return;
-        }
-        existing.quantity = Number(existing.quantity) + 1;
-      } else cart.push(cartItem);
-      try {
-        localStorage.setItem("popTheLookCart", JSON.stringify(cart));
-        $("cart-message").textContent = "Added to cart.";
-      } catch (error) {
-        console.error("Cart save error:", error);
-        $("cart-message").textContent = "Could not save your cart. Please try again.";
-      }
+  if (!product || !selectedVariant) {
+    $("cart-message").textContent = "Please choose your size first.";
+    return;
+  }
+
+  const key = "popTheLookCart";
+  let cart = [];
+
+  try {
+    cart = JSON.parse(localStorage.getItem(key) || "[]");
+    if (!Array.isArray(cart)) cart = [];
+  } catch {
+    cart = [];
+  }
+
+  const variantId = String(selectedVariant.id);
+  const existing = cart.find(item => String(item.variantId) === variantId);
+  const currentQuantity = existing ? Number(existing.quantity) || 0 : 0;
+
+  if (currentQuantity >= Number(selectedVariant.stock)) {
+    $("cart-message").textContent = "You cannot add more than the available stock.";
+    return;
+  }
+
+  if (existing) {
+    existing.quantity = currentQuantity + 1;
+  } else {
+    cart.push({
+      productId: product.id,
+      variantId: selectedVariant.id,
+      name: product.name,
+      price: Number(product.price) || 0,
+      color: selectedVariant.color_name || "Default",
+      size: selectedVariant.size || "One size",
+      image: $("main-image").src,
+      quantity: 1
     });
+  }
+
+  try {
+    localStorage.setItem(key, JSON.stringify(cart));
+    $("cart-message").textContent = "Added to cart.";
+  } catch (error) {
+    console.error("Cart save error:", error);
+    $("cart-message").textContent = "Could not save your cart. Please try again.";
+  }
+});
 
     async function loadProduct() {
       if (!productId) { showError("No product was selected. Please return to the shop."); return; }
