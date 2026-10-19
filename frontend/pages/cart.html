@@ -1,30 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#ffffff">
-<title>Your Bag | POP THE LOOK</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
-<style>
-:root{--ink:#211e19;--muted:#796b58;--line:#ded5c7}*{box-sizing:border-box}body{margin:0;background:#fff;color:var(--ink);font-family:"DM Sans",sans-serif}header{padding:18px 5%;min-height:76px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}.logo{font:600 clamp(21px,3vw,30px) "Playfair Display",serif;letter-spacing:1px;text-decoration:none}a{color:inherit}main{width:min(1000px,92%);margin:42px auto 70px}h1{font:500 clamp(30px,4vw,42px) "Playfair Display",serif;margin:0 0 28px}.empty,.meta,.note{color:var(--muted)}.item{display:grid;grid-template-columns:112px minmax(0,1fr) auto;gap:20px;padding:22px 0;border-bottom:1px solid var(--line);align-items:center}.item-image{display:block;width:112px;height:140px;object-fit:contain}.item-info{min-width:0}.item-name{font-weight:600;text-decoration:none}.meta{font-size:14px;line-height:1.7;margin:8px 0}.item-price{margin:8px 0}.quantity{display:flex;align-items:center;margin-top:14px}.quantity button{width:36px;height:34px;background:#fff;border:1px solid var(--line);color:var(--ink);font-size:18px;cursor:pointer}.quantity span{min-width:38px;text-align:center}.remove{margin-left:14px;border:0;background:none;text-decoration:underline;color:var(--muted);cursor:pointer;font:inherit;font-size:13px}.line-total{font-weight:600;white-space:nowrap;align-self:start}.summary{display:flex;justify-content:flex-end;margin-top:28px}.summary-inner{width:min(100%,340px)}.subtotal{display:flex;justify-content:space-between;font-size:18px;font-weight:600}.note{font-size:13px;line-height:1.6}.continue{display:inline-block;margin-top:24px;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:4px}@media(max-width:560px){main{margin-top:28px}.item{grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:start}.item-image{width:84px;height:112px}.line-total{grid-column:2}.item-name{font-size:15px}.remove{margin-left:8px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>Your Cart | POP THE LOOK</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#211e19;--muted:#796b58;--line:#ded5c7}
+    *{box-sizing:border-box}
+    body{margin:0;background:#fff;color:var(--ink);font-family:"DM Sans",sans-serif}
+    header{min-height:76px;padding:18px 5%;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .logo{font-family:"Playfair Display",serif;font-size:clamp(21px,3vw,30px);font-weight:600;letter-spacing:1px;color:var(--ink);text-decoration:none}
+    header nav{display:flex;gap:18px;align-items:center}
+    a{color:var(--ink)}
+    main{width:min(1000px,92%);margin:42px auto 70px}
+    h1{font-family:"Playfair Display",serif;font-weight:500;font-size:clamp(30px,4vw,42px);margin:0 0 28px}
+    .cart-item{display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;padding:20px 0;border-bottom:1px solid var(--line)}
+    .cart-item img{width:100px;height:125px;object-fit:contain;background:#fff}
+    .item-name{font-weight:600;margin:0 0 8px}
+    .meta{font-size:13px;color:var(--muted);margin:5px 0}
+    .quantity{display:flex;align-items:center;gap:10px;margin-top:12px}
+    .quantity button,.remove{border:1px solid var(--line);background:#fff;color:var(--ink);padding:7px 11px;cursor:pointer}
+    .remove{border:0;text-decoration:underline;padding:6px 0;margin-top:8px}
+    .item-total{font-weight:600;white-space:nowrap}
+    .summary{margin:28px 0 0 auto;width:min(360px,100%)}
+    .summary-row{display:flex;justify-content:space-between;gap:20px;margin:12px 0}
+    .checkout{display:block;width:100%;margin-top:22px;min-height:52px;border:1px solid var(--ink);background:var(--ink);color:#fff;font:inherit;letter-spacing:1px;text-align:center;text-decoration:none;padding:16px}
+    .continue{display:inline-block;margin-top:18px;text-decoration:none}
+    .empty{padding:28px 0;color:var(--muted)}
+    .notice{font-size:13px;color:var(--muted);line-height:1.6}
+    @media(max-width:600px){header{padding:16px 4%}header nav{gap:12px;font-size:13px}main{margin-top:30px}.cart-item{grid-template-columns:76px 1fr;gap:12px}.cart-item img{width:76px;height:100px}.item-total{grid-column:2}.summary{width:100%}}
+  </style>
 </head>
 <body>
-<header><a class="logo" href="../../index.html">POP THE LOOK</a><a href="../../index.html#shop">Continue shopping</a></header>
-<main><h1>Your Bag</h1><div id="cart-items" aria-live="polite"></div><div id="summary" class="summary" hidden><div class="summary-inner"><div class="subtotal"><span>Subtotal</span><span id="subtotal">£0.00</span></div><p class="note">Shipping and any applicable taxes are calculated at checkout.</p></div></div><a class="continue" href="../../index.html#shop">← Continue shopping</a></main>
-<script>
-const KEY="popTheLookCart",container=document.getElementById("cart-items"),summary=document.getElementById("summary"),subtotalNode=document.getElementById("subtotal");
-const money=v=>new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP"}).format(Number(v)||0);
-function readCart(){try{const c=JSON.parse(localStorage.getItem(KEY)||"[]");return Array.isArray(c)?c:[]}catch{return []}}
-function saveCart(c){localStorage.setItem(KEY,JSON.stringify(c))}
-function renderCart(){const cart=readCart();container.replaceChildren();if(!cart.length){const p=document.createElement("p");p.className="empty";p.textContent="Your bag is empty.";container.appendChild(p);summary.hidden=true;return}let subtotal=0;
-cart.forEach((item,index)=>{const qty=Math.max(1,Number(item.quantity)||1),price=Number(item.price)||0;subtotal+=price*qty;
-const row=document.createElement("article");row.className="item";const link=document.createElement("a");link.href="product.html?id="+encodeURIComponent(item.productId||"");const img=document.createElement("img");img.className="item-image";img.src=item.image||"";img.alt=item.name||"Product";link.appendChild(img);
-const info=document.createElement("div");info.className="item-info";const name=document.createElement("a");name.className="item-name";name.href=link.href;name.textContent=item.name||"Product";const meta=document.createElement("p");meta.className="meta";meta.textContent="Colour: "+(item.color||"Default")+" · Size: "+(item.size||"One size");const priceEl=document.createElement("p");priceEl.className="item-price";priceEl.textContent=money(price);
-const controls=document.createElement("div");controls.className="quantity";const minus=document.createElement("button");minus.type="button";minus.textContent="−";minus.setAttribute("aria-label","Decrease quantity");minus.onclick=()=>{const c=readCart();if(c[index])c[index].quantity=Math.max(1,(Number(c[index].quantity)||1)-1);saveCart(c);renderCart()};const q=document.createElement("span");q.textContent=qty;const plus=document.createElement("button");plus.type="button";plus.textContent="+";plus.setAttribute("aria-label","Increase quantity");plus.onclick=()=>{const c=readCart();if(c[index])c[index].quantity=(Number(c[index].quantity)||1)+1;saveCart(c);renderCart()};const remove=document.createElement("button");remove.type="button";remove.className="remove";remove.textContent="Remove";remove.onclick=()=>{const c=readCart();c.splice(index,1);saveCart(c);renderCart()};controls.append(minus,q,plus,remove);info.append(name,meta,priceEl,controls);const total=document.createElement("div");total.className="line-total";total.textContent=money(price*qty);row.append(link,info,total);container.appendChild(row)});
-subtotalNode.textContent=money(subtotal);summary.hidden=false}
-window.addEventListener("storage",renderCart);renderCart();
-</script>
+  <header>
+    <a class="logo" href="../../index.html">POP THE LOOK</a>
+    <nav aria-label="Cart navigation">
+      <a href="../../index.html#shop">Continue shopping</a>
+      <a href="cart.html" aria-current="page">Cart (<span id="cart-count">0</span>)</a>
+    </nav>
+  </header>
+  <main>
+    <h1>Your shopping bag</h1>
+    <div id="cart-items"></div>
+    <section id="summary" class="summary" hidden>
+      <div class="summary-row"><span>Subtotal</span><strong id="subtotal">£0.00</strong></div>
+      <p class="notice">Shipping and any applicable taxes are calculated at checkout.</p>
+      <a class="checkout" href="#" id="checkout-button">PROCEED TO CHECKOUT</a>
+    </section>
+    <a class="continue" href="../../index.html#shop">← Continue shopping</a>
+  </main>
+  <script>
+    const CART_KEY = "popTheLookCart";
+    const money = value => new Intl.NumberFormat("en-GB",{style:"currency",currency:"GBP"}).format(Number(value)||0);
+    const readCart = () => {
+      try {
+        const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
+        return Array.isArray(cart) ? cart : [];
+      } catch { return []; }
+    };
+    const saveCart = cart => {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      renderCart();
+    };
+    function renderCart(){
+      const cart = readCart();
+      const root = document.getElementById("cart-items");
+      const count = cart.reduce((sum,item)=>sum+Math.max(0,Number(item.quantity)||0),0);
+      document.getElementById("cart-count").textContent = count;
+      root.replaceChildren();
+      if(!cart.length){
+        root.innerHTML = '<p class="empty">Your cart is empty.</p>';
+        document.getElementById("summary").hidden = true;
+        return;
+      }
+      let subtotal = 0;
+      cart.forEach((item,index)=>{
+        const price = Number(item.price)||0;
+        const quantity = Math.max(1,Number(item.quantity)||1);
+        subtotal += price*quantity;
+        const article = document.createElement("article");
+        article.className = "cart-item";
+        const img = document.createElement("img");
+        img.src = item.image || "";
+        img.alt = item.name || "Product";
+        img.loading = "lazy";
+        img.onerror = ()=>{img.style.visibility="hidden";};
+        const info = document.createElement("div");
+        const name = document.createElement("p"); name.className="item-name"; name.textContent=item.name||"Product";
+        const priceLine = document.createElement("p"); priceLine.className="meta"; priceLine.textContent=money(price);
+        const color = document.createElement("p"); color.className="meta"; color.textContent="Colour: "+(item.color||"Default");
+        const size = document.createElement("p"); size.className="meta"; size.textContent="Size: "+(item.size||"One size");
+        const controls = document.createElement("div"); controls.className="quantity";
+        const minus = document.createElement("button"); minus.type="button"; minus.textContent="−"; minus.setAttribute("aria-label","Decrease quantity");
+        const qty = document.createElement("span"); qty.textContent=quantity;
+        const plus = document.createElement("button"); plus.type="button"; plus.textContent="+"; plus.setAttribute("aria-label","Increase quantity");
+        minus.disabled = quantity<=1;
+        minus.addEventListener("click",()=>{const latest=readCart();if(latest[index]){latest[index].quantity=Math.max(1,(Number(latest[index].quantity)||1)-1);saveCart(latest);}});
+        plus.addEventListener("click",()=>{const latest=readCart();if(latest[index]){latest[index].quantity=(Number(latest[index].quantity)||1)+1;saveCart(latest);}});
+        controls.append(minus,qty,plus);
+        const remove = document.createElement("button"); remove.type="button"; remove.className="remove"; remove.textContent="Remove";
+        remove.addEventListener("click",()=>{const latest=readCart();latest.splice(index,1);saveCart(latest);});
+        info.append(name,priceLine,color,size,controls,remove);
+        const total = document.createElement("div"); total.className="item-total"; total.textContent=money(price*quantity);
+        article.append(img,info,total); root.appendChild(article);
+      });
+      document.getElementById("subtotal").textContent=money(subtotal);
+      document.getElementById("summary").hidden=false;
+    }
+    document.getElementById("checkout-button").addEventListener("click",event=>{
+      event.preventDefault();
+      alert("Checkout is not connected yet. The cart is saved; payment will be added in the final stage.");
+    });
+    window.addEventListener("storage",event=>{if(event.key===CART_KEY)renderCart();});
+    renderCart();
+  </script>
 </body>
 </html>
