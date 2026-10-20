@@ -88,7 +88,19 @@
     scroll-margin-bottom: calc(24px + env(safe-area-inset-bottom));
   }
 }
- 
+
+    
+@media (max-width: 600px) and (orientation: portrait) {
+  #product-layout {
+    gap: 12px;
+  }
+
+  #color-options,
+  #size-select {
+    margin-top: 4px;
+  }
+}
+
   </style>
 </head>
 <body>
