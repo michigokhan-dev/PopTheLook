@@ -235,6 +235,7 @@
 
   try {
     localStorage.setItem(key, JSON.stringify(cart));
+    updateCartCount();
     $("cart-message").textContent = "Added to cart.";
   } catch (error) {
     console.error("Cart save error:", error);
