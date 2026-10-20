@@ -75,6 +75,20 @@
   stroke-linejoin: round;
   fill: none;
 }
+
+   
+/* Product page: improve spacing on portrait phones */
+@media (max-width: 600px) and (orientation: portrait) {
+  #product-layout {
+    padding-bottom: calc(32px + env(safe-area-inset-bottom));
+  }
+
+  #add-to-cart {
+    margin-bottom: calc(20px + env(safe-area-inset-bottom));
+    scroll-margin-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}
+ 
   </style>
 </head>
 <body>
