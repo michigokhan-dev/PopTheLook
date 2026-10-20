@@ -86,6 +86,13 @@
         article.className = "cart-item";
         const img = document.createElement("img");
         img.src = item.image || "";
+        img.style.cursor = "pointer";
+img.addEventListener("click", () => {
+  if (item.productId) {
+    window.location.href =
+      `product.html?id=${encodeURIComponent(item.productId)}`;
+  }
+});
         img.alt = item.name || "Product";
         img.loading = "lazy";
         img.onerror = ()=>{img.style.visibility="hidden";};
