@@ -118,10 +118,10 @@ img.addEventListener("click", () => {
       document.getElementById("subtotal").textContent=money(subtotal);
       document.getElementById("summary").hidden=false;
     }
-    document.getElementById("checkout-button").addEventListener("click",event=>{
-      event.preventDefault();
-      alert("Checkout is not connected yet. The cart is saved; payment will be added in the final stage.");
-    });
+    document.getElementById("checkout-button").addEventListener("click", event => {
+  event.preventDefault();
+  window.location.href = "checkout.html";
+});
     window.addEventListener("storage",event=>{if(event.key===CART_KEY)renderCart();});
     renderCart();
   </script>
