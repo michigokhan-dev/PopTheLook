@@ -840,6 +840,29 @@ searchInput?.addEventListener("keydown", (event) => {
   });
 
   supabase.auth.onAuthStateChange((_event, session) => updateAccountUI(session));
+
+
+function updateCartCount() {
+  try {
+    const cart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
+    const count = Array.isArray(cart)
+      ? cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
+      : 0;
+
+    document.querySelectorAll(".cart-count").forEach(element => {
+      element.textContent = count;
+    });
+  } catch {
+    document.querySelectorAll(".cart-count").forEach(element => {
+      element.textContent = "0";
+    });
+  }
+}
+
+updateCartCount();
+window.addEventListener("storage", updateCartCount);
+
+  
 </script>
 </body>
 </html>
