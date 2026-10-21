@@ -9,174 +9,66 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-  --white: #ffffff;
-  --cream: #ffffff;
-  --ink: #211e19;
-  --muted: #796b58;
-  --line: #ded5c7;
-}
+      --white: #ffffff;
+      --cream: #ffffff;
+      --ink: #211e19;
+      --muted: #796b58;
+      --line: #ded5c7;
+    }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: #ffffff;
-      color: var(--ink);
-      font-family: "DM Sans", sans-serif;
-    }
+    body { margin: 0; background: #ffffff; color: var(--ink); font-family: "DM Sans", sans-serif; }
     a { color: inherit; }
-    .site-header {
-      min-height: 82px;
-      padding: 18px 5%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      border-bottom: 1px solid var(--line);
-    }
-    .logo {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 600;
-      letter-spacing: .02em;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .header-link {
-      font-size: 13px;
-      text-decoration: none;
-      color: var(--muted);
-    }
-    main {
-      width: min(1120px, 90%);
-      margin: 48px auto 80px;
-    }
-    .eyebrow {
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-    }
+    .site-header { min-height: 82px; padding: 18px 5%; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); }
+    .logo { font-family: "Playfair Display", serif; font-size: clamp(22px, 3vw, 32px); font-weight: 600; letter-spacing: .02em; text-decoration: none; white-space: nowrap; }
+    .header-link { font-size: 13px; text-decoration: none; color: var(--muted); }
+    main { width: min(1120px, 90%); margin: 48px auto 80px; }
+    .eyebrow { margin: 0 0 10px; color: var(--muted); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
     h1, h2 { font-family: "Playfair Display", serif; font-weight: 500; }
     h1 { margin: 0 0 34px; font-size: clamp(34px, 5vw, 48px); }
     h2 { margin: 0 0 22px; font-size: 25px; }
-    .checkout-layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.35fr) minmax(300px, .85fr);
-      gap: 54px;
-      align-items: start;
-    }
-    .section {
-      background: var(--white);
-      border: 1px solid var(--line);
-      padding: 28px;
-      margin-bottom: 22px;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px 14px;
-    }
+    .checkout-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, .85fr); gap: 54px; align-items: start; }
+    .section { background: var(--white); border: 1px solid var(--line); padding: 28px; margin-bottom: 22px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 14px; }
     .field { display: flex; flex-direction: column; gap: 8px; }
     .field.full { grid-column: 1 / -1; }
     label { font-size: 12px; color: var(--muted); }
-    input, select {
-      width: 100%;
-      min-height: 48px;
-      border: 1px solid var(--line);
-      border-radius: 0;
-      padding: 12px;
-      background: #fff;
-      color: var(--ink);
-      font: inherit;
-      font-size: 14px;
-    }
+    input, select { width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 0; padding: 12px; background: #fff; color: var(--ink); font: inherit; font-size: 14px; }
     input:focus, select:focus { outline: 1px solid var(--ink); outline-offset: 1px; }
+    input[readonly] { background: #fff; }
     .summary { position: sticky; top: 20px; }
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      font-size: 13px;
-      margin: 16px 0;
-    }
+    .summary-row { display: flex; justify-content: space-between; gap: 18px; font-size: 13px; margin: 16px 0; }
     .summary-row.muted { color: var(--muted); }
-    .summary-total {
-      border-top: 1px solid var(--line);
-      padding-top: 20px;
-      margin-top: 20px;
-      font-size: 16px;
-      font-weight: 600;
-    }
-    .item {
-      display: grid;
-      grid-template-columns: 68px minmax(0, 1fr) auto;
-      gap: 12px;
-      padding: 15px 0;
-      border-bottom: 1px solid var(--line);
-      align-items: start;
-    }
-    .item img {
-      width: 68px;
-      height: 84px;
-      object-fit: cover;
-      background: var(--cream);
-    }
+    .summary-total { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 20px; font-size: 16px; font-weight: 600; }
+    .item { display: grid; grid-template-columns: 68px minmax(0, 1fr) auto; gap: 12px; padding: 15px 0; border-bottom: 1px solid var(--line); align-items: start; }
+    .item img { width: 68px; height: 84px; object-fit: cover; background: #fff; }
     .item-name { font-size: 13px; font-weight: 600; margin: 2px 0 7px; }
     .item-meta { color: var(--muted); font-size: 11px; line-height: 1.7; }
     .item-price { font-size: 12px; white-space: nowrap; }
-    .button {
-      width: 100%;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid var(--ink);
-      background: var(--ink);
-      color: #fff;
-      text-decoration: none;
-      font: inherit;
-      font-size: 12px;
-      letter-spacing: .1em;
-      cursor: pointer;
-      margin-top: 18px;
-    }
+    .button { width: 100%; min-height: 52px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--ink); background: var(--ink); color: #fff; text-decoration: none; font: inherit; font-size: 12px; letter-spacing: .1em; cursor: pointer; margin-top: 18px; }
     .button:disabled { opacity: .5; cursor: not-allowed; }
-    .notice {
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--muted);
-      margin: 14px 0 0;
-    }
-    .empty {
-      background: var(--white);
-      border: 1px solid var(--line);
-      padding: 32px;
-      line-height: 1.7;
-    }
+    .secondary-button { min-height: 44px; padding: 10px 14px; border: 1px solid var(--ink); background: #fff; color: var(--ink); font: inherit; font-size: 13px; cursor: pointer; }
+    .notice { font-size: 12px; line-height: 1.6; color: var(--muted); margin: 14px 0 0; }
+    .empty { background: #fff; border: 1px solid var(--line); padding: 32px; line-height: 1.7; }
     .empty a { display: inline-block; margin-top: 10px; }
     .error { color: #9b2c2c; font-size: 12px; margin-top: 12px; }
-    @media (max-width: 760px) {
-      main { margin-top: 32px; }
-      .checkout-layout { grid-template-columns: 1fr; gap: 8px; }
-      .summary { position: static; }
-      .section { padding: 20px; }
-    }
-    @media (max-width: 430px) {
-      .form-grid { grid-template-columns: 1fr; }
-      .field.full { grid-column: auto; }
-      .site-header { padding-left: 5%; padding-right: 5%; }
-      .header-link { font-size: 12px; }
-    }
-
-    input,
-select,
-textarea,
-.field,
-.form-group,
-.checkout-section,
-.order-summary {
-  background-color: #ffffff !important;
-}
+    .success { color: #276749; font-size: 12px; margin-top: 12px; }
+    .address-choice-list { display: grid; gap: 10px; margin-top: 16px; }
+    .address-choice { display: flex; align-items: flex-start; gap: 10px; border: 1px solid var(--line); padding: 14px; cursor: pointer; background: #fff; }
+    .address-choice input { width: 17px; min-height: 17px; margin: 2px 0 0; padding: 0; flex: 0 0 auto; }
+    .address-choice strong { display: block; font-size: 13px; margin-bottom: 5px; color: var(--ink); }
+    .address-choice span { display: block; color: var(--muted); font-size: 12px; line-height: 1.6; }
+    .different-address-toggle { display: flex; align-items: center; gap: 10px; margin-top: 20px; color: var(--ink); cursor: pointer; }
+    .different-address-toggle input { width: 17px; min-height: 17px; margin: 0; padding: 0; }
+    .modal-backdrop { position: fixed; inset: 0; z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 18px; background: rgba(0,0,0,.45); }
+    .modal-backdrop[hidden] { display: none; }
+    .modal { width: min(620px, 100%); max-height: 90vh; overflow-y: auto; background: #fff; border: 1px solid var(--line); padding: 26px; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .modal-header h2 { margin: 0; }
+    .close-modal { border: 0; background: #fff; font-size: 26px; cursor: pointer; color: var(--ink); }
+    .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+    .modal-actions button { flex: 1; margin: 0; }
+    @media (max-width: 760px) { main { margin-top: 32px; } .checkout-layout { grid-template-columns: 1fr; gap: 8px; } .summary { position: static; } .section { padding: 20px; } }
+    @media (max-width: 430px) { .form-grid { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .site-header { padding-left: 5%; padding-right: 5%; } .header-link { font-size: 12px; } .modal { padding: 20px; } .modal-actions { flex-direction: column; } }
   </style>
 </head>
 <body>
@@ -220,8 +112,16 @@ textarea,
           </div>
 
           <div class="section">
-            <h2>Delivery address</h2>
-            <div class="form-grid">
+            <h2>Shipping address</h2>
+            <p class="notice" id="address-loading">Loading your saved details…</p>
+            <div id="address-choice-list" class="address-choice-list" hidden></div>
+            <button id="add-another-address" class="secondary-button" type="button" style="display:none;margin-top:12px">ADD ANOTHER ADDRESS</button>
+            <label class="different-address-toggle">
+              <input id="different-address-checkbox" type="checkbox">
+              <span>Ship to a different address</span>
+            </label>
+            <p class="notice">Your home address is loaded from your Profile. You can save another address and reuse it at future checkouts.</p>
+            <div class="form-grid" style="margin-top:20px">
               <div class="field full">
                 <label for="address">Address line 1 *</label>
                 <input id="address" name="address" autocomplete="address-line1" required>
@@ -241,7 +141,7 @@ textarea,
               <div class="field full">
                 <label for="country">Country *</label>
                 <select id="country" name="country" autocomplete="country-name" required>
-                  <option value="United Kingdom" selected>United Kingdom</option>
+                  <option value="United Kingdom">United Kingdom</option>
                   <option value="Ireland">Ireland</option>
                   <option value="Other">Other</option>
                 </select>
@@ -250,7 +150,7 @@ textarea,
           </div>
 
           <button class="button" type="submit">CONTINUE TO PAYMENT</button>
-          <p class="notice">Payment is not connected yet. Your details are not sent or saved by this demo checkout.</p>
+          <p class="notice">Payment is not connected yet. Stripe will be added in the final setup stage.</p>
           <p id="form-message" class="error" role="status" hidden></p>
         </form>
       </section>
@@ -258,101 +158,365 @@ textarea,
       <aside class="section summary">
         <h2>Order summary</h2>
         <div id="order-items"></div>
-        <div class="summary-row">
-          <span>Subtotal</span>
-          <span id="subtotal">£0.00</span>
-        </div>
-        <div class="summary-row muted">
-          <span>Delivery</span>
-          <span id="delivery">Calculated at payment</span>
-        </div>
-        <div class="summary-row summary-total">
-          <span>Total</span>
-          <span id="total">£0.00</span>
-        </div>
+        <div class="summary-row"><span>Subtotal</span><span id="subtotal">£0.00</span></div>
+        <div class="summary-row muted"><span>Delivery</span><span id="delivery">Calculated at payment</span></div>
+        <div class="summary-row summary-total"><span>Total</span><span id="total">£0.00</span></div>
         <a class="header-link" href="cart.html">Edit shopping bag</a>
       </aside>
     </div>
   </main>
 
+  <div id="address-modal-backdrop" class="modal-backdrop" hidden>
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 id="modal-title">Add shipping address</h2>
+        <button class="close-modal" id="close-address-modal" type="button" aria-label="Close">×</button>
+      </div>
+      <form id="alternative-address-form">
+        <div class="form-grid">
+          <div class="field">
+            <label for="recipient-name">Recipient full name *</label>
+            <input id="recipient-name" required autocomplete="name">
+          </div>
+          <div class="field">
+            <label for="recipient-phone">Phone number</label>
+            <input id="recipient-phone" type="tel" autocomplete="tel">
+          </div>
+          <div class="field full">
+            <label for="alt-address">Address line 1 *</label>
+            <input id="alt-address" required autocomplete="address-line1">
+          </div>
+          <div class="field full">
+            <label for="alt-address2">Address line 2 (optional)</label>
+            <input id="alt-address2" autocomplete="address-line2">
+          </div>
+          <div class="field">
+            <label for="alt-city">Town / City *</label>
+            <input id="alt-city" required autocomplete="address-level2">
+          </div>
+          <div class="field">
+            <label for="alt-postcode">Postcode *</label>
+            <input id="alt-postcode" required autocomplete="postal-code">
+          </div>
+          <div class="field full">
+            <label for="alt-country">Country *</label>
+            <select id="alt-country" required autocomplete="country-name">
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="Ireland">Ireland</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+        <p id="address-modal-message" class="error" role="status" hidden></p>
+        <div class="modal-actions">
+          <button class="secondary-button" id="cancel-address-modal" type="button">Cancel</button>
+          <button class="button" id="save-address-button" type="submit">SAVE ADDRESS</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../scripts/supabase.js"></script>
   <script>
     const CART_KEY = "popTheLookCart";
-    const money = value => new Intl.NumberFormat("en-GB", {
-      style: "currency", currency: "GBP"
-    }).format(Number(value) || 0);
+    const money = value => new Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP" }).format(Number(value) || 0);
+    const $ = id => document.getElementById(id);
+    let currentUser = null;
+    let homeAddress = null;
+    let savedAddresses = [];
+    let selectedAddressId = "home";
 
     function readCart() {
       try {
         const cart = JSON.parse(localStorage.getItem(CART_KEY) || "[]");
         return Array.isArray(cart) ? cart : [];
-      } catch {
-        return [];
-      }
+      } catch { return []; }
     }
 
     function renderCheckout() {
       const cart = readCart();
-      const empty = document.getElementById("empty-cart");
-      const layout = document.getElementById("checkout-layout");
-
       if (!cart.length) {
-        empty.hidden = false;
-        layout.hidden = true;
+        $("empty-cart").hidden = false;
+        $("checkout-layout").hidden = true;
         return;
       }
-
-      empty.hidden = true;
-      layout.hidden = false;
-      const items = document.getElementById("order-items");
+      $("empty-cart").hidden = true;
+      $("checkout-layout").hidden = false;
+      const items = $("order-items");
       items.replaceChildren();
       let subtotal = 0;
-
       cart.forEach(item => {
         const quantity = Math.max(1, Number(item.quantity) || 1);
         const price = Number(item.price) || 0;
         subtotal += price * quantity;
-
         const row = document.createElement("div");
         row.className = "item";
-
         const img = document.createElement("img");
         img.alt = item.name || "Product";
         img.src = item.image || "";
         img.onerror = () => { img.style.visibility = "hidden"; };
-
         const details = document.createElement("div");
         const name = document.createElement("div");
         name.className = "item-name";
         name.textContent = item.name || "Product";
-
         const meta = document.createElement("div");
         meta.className = "item-meta";
         meta.textContent = `${item.color || "Default"} · ${item.size || "One size"} · Qty ${quantity}`;
-
         details.append(name, meta);
-
         const itemPrice = document.createElement("div");
         itemPrice.className = "item-price";
         itemPrice.textContent = money(price * quantity);
-
         row.append(img, details, itemPrice);
         items.append(row);
       });
-
-      document.getElementById("subtotal").textContent = money(subtotal);
-      document.getElementById("total").textContent = money(subtotal);
+      $("subtotal").textContent = money(subtotal);
+      $("total").textContent = money(subtotal);
     }
 
-    document.getElementById("checkout-form").addEventListener("submit", event => {
+    function setFormAddress(address) {
+      $("address").value = address?.address_line1 || "";
+      $("address2").value = address?.address_line2 || "";
+      $("city").value = address?.city || "";
+      $("postcode").value = address?.postcode || "";
+      const country = address?.country || "United Kingdom";
+      $("country").value = ["United Kingdom", "Ireland", "Other"].includes(country) ? country : "Other";
+    }
+
+    function addressText(address) {
+      return [address.address_line1, address.address_line2, address.city, address.postcode, address.country]
+        .filter(Boolean).join(", ");
+    }
+
+    function renderAddressChoices() {
+      const list = $("address-choice-list");
+      list.replaceChildren();
+      const options = [{ id: "home", label: "Home address", address: homeAddress }, ...savedAddresses.map(a => ({ id: a.id, label: a.label || "Alternative shipping address", address: a }))];
+      options.forEach(option => {
+        const label = document.createElement("label");
+        label.className = "address-choice";
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "shipping-address-choice";
+        radio.value = option.id;
+        radio.checked = String(selectedAddressId) === String(option.id);
+        const textWrap = document.createElement("div");
+        const title = document.createElement("strong");
+        title.textContent = option.label;
+        const details = document.createElement("span");
+        details.textContent = addressText(option.address || {}) || (option.id === "home" ? "Add your address in Profile to use it here." : "Address details unavailable");
+        textWrap.append(title, details);
+        label.append(radio, textWrap);
+        radio.addEventListener("change", () => {
+          selectedAddressId = option.id;
+          const isAlternative = option.id !== "home";
+          $("different-address-checkbox").checked = isAlternative;
+          setFormAddress(option.address);
+          if (isAlternative) {
+            const chosen = savedAddresses.find(a => String(a.id) === String(option.id));
+            if (chosen) {
+              $("first-name").value = chosen.recipient_name || $("first-name").value;
+              $("last-name").value = "";
+              $("phone").value = chosen.phone || $("phone").value;
+            }
+          } else {
+            fillContactAndHome();
+          }
+          renderAddressChoices();
+        });
+        list.append(label);
+      });
+      list.hidden = !$("different-address-checkbox").checked;
+      $("add-another-address").style.display =
+        $("different-address-checkbox").checked ? "inline-block" : "none";
+    }
+
+    function fillContactAndHome() {
+      const fullName = (homeAddress?.full_name || currentUser?.user_metadata?.full_name || "").trim();
+      const nameParts = fullName.split(/\s+/).filter(Boolean);
+      $("first-name").value = nameParts.shift() || "";
+      $("last-name").value = nameParts.join(" ");
+      $("email").value = currentUser?.email || "";
+      $("phone").value = homeAddress?.phone || "";
+      setFormAddress(homeAddress);
+      selectedAddressId = "home";
+      renderAddressChoices();
+    }
+
+    async function loadCustomerDetails() {
+      $("address-loading").hidden = false;
+      if (typeof supabaseClient === "undefined") {
+        $("address-loading").textContent = "Could not connect to your account. Please refresh the page.";
+        return;
+      }
+
+      const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+      if (userError || !user) {
+        $("address-loading").textContent = "Please sign in to load your saved profile and shipping addresses.";
+        $("address-loading").hidden = false;
+        $("checkout-form").addEventListener("submit", event => {
+          event.preventDefault();
+          $("form-message").textContent = "Please sign in before continuing.";
+          $("form-message").hidden = false;
+        }, { once: true });
+        return;
+      }
+      currentUser = user;
+
+      const { data: profile, error: profileError } = await supabaseClient
+        .from("profiles")
+        .select("full_name, phone, address_line1, address_line2, city, postcode, country")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (profileError) {
+        $("address-loading").textContent = "We couldn't load your Profile details. Please check your profile settings and refresh.";
+        $("address-loading").hidden = false;
+        console.error("Profile load error:", profileError);
+      } else {
+        homeAddress = { ...(profile || {}), full_name: profile?.full_name || user.user_metadata?.full_name || "" };
+        fillContactAndHome();
+        $("address-loading").hidden = true;
+      }
+
+      const { data: addresses, error: addressError } = await supabaseClient
+        .from("customer_addresses")
+        .select("id, label, recipient_name, phone, address_line1, address_line2, city, postcode, country, created_at")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: true });
+
+      if (addressError) {
+        console.error("Saved shipping address load error:", addressError);
+        $("address-loading").textContent = "Your Profile details loaded. To save alternative addresses, the shipping-address database setup is still needed.";
+        $("address-loading").hidden = false;
+      } else {
+        savedAddresses = addresses || [];
+        renderAddressChoices();
+      }
+    }
+
+    function openAddressModal() {
+      $("address-modal-message").hidden = true;
+      $("address-modal-backdrop").hidden = false;
+      $("recipient-name").value = [$("first-name").value, $("last-name").value].filter(Boolean).join(" ");
+      $("recipient-phone").value = $("phone").value;
+      $("alt-address").value = "";
+      $("alt-address2").value = "";
+      $("alt-city").value = "";
+      $("alt-postcode").value = "";
+      $("alt-country").value = $("country").value || "United Kingdom";
+      $("recipient-name").focus();
+    }
+
+    function closeAddressModal() {
+      $("address-modal-backdrop").hidden = true;
+    }
+
+    $("different-address-checkbox").addEventListener("change", event => {
+      if (event.target.checked) {
+        if (savedAddresses.length) {
+          const firstSaved = savedAddresses.find(a => String(a.id) === String(selectedAddressId)) || savedAddresses[0];
+          selectedAddressId = firstSaved.id;
+          setFormAddress(firstSaved);
+          $("first-name").value = firstSaved.recipient_name || "";
+          $("last-name").value = "";
+          $("phone").value = firstSaved.phone || "";
+          renderAddressChoices();
+        } else {
+          openAddressModal();
+        }
+      } else {
+        fillContactAndHome();
+      }
+    });
+
+    $("add-another-address").addEventListener("click", openAddressModal);
+
+    $("close-address-modal").addEventListener("click", () => {
+      closeAddressModal();
+      $("different-address-checkbox").checked = selectedAddressId !== "home";
+    });
+    $("cancel-address-modal").addEventListener("click", () => {
+      closeAddressModal();
+      $("different-address-checkbox").checked = selectedAddressId !== "home";
+    });
+    $("address-modal-backdrop").addEventListener("click", event => {
+      if (event.target === $("address-modal-backdrop")) closeAddressModal();
+    });
+
+    $("alternative-address-form").addEventListener("submit", async event => {
       event.preventDefault();
-      const message = document.getElementById("form-message");
+      const message = $("address-modal-message");
+      message.hidden = true;
+      if (!currentUser || typeof supabaseClient === "undefined") {
+        message.textContent = "Please sign in before saving a shipping address.";
+        message.hidden = false;
+        return;
+      }
+
+      const recipientName = $("recipient-name").value.trim();
+      const nameParts = recipientName.split(/\s+/).filter(Boolean);
+      const payload = {
+        user_id: currentUser.id,
+        label: "Alternative shipping address",
+        recipient_name: recipientName,
+        phone: $("recipient-phone").value.trim(),
+        address_line1: $("alt-address").value.trim(),
+        address_line2: $("alt-address2").value.trim(),
+        city: $("alt-city").value.trim(),
+        postcode: $("alt-postcode").value.trim(),
+        country: $("alt-country").value
+      };
+
+      $("save-address-button").disabled = true;
+      $("save-address-button").textContent = "SAVING…";
+      const { data, error } = await supabaseClient
+        .from("customer_addresses")
+        .insert(payload)
+        .select("id, label, recipient_name, phone, address_line1, address_line2, city, postcode, country, created_at")
+        .single();
+      $("save-address-button").disabled = false;
+      $("save-address-button").textContent = "SAVE ADDRESS";
+
+      if (error) {
+        console.error("Save shipping address error:", error);
+        message.textContent = error.message.includes("customer_addresses")
+          ? "The shipping-address database setup is not complete yet. Please run the SQL setup provided with this file."
+          : "We couldn't save this address. Please check your connection and try again.";
+        message.hidden = false;
+        return;
+      }
+
+      savedAddresses.push(data);
+      selectedAddressId = data.id;
+      $("first-name").value = nameParts.shift() || "";
+      $("last-name").value = nameParts.join(" ");
+      $("phone").value = data.phone || "";
+      setFormAddress(data);
+      $("different-address-checkbox").checked = true;
+      renderAddressChoices();
+      closeAddressModal();
+      $("form-message").textContent = "Shipping address saved to your account for future checkouts.";
+      $("form-message").className = "success";
+      $("form-message").hidden = false;
+    });
+
+    $("checkout-form").addEventListener("submit", async event => {
+      event.preventDefault();
+      const message = $("form-message");
+      message.className = "error";
+      message.hidden = true;
 
       if (!readCart().length) {
         message.textContent = "Your shopping bag is empty. Please add an item first.";
         message.hidden = false;
         return;
       }
-
+      if (!currentUser) {
+        message.textContent = "Please sign in to use your saved details.";
+        message.hidden = false;
+        return;
+      }
       if (!event.currentTarget.reportValidity()) return;
 
       message.textContent = "Your delivery details look complete. Secure payment will be added in the final Stripe setup stage.";
@@ -360,6 +524,7 @@ textarea,
     });
 
     renderCheckout();
+    loadCustomerDetails();
   </script>
 </body>
 </html>
