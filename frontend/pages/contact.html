@@ -45,6 +45,23 @@
     .send-button:hover{background:#39342d}
     .send-button svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.5}
     .form-note{min-height:20px;margin:12px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
+    .newsletter{width:min(1120px,88%);margin:0 auto 95px;padding:58px clamp(22px,6vw,76px);border:1px solid var(--line);text-align:center}
+    .newsletter .eyebrow{margin-bottom:15px}
+    .newsletter h2{margin:0;font:400 clamp(32px,4vw,44px)/1.2 "Playfair Display",Georgia,serif}
+    .newsletter-copy{max-width:570px;margin:18px auto 30px;color:var(--muted);font-size:14px;line-height:1.85}
+    .newsletter-form{max-width:650px;margin:0 auto;text-align:left}
+    .newsletter-field{margin-bottom:18px}
+    .newsletter-field label{display:block;margin-bottom:9px;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase}
+    .newsletter-field input{width:100%;min-height:49px;border:1px solid #dedbd6;border-radius:2px;background:#fff;padding:13px 15px;color:var(--ink);font:14px "DM Sans",Arial,sans-serif;outline:none}
+    .newsletter-field input:focus{border-color:#a99b88}
+    .newsletter-field input::placeholder{color:#a6a19a}
+    .consent-list{display:grid;gap:13px;margin:24px 0}
+    .consent-option{display:flex;align-items:flex-start;gap:11px;color:#55504a;font-size:12px;line-height:1.7}
+    .consent-option input{width:16px;height:16px;flex:0 0 16px;margin:2px 0 0;accent-color:var(--ink)}
+    .consent-option a{text-underline-offset:3px}
+    .newsletter-button{width:100%;min-height:53px;border:1px solid var(--ink);background:var(--ink);color:#fff;font:600 11px "DM Sans",Arial,sans-serif;letter-spacing:2.2px;cursor:pointer}
+    .newsletter-button:hover{background:#39342d}
+    .newsletter-note{min-height:20px;margin:13px 0 0;color:var(--muted);font-size:12px;line-height:1.6}
     .footer{border-top:1px solid var(--line);padding:42px 20px 35px;text-align:center}
     .footer-brand{margin:0;font:400 27px "Playfair Display",Georgia,serif;letter-spacing:4px}
     .footer-tagline{margin:9px 0 0;color:var(--muted);font-size:9px;font-weight:600;letter-spacing:3px}
@@ -63,6 +80,7 @@
       .info-item{grid-template-columns:52px minmax(0,1fr);gap:17px;padding:22px 0}
       .icon-wrap{width:52px;height:52px}
       .message-panel h2{font-size:31px}
+      .newsletter{width:88%;margin-bottom:65px;padding:42px 20px}
     }
     @media(max-width:380px){.brand{font-size:20px;letter-spacing:1.5px}.nav{gap:19px}}
   </style>
@@ -115,10 +133,38 @@
         <div class="field"><label for="customer-email">Your Email *</label><input id="customer-email" name="email" type="email" autocomplete="email" placeholder="Your Email" required></div>
         <div class="field"><label for="customer-message">Your Message *</label><textarea id="customer-message" name="message" placeholder="Your Message" required></textarea></div>
         <button class="send-button" type="submit">SEND MESSAGE <svg viewBox="0 0 24 24"><path d="M4 12h15M13 5l7 7-7 7"/></svg></button>
-        <p class="form-note" id="form-note">Please email us directly using the address shown if you need assistance.</p>
+        <p class="form-note" id="form-note">The message sending service will be connected during backend setup. For now, please use the contact email shown above.</p>
       </form>
     </section>
   </main>
+
+  <section class="newsletter" aria-labelledby="newsletter-title">
+    <p class="eyebrow">STAY IN THE KNOW</p>
+    <h2 id="newsletter-title">Be First to Discover</h2>
+    <p class="newsletter-copy">Sign up for new arrivals, selected highlights and updates from POP THE LOOK. Choose how you’d like to hear from us.</p>
+    <form class="newsletter-form" id="newsletter-form">
+      <div class="newsletter-field">
+        <label for="newsletter-email">Email address</label>
+        <input id="newsletter-email" name="email" type="email" autocomplete="email" placeholder="Enter your email address">
+      </div>
+      <div class="newsletter-field">
+        <label for="newsletter-phone">WhatsApp number</label>
+        <input id="newsletter-phone" name="phone" type="tel" autocomplete="tel" placeholder="Include country code, e.g. +44">
+      </div>
+      <div class="consent-list">
+        <label class="consent-option">
+          <input id="newsletter-email-consent" name="emailConsent" type="checkbox">
+          <span>I agree to receive new arrivals and promotional emails from POP THE LOOK. I can unsubscribe at any time.</span>
+        </label>
+        <label class="consent-option">
+          <input id="newsletter-whatsapp-consent" name="whatsappConsent" type="checkbox">
+          <span>I agree to receive promotional updates from POP THE LOOK via WhatsApp. I can opt out at any time.</span>
+        </label>
+      </div>
+      <button class="newsletter-button" type="submit">SIGN UP FOR UPDATES</button>
+      <p class="newsletter-note" id="newsletter-note" role="status" aria-live="polite">Choose at least one update method and give your consent. Subscription storage and messaging will be connected during backend setup.</p>
+    </form>
+  </section>
 
   <footer class="footer"><p class="footer-brand">POP THE LOOK</p><p class="footer-tagline">LUXURY WOMEN CLOTHING</p></footer>
 
@@ -127,7 +173,35 @@
   <script>
     document.getElementById("contact-form").addEventListener("submit", function(event) {
       event.preventDefault();
-      document.getElementById("form-note").textContent = "This message form is not connected yet. Please contact us using the email address shown.";
+      document.getElementById("form-note").textContent =
+        "Message sending is not active yet. Please contact us using the email address shown above.";
+    });
+
+    document.getElementById("newsletter-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("newsletter-email").value.trim();
+      const phone = document.getElementById("newsletter-phone").value.trim();
+      const emailConsent = document.getElementById("newsletter-email-consent").checked;
+      const whatsappConsent = document.getElementById("newsletter-whatsapp-consent").checked;
+      const note = document.getElementById("newsletter-note");
+
+      if (!emailConsent && !whatsappConsent) {
+        note.textContent = "Please select at least one update method and tick its consent box.";
+        return;
+      }
+      if (emailConsent && !email) {
+        note.textContent = "Please enter your email address to subscribe to email updates.";
+        document.getElementById("newsletter-email").focus();
+        return;
+      }
+      if (whatsappConsent && !phone) {
+        note.textContent = "Please enter your WhatsApp number, including your country code.";
+        document.getElementById("newsletter-phone").focus();
+        return;
+      }
+
+      note.textContent = "The signup form is a preview only and has not saved your details. Subscription storage and automatic messages will be connected during backend setup.";
     });
 
     async function loadContactDetails() {
