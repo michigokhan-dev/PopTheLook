@@ -179,7 +179,73 @@
       white-space: nowrap;
       cursor: pointer;
     }
-   
+
+    /* Newsletter popup */
+.newsletter-popup-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 18px; background: rgba(0,0,0,.48); box-sizing: border-box;
+}
+.newsletter-popup-overlay[hidden] { display: none !important; }
+.newsletter-popup {
+  position: relative; width: min(100%, 440px); max-height: 90vh;
+  overflow-y: auto; padding: 34px 28px 28px;
+  background: #fff; color: #211e19; border: 1px solid #eee;
+  box-shadow: 0 18px 60px rgba(0,0,0,.18);
+  box-sizing: border-box; font-family: "DM Sans", sans-serif;
+}
+.newsletter-popup-close {
+  position: absolute; top: 10px; right: 12px; width: 36px; height: 36px;
+  border: 0; background: #fff; color: #211e19; font-size: 26px;
+  line-height: 1; cursor: pointer;
+}
+.newsletter-popup-eyebrow {
+  margin: 0 0 10px; text-align: center; font-size: 10px;
+  letter-spacing: 2px; text-transform: uppercase; color: #796b58;
+}
+.newsletter-popup h2 {
+  margin: 0 0 12px; text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(27px, 6vw, 34px); font-weight: 600; line-height: 1.2;
+}
+.newsletter-popup-description {
+  margin: 0 auto 22px; max-width: 340px; text-align: center;
+  color: #625b52; font-size: 13px; line-height: 1.65;
+}
+.newsletter-popup-form { display: grid; gap: 13px; }
+.newsletter-popup-form label:not(.newsletter-consent) {
+  display: block; margin-bottom: 6px; color: #211e19; font-size: 12px;
+}
+.newsletter-popup-form input[type="email"],
+.newsletter-popup-form input[type="tel"] {
+  display: block; width: 100%; min-height: 46px; padding: 12px;
+  border: 1px solid #d8d8d8; border-radius: 0; background: #fff;
+  color: #211e19; font: inherit; font-size: 14px; box-sizing: border-box;
+}
+.newsletter-consent {
+  display: flex; align-items: flex-start; gap: 9px;
+  color: #625b52; font-size: 11px; line-height: 1.5;
+}
+.newsletter-consent input { margin-top: 3px; flex: 0 0 auto; }
+.newsletter-popup-submit {
+  width: 100%; min-height: 48px; padding: 13px 16px;
+  border: 1px solid #211e19; border-radius: 0; background: #211e19;
+  color: #fff; font: inherit; font-size: 12px; letter-spacing: 1px; cursor: pointer;
+}
+.newsletter-popup-no-thanks {
+  display: block; margin: 13px auto 0; padding: 7px 12px;
+  border: 0; background: transparent; color: #625b52;
+  text-decoration: underline; font: inherit; font-size: 12px; cursor: pointer;
+}
+.newsletter-popup-note {
+  margin: 12px 0 0; color: #625b52; text-align: center;
+  font-size: 11px; line-height: 1.5;
+}
+body.newsletter-popup-open { overflow: hidden; }
+@media (max-width: 480px) {
+  .newsletter-popup { padding: 34px 20px 22px; }
+}
+
     
   </style>
 </head>
@@ -265,6 +331,35 @@
     <footer id="about">
       © 2026 POP THE LOOK. All rights reserved.
     </footer>
+    <div id="newsletter-popup-overlay" class="newsletter-popup-overlay" hidden>
+    <section class="newsletter-popup" role="dialog" aria-modal="true" aria-labelledby="newsletter-popup-title">
+      <button type="button" id="newsletter-popup-close" class="newsletter-popup-close" aria-label="Close newsletter popup">×</button>
+      <p class="newsletter-popup-eyebrow">POP THE LOOK NEWSLETTER</p>
+      <h2 id="newsletter-popup-title">Be First to Discover</h2>
+      <p class="newsletter-popup-description">Discover new arrivals, special offers and the latest looks. Choose how you would like to hear from us.</p>
+      <form id="newsletter-popup-form" class="newsletter-popup-form">
+        <div>
+          <label for="newsletter-popup-email">Email address</label>
+          <input id="newsletter-popup-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <label class="newsletter-consent">
+          <input id="newsletter-popup-email-consent" type="checkbox">
+          <span>I'd like to receive new arrivals and offers by email.</span>
+        </label>
+        <div>
+          <label for="newsletter-popup-whatsapp">WhatsApp number (include country code)</label>
+          <input id="newsletter-popup-whatsapp" name="whatsapp" type="tel" placeholder="+44 7..." autocomplete="tel">
+        </div>
+        <label class="newsletter-consent">
+          <input id="newsletter-popup-whatsapp-consent" type="checkbox">
+          <span>I'd like to receive new arrivals and offers through WhatsApp.</span>
+        </label>
+        <button class="newsletter-popup-submit" type="submit">SIGN ME UP</button>
+      </form>
+      <p id="newsletter-popup-note" class="newsletter-popup-note">Choose at least one contact method and tick its consent box. You can opt out at any time.</p>
+      <button type="button" id="newsletter-popup-no-thanks" class="newsletter-popup-no-thanks">No thanks</button>
+    </section>
+  </div>
   </main>
 
 <script type="module">
@@ -938,6 +1033,71 @@ function updateCartCount() {
 updateCartCount();
 window.addEventListener("storage", updateCartCount);
 
+  /* Newsletter popup: 5 saniye sonra, tarayıcı başına bir kez gösterilir.
+     Abonelik henüz kaydedilmez; backend aşamasında bağlanacak. */
+  const newsletterOverlay = document.getElementById("newsletter-popup-overlay");
+  const newsletterForm = document.getElementById("newsletter-popup-form");
+  const newsletterEmail = document.getElementById("newsletter-popup-email");
+  const newsletterEmailConsent = document.getElementById("newsletter-popup-email-consent");
+  const newsletterWhatsapp = document.getElementById("newsletter-popup-whatsapp");
+  const newsletterWhatsappConsent = document.getElementById("newsletter-popup-whatsapp-consent");
+  const newsletterNote = document.getElementById("newsletter-popup-note");
+  const newsletterPopupKey = "popTheLookNewsletterPopupDismissed";
+
+  function closeNewsletterPopup() {
+    newsletterOverlay.hidden = true;
+    document.body.classList.remove("newsletter-popup-open");
+    try { localStorage.setItem(newsletterPopupKey, "yes"); } catch {}
+  }
+
+  function openNewsletterPopup() {
+    newsletterOverlay.hidden = false;
+    document.body.classList.add("newsletter-popup-open");
+    document.getElementById("newsletter-popup-close")?.focus();
+  }
+
+  let popupWasDismissed = false;
+  try { popupWasDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
+  if (!popupWasDismissed) {
+    window.setTimeout(() => {
+      let alreadyDismissed = false;
+      try { alreadyDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
+      if (!alreadyDismissed) openNewsletterPopup();
+    }, 5000);
+  }
+
+  document.getElementById("newsletter-popup-close")?.addEventListener("click", closeNewsletterPopup);
+  document.getElementById("newsletter-popup-no-thanks")?.addEventListener("click", closeNewsletterPopup);
+  newsletterOverlay?.addEventListener("click", event => {
+    if (event.target === newsletterOverlay) closeNewsletterPopup();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && newsletterOverlay && !newsletterOverlay.hidden) closeNewsletterPopup();
+  });
+
+  newsletterForm?.addEventListener("submit", event => {
+    event.preventDefault();
+    const email = newsletterEmail.value.trim();
+    const whatsapp = newsletterWhatsapp.value.trim();
+    const emailChosen = newsletterEmailConsent.checked && Boolean(email);
+    const whatsappChosen = newsletterWhatsappConsent.checked && Boolean(whatsapp);
+
+    if (!emailChosen && !whatsappChosen) {
+      newsletterNote.textContent = "Enter an email and tick email consent, or enter a WhatsApp number and tick WhatsApp consent. You can choose either or both.";
+      return;
+    }
+    if (newsletterEmailConsent.checked && !email) {
+      newsletterNote.textContent = "Please enter your email address for email updates.";
+      newsletterEmail.focus();
+      return;
+    }
+    if (newsletterWhatsappConsent.checked && !whatsapp) {
+      newsletterNote.textContent = "Please enter your WhatsApp number for WhatsApp updates.";
+      newsletterWhatsapp.focus();
+      return;
+    }
+    newsletterNote.textContent = "Thanks! This sign-up preview is not connected yet, so your details have not been saved. We'll connect subscriptions and messaging during the backend stage.";
+  });
   
 </script>
 </body>
