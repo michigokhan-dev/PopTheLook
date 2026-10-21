@@ -246,6 +246,17 @@ body.newsletter-popup-open { overflow: hidden; }
   .newsletter-popup { padding: 34px 20px 22px; }
 }
 
+#footer-subscribe-button {
+  display: block;
+  margin: 12px auto 20px;
+  padding: 12px 28px;
+  background: #211e19;
+  color: #fff;
+  border: 1px solid #211e19;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+}
     
   </style>
 </head>
@@ -1059,6 +1070,10 @@ window.addEventListener("storage", updateCartCount);
     document.body.classList.add("newsletter-popup-open");
     document.getElementById("newsletter-popup-close")?.focus();
   }
+
+  document
+  .getElementById("footer-subscribe-button")
+  ?.addEventListener("click", openNewsletterPopup);
 
   let popupWasDismissed = false;
   try { popupWasDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
