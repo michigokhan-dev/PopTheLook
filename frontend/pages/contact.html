@@ -182,7 +182,7 @@
       const error = document.getElementById("error-message");
 
       try {
-        if (typeof supabaseClient === "undefined") {
+        if (!window.supabaseClient && typeof supabaseClient === "undefined") {
           throw new Error("Supabase client was not initialized.");
         }
 
