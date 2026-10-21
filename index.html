@@ -898,6 +898,24 @@ supabase.auth.onAuthStateChange((_event, session) => {
   updateAccountUI(session);
 });
 
+  
+document.addEventListener("click", event => {
+  if (
+    dropdown &&
+    dropdown.style.display !== "none" &&
+    !dropdown.contains(event.target) &&
+    !accountIcon.contains(event.target)
+  ) {
+    dropdown.style.display = "none";
+  }
+});
+
+dropdown?.querySelector('a[href="frontend/pages/profile.html"]')
+  ?.addEventListener("click", () => {
+    dropdown.style.display = "none";
+  });
+
+
 
 function updateCartCount() {
   try {
