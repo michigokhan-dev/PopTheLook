@@ -770,76 +770,133 @@ searchInput?.addEventListener("keydown", (event) => {
 });
   loadStoreProducts();
 
-  const accountIcon = document.getElementById("account-icon");
-  const signInSignUpButton = document.getElementById("signin-signup-button");
-  let dropdown = document.getElementById("account-dropdown");
+  
+const accountIcon = document.getElementById("account-icon");
+const signInSignUpButton = document.getElementById("signin-signup-button");
 
-  if (!dropdown && accountIcon?.parentElement) {
-    dropdown = document.createElement("button");
-    dropdown.id = "account-dropdown";
-    dropdown.type = "button";
-    dropdown.textContent = "Sign out";
-    Object.assign(dropdown.style, {
-      display: "none", position: "absolute", right: "0", top: "100%",
-      padding: "12px 18px", background: "#fff", color: "#222",
-      cursor: "pointer", zIndex: "1000", boxShadow: "0 4px 12px #0002",
-      border: "1px solid #ded5c7", font: "inherit", whiteSpace: "nowrap"
-    });
-    accountIcon.parentElement.style.position = "relative";
-    accountIcon.parentElement.appendChild(dropdown);
+let dropdown = document.getElementById("account-dropdown");
+
+if (!dropdown && accountIcon?.parentElement) {
+  dropdown = document.createElement("div");
+  dropdown.id = "account-dropdown";
+
+  Object.assign(dropdown.style, {
+    display: "none",
+    position: "absolute",
+    right: "0",
+    top: "100%",
+    minWidth: "180px",
+    background: "#ffffff",
+    color: "#211e19",
+    zIndex: "1000",
+    boxShadow: "0 4px 12px #0002",
+    border: "1px solid #dedede",
+    font: "inherit"
+  });
+
+  dropdown.innerHTML = `
+    <a href="frontend/pages/profile.html"
+       style="display:block;padding:13px 16px;color:#211e19;text-decoration:none;border-bottom:1px solid #eeeeee;">
+       Profile
+    </a>
+    <a href="#"
+       id="account-orders-link"
+       style="display:block;padding:13px 16px;color:#211e19;text-decoration:none;border-bottom:1px solid #eeeeee;">
+       Orders
+    </a>
+    <button type="button"
+       id="account-signout-button"
+       style="display:block;width:100%;text-align:left;padding:13px 16px;background:#ffffff;color:#211e19;border:0;cursor:pointer;font:inherit;">
+       Sign out
+    </button>
+  `;
+
+  accountIcon.parentElement.style.position = "relative";
+  accountIcon.parentElement.appendChild(dropdown);
+}
+
+function updateAccountUI(session) {
+  const signedIn = Boolean(session);
+
+  if (accountIcon) {
+    accountIcon.href = signedIn ? "#" : "frontend/pages/signin.html";
+    accountIcon.setAttribute(
+      "aria-label",
+      signedIn ? "Account menu" : "Sign in or create an account"
+    );
   }
 
-  function updateAccountUI(session) {
-    const signedIn = Boolean(session);
+  if (signInSignUpButton) {
+    signInSignUpButton.textContent = signedIn
+      ? "Sign out"
+      : "Sign in / Sign up";
 
-    if (accountIcon) {
-      accountIcon.href = signedIn ? "#" : "frontend/pages/signin.html";
-      accountIcon.setAttribute(
-        "aria-label",
-        signedIn ? "Account menu" : "Sign in or create an account"
-      );
-    }
-
-    if (signInSignUpButton) {
-      signInSignUpButton.textContent = signedIn ? "Sign out" : "Sign in / Sign up";
-      signInSignUpButton.href = signedIn ? "#home" : "frontend/pages/signin.html";
-    }
-
-    if (!signedIn && dropdown) dropdown.style.display = "none";
+    signInSignUpButton.href = signedIn
+      ? "#home"
+      : "frontend/pages/signin.html";
   }
 
-  const { data: { session } } = await supabase.auth.getSession();
+  if (!signedIn && dropdown) {
+    dropdown.style.display = "none";
+  }
+}
+
+const { data: { session } } = await supabase.auth.getSession();
+updateAccountUI(session);
+
+accountIcon?.addEventListener("click", async event => {
+  const { data: { session: currentSession } } =
+    await supabase.auth.getSession();
+
+  if (!currentSession) return;
+
+  event.preventDefault();
+
+  if (dropdown) {
+    dropdown.style.display =
+      dropdown.style.display === "none" ? "block" : "none";
+  }
+});
+
+async function signOutAndStayHome(event) {
+  event.preventDefault();
+
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  if (dropdown) dropdown.style.display = "none";
+
+  updateAccountUI(null);
+  window.location.hash = "home";
+}
+
+document
+  .getElementById("account-signout-button")
+  ?.addEventListener("click", signOutAndStayHome);
+
+document
+  .getElementById("account-orders-link")
+  ?.addEventListener("click", event => {
+    event.preventDefault();
+    alert("Orders will be available in a later stage.");
+  });
+
+signInSignUpButton?.addEventListener("click", async event => {
+  const { data: { session: currentSession } } =
+    await supabase.auth.getSession();
+
+  if (!currentSession) return;
+
+  await signOutAndStayHome(event);
+});
+
+supabase.auth.onAuthStateChange((_event, session) => {
   updateAccountUI(session);
-
-  accountIcon?.addEventListener("click", async event => {
-    const { data: { session: currentSession } } = await supabase.auth.getSession();
-    if (!currentSession) return;
-    event.preventDefault();
-    if (dropdown) {
-      dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
-    }
-  });
-
-  async function signOutAndStayHome(event) {
-    event.preventDefault();
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      alert(error.message);
-      return;
-    }
-    if (dropdown) dropdown.style.display = "none";
-    updateAccountUI(null);
-    window.location.hash = "home";
-  }
-
-  dropdown?.addEventListener("click", signOutAndStayHome);
-  signInSignUpButton?.addEventListener("click", async event => {
-    const { data: { session: currentSession } } = await supabase.auth.getSession();
-    if (!currentSession) return;
-    await signOutAndStayHome(event);
-  });
-
-  supabase.auth.onAuthStateChange((_event, session) => updateAccountUI(session));
+});
 
 
 function updateCartCount() {
