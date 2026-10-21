@@ -1,1124 +1,1124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f0e7">
-  <meta name="description" content="Discover timeless women's fashion at POP THE LOOK.">
-  <title>POP THE LOOK | Women's Fashion</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="frontend/styles/style.css">
-  <style>
-    .products-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 30px 20px;
-      width: 100%;
-    }
-    .product-card { min-width: 0; width: 100%; }
-    .product-card img {
-      display: block; width: 100%; height: 440px; aspect-ratio: auto;
-      object-fit: contain; object-position: center; background-color: #ffffff;
-    }
-    @media (min-width: 900px) {
-      .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 24px; }
-    }
-    .product-prices {
-      display: flex; align-items: center; justify-content: center;
-      gap: 9px; flex-wrap: wrap;
-    }
-    .product-price-old { color: #c62828; text-decoration: line-through; opacity: 1; }
-    .product-card h3 { text-align: center; width: 100%; }
-    .product-price-current { color: #211e19; font-weight: 600; }
-
-    #products-grid.products-grid {
-      display: grid !important;
-      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-      gap: 12px !important; width: 100% !important;
-    }
-    @media screen and (orientation: landscape) and (max-width: 899px) {
-      #products-grid.products-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-    }
-    @media screen and (orientation: portrait) and (max-width: 700px) {
-      #products-grid.products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-    }
-    @media screen and (min-width: 900px) {
-      #products-grid.products-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
-    }
-
-    .shop-menu {
-      position: relative; width: 100%; margin: 20px 0; text-align: left;
-    }
-    .shop-menu-toggle {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 44px; height: 44px; padding: 0;
-      background: #211e19; color: #fff; border: 1px solid #211e19;
-      cursor: pointer; font-size: 22px; line-height: 1;
-    }
-    .shop-menu-toggle:focus-visible,
-    .shop-department-button:focus-visible,
-    .shop-category-button:focus-visible,
-    .shop-category-group summary:focus-visible {
-      outline: 2px solid #796b58; outline-offset: 3px;
-    }
-    .shop-menu-panel {
-      width: min(100%, 360px); max-height: 70vh; overflow-y: auto;
-      margin-top: 10px; padding: 12px;
-      border: 1px solid #ded5c7; background: #f5f0e7;
-      box-sizing: border-box; z-index: 20;
-    }
-    .shop-menu-panel[hidden], .shop-category-filters[hidden] { display: none !important; }
-    .shop-department-button {
-      display: block; width: 100%; padding: 13px 8px;
-      border: 0; border-bottom: 1px solid #ded5c7;
-      background: transparent; color: #211e19;
-      text-align: left; cursor: pointer; font-size: 14px;
-    }
-    .shop-department-button:hover { background: #ebe3d7; }
-    .shop-department-button[aria-pressed="true"] { font-weight: 600; }
-    .shop-category-filters {
-      display: block; margin-top: 8px; padding-top: 4px;
-      border-top: 1px solid #ded5c7;
-    }
-    .shop-category-all {
-      width: 100%; margin: 8px 0; padding: 11px 8px;
-      border: 1px solid #ded5c7; background: transparent;
-      color: #211e19; text-align: left; cursor: pointer;
-    }
-    .shop-category-group { border-bottom: 1px solid #ded5c7; }
-    .shop-category-group summary {
-      list-style: none; cursor: pointer; padding: 13px 8px;
-      color: #211e19; font-size: 14px; font-weight: 600;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px;
-    }
-    .shop-category-group summary::-webkit-details-marker { display: none; }
-    .shop-category-group summary::after { content: "+"; font-size: 18px; font-weight: 400; }
-    .shop-category-group[open] summary::after { content: "−"; }
-    .shop-category-options { display: grid; grid-template-columns: 1fr; padding: 0 8px 8px; }
-    .shop-category-button {
-      display: block; width: 100%; padding: 10px 8px;
-      border: 0; background: transparent; color: #796b58;
-      text-align: left; cursor: pointer; font-size: 13px;
-      overflow-wrap: anywhere;
-    }
-    .shop-category-button:hover { background: #ebe3d7; color: #211e19; }
-    .shop-category-button.active, .shop-category-all.active {
-      background: #211e19; color: #fff; border-color: #211e19;
-    }
-    .shop-empty-message { padding: 24px 0; color: #796b58; text-align: center; }
-    @media (max-width: 480px) {
-      .shop-menu-panel { width: min(100%, 320px); padding: 10px; }
-      .shop-category-group summary { padding: 12px 6px; }
-      .shop-category-options { padding-right: 4px; padding-left: 4px; }
-      .product-card img { height: 240px; }
-    }
-
-    .shop-menu-toggle {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      background: transparent !important;
-      color: #211e19 !important;
-      border: none !important;
-      box-shadow: none !important;
-      cursor: pointer;
-      font-size: 22px;
-      outline: none;
-    }
-
-    /* White background for the opened burger menu */
-    .shop-menu-panel {
-      background: #ffffff !important;
-      background-color: #ffffff !important;
-      border-color: #ded5c7;
-    }
-
-    .shop-menu-panel .shop-department-button,
-    .shop-menu-panel .shop-category-group,
-    .shop-menu-panel .shop-category-group summary,
-    .shop-menu-panel .shop-category-button,
-    .shop-menu-panel .shop-category-filters {
-      background-color: #ffffff !important;
-    }
-
-    .shop-menu-panel .shop-department-button:hover,
-    .shop-menu-panel .shop-category-button:hover {
-      background-color: #f5f5f5 !important;
-    }
-
-    .shop-toolbar {
-      display: flex;
-      justify-content: flex-start;
-      align-items: flex-start;
-      gap: 12px;
-      width: 100%;
-      position: relative;
-    }
-
-    .shop-toolbar .shop-menu {
-      margin: 0;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-    }
-
-    .navigation .auth-link {
-      color: inherit;
-      text-decoration: none;
-      background: transparent;
-      border: 0;
-      padding: 0;
-      margin-left: 12px;
-      font: inherit;
-      white-space: nowrap;
-      cursor: pointer;
-    }
-
-    /* Newsletter popup */
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <meta name="theme-color" content="#f5f0e7">
+ <meta name="description" content="Discover timeless women's fashion at POP THE LOOK.">
+ <title>POP THE LOOK | Women's Fashion</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="frontend/styles/style.css">
+ <style>
+   .products-grid {
+     display: grid;
+     grid-template-columns: repeat(3, minmax(0, 1fr));
+     gap: 30px 20px;
+     width: 100%;
+   }
+   .product-card { min-width: 0; width: 100%; }
+   .product-card img {
+     display: block; width: 100%; height: 440px; aspect-ratio: auto;
+     object-fit: contain; object-position: center; background-color: #ffffff;
+   }
+   @media (min-width: 900px) {
+     .products-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 24px; }
+   }
+   .product-prices {
+     display: flex; align-items: center; justify-content: center;
+     gap: 9px; flex-wrap: wrap;
+   }
+   .product-price-old { color: #c62828; text-decoration: line-through; opacity: 1; }
+   .product-card h3 { text-align: center; width: 100%; }
+   .product-price-current { color: #211e19; font-weight: 600; }
+ 
+   #products-grid.products-grid {
+     display: grid !important;
+     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+     gap: 12px !important; width: 100% !important;
+   }
+   @media screen and (orientation: landscape) and (max-width: 899px) {
+     #products-grid.products-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+   }
+   @media screen and (orientation: portrait) and (max-width: 700px) {
+     #products-grid.products-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+   }
+   @media screen and (min-width: 900px) {
+     #products-grid.products-grid { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+   }
+ 
+   .shop-menu {
+     position: relative; width: 100%; margin: 20px 0; text-align: left;
+   }
+   .shop-menu-toggle {
+     display: inline-flex; align-items: center; justify-content: center;
+     width: 44px; height: 44px; padding: 0;
+     background: #211e19; color: #fff; border: 1px solid #211e19;
+     cursor: pointer; font-size: 22px; line-height: 1;
+   }
+   .shop-menu-toggle:focus-visible,
+   .shop-department-button:focus-visible,
+   .shop-category-button:focus-visible,
+   .shop-category-group summary:focus-visible {
+     outline: 2px solid #796b58; outline-offset: 3px;
+   }
+   .shop-menu-panel {
+     width: min(100%, 360px); max-height: 70vh; overflow-y: auto;
+     margin-top: 10px; padding: 12px;
+     border: 1px solid #ded5c7; background: #f5f0e7;
+     box-sizing: border-box; z-index: 20;
+   }
+   .shop-menu-panel[hidden], .shop-category-filters[hidden] { display: none !important; }
+   .shop-department-button {
+     display: block; width: 100%; padding: 13px 8px;
+     border: 0; border-bottom: 1px solid #ded5c7;
+     background: transparent; color: #211e19;
+     text-align: left; cursor: pointer; font-size: 14px;
+   }
+   .shop-department-button:hover { background: #ebe3d7; }
+   .shop-department-button[aria-pressed="true"] { font-weight: 600; }
+   .shop-category-filters {
+     display: block; margin-top: 8px; padding-top: 4px;
+     border-top: 1px solid #ded5c7;
+   }
+   .shop-category-all {
+     width: 100%; margin: 8px 0; padding: 11px 8px;
+     border: 1px solid #ded5c7; background: transparent;
+     color: #211e19; text-align: left; cursor: pointer;
+   }
+   .shop-category-group { border-bottom: 1px solid #ded5c7; }
+   .shop-category-group summary {
+     list-style: none; cursor: pointer; padding: 13px 8px;
+     color: #211e19; font-size: 14px; font-weight: 600;
+     display: flex; align-items: center; justify-content: space-between;
+     gap: 12px;
+   }
+   .shop-category-group summary::-webkit-details-marker { display: none; }
+   .shop-category-group summary::after { content: "+"; font-size: 18px; font-weight: 400; }
+   .shop-category-group[open] summary::after { content: "−"; }
+   .shop-category-options { display: grid; grid-template-columns: 1fr; padding: 0 8px 8px; }
+   .shop-category-button {
+     display: block; width: 100%; padding: 10px 8px;
+     border: 0; background: transparent; color: #796b58;
+     text-align: left; cursor: pointer; font-size: 13px;
+     overflow-wrap: anywhere;
+   }
+   .shop-category-button:hover { background: #ebe3d7; color: #211e19; }
+   .shop-category-button.active, .shop-category-all.active {
+     background: #211e19; color: #fff; border-color: #211e19;
+   }
+   .shop-empty-message { padding: 24px 0; color: #796b58; text-align: center; }
+   @media (max-width: 480px) {
+     .shop-menu-panel { width: min(100%, 320px); padding: 10px; }
+     .shop-category-group summary { padding: 12px 6px; }
+     .shop-category-options { padding-right: 4px; padding-left: 4px; }
+     .product-card img { height: 240px; }
+   }
+ 
+   .shop-menu-toggle {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 44px;
+     height: 44px;
+     padding: 0;
+     background: transparent !important;
+     color: #211e19 !important;
+     border: none !important;
+     box-shadow: none !important;
+     cursor: pointer;
+     font-size: 22px;
+     outline: none;
+   }
+ 
+   /* White background for the opened burger menu */
+   .shop-menu-panel {
+     background: #ffffff !important;
+     background-color: #ffffff !important;
+     border-color: #ded5c7;
+   }
+ 
+   .shop-menu-panel .shop-department-button,
+   .shop-menu-panel .shop-category-group,
+   .shop-menu-panel .shop-category-group summary,
+   .shop-menu-panel .shop-category-button,
+   .shop-menu-panel .shop-category-filters {
+     background-color: #ffffff !important;
+   }
+ 
+   .shop-menu-panel .shop-department-button:hover,
+   .shop-menu-panel .shop-category-button:hover {
+     background-color: #f5f5f5 !important;
+   }
+ 
+   .shop-toolbar {
+     display: flex;
+     justify-content: flex-start;
+     align-items: flex-start;
+     gap: 12px;
+     width: 100%;
+     position: relative;
+   }
+ 
+   .shop-toolbar .shop-menu {
+     margin: 0;
+     background: transparent;
+     border: none;
+     box-shadow: none;
+   }
+ 
+   .navigation .auth-link {
+     color: inherit;
+     text-decoration: none;
+     background: transparent;
+     border: 0;
+     padding: 0;
+     margin-left: 12px;
+     font: inherit;
+     white-space: nowrap;
+     cursor: pointer;
+   }
+ 
+   /* Newsletter popup */
 .newsletter-popup-overlay {
-  position: fixed; inset: 0; z-index: 10000;
-  display: flex; align-items: center; justify-content: center;
-  padding: 18px; background: rgba(0,0,0,.48); box-sizing: border-box;
+ position: fixed; inset: 0; z-index: 10000;
+ display: flex; align-items: center; justify-content: center;
+ padding: 18px; background: rgba(0,0,0,.48); box-sizing: border-box;
 }
 .newsletter-popup-overlay[hidden] { display: none !important; }
 .newsletter-popup {
-  position: relative; width: min(100%, 440px); max-height: 90vh;
-  overflow-y: auto; padding: 34px 28px 28px;
-  background: #fff; color: #211e19; border: 1px solid #eee;
-  box-shadow: 0 18px 60px rgba(0,0,0,.18);
-  box-sizing: border-box; font-family: "DM Sans", sans-serif;
+ position: relative; width: min(100%, 440px); max-height: 90vh;
+ overflow-y: auto; padding: 34px 28px 28px;
+ background: #fff; color: #211e19; border: 1px solid #eee;
+ box-shadow: 0 18px 60px rgba(0,0,0,.18);
+ box-sizing: border-box; font-family: "DM Sans", sans-serif;
 }
 .newsletter-popup-close {
-  position: absolute; top: 10px; right: 12px; width: 36px; height: 36px;
-  border: 0; background: #fff; color: #211e19; font-size: 26px;
-  line-height: 1; cursor: pointer;
+ position: absolute; top: 10px; right: 12px; width: 36px; height: 36px;
+ border: 0; background: #fff; color: #211e19; font-size: 26px;
+ line-height: 1; cursor: pointer;
 }
 .newsletter-popup-eyebrow {
-  margin: 0 0 10px; text-align: center; font-size: 10px;
-  letter-spacing: 2px; text-transform: uppercase; color: #796b58;
+ margin: 0 0 10px; text-align: center; font-size: 10px;
+ letter-spacing: 2px; text-transform: uppercase; color: #796b58;
 }
 .newsletter-popup h2 {
-  margin: 0 0 12px; text-align: center;
-  font-family: "Playfair Display", serif;
-  font-size: clamp(27px, 6vw, 34px); font-weight: 600; line-height: 1.2;
+ margin: 0 0 12px; text-align: center;
+ font-family: "Playfair Display", serif;
+ font-size: clamp(27px, 6vw, 34px); font-weight: 600; line-height: 1.2;
 }
 .newsletter-popup-description {
-  margin: 0 auto 22px; max-width: 340px; text-align: center;
-  color: #625b52; font-size: 13px; line-height: 1.65;
+ margin: 0 auto 22px; max-width: 340px; text-align: center;
+ color: #625b52; font-size: 13px; line-height: 1.65;
 }
 .newsletter-popup-form { display: grid; gap: 13px; }
 .newsletter-popup-form label:not(.newsletter-consent) {
-  display: block; margin-bottom: 6px; color: #211e19; font-size: 12px;
+ display: block; margin-bottom: 6px; color: #211e19; font-size: 12px;
 }
 .newsletter-popup-form input[type="email"],
 .newsletter-popup-form input[type="tel"] {
-  display: block; width: 100%; min-height: 46px; padding: 12px;
-  border: 1px solid #d8d8d8; border-radius: 0; background: #fff;
-  color: #211e19; font: inherit; font-size: 14px; box-sizing: border-box;
+ display: block; width: 100%; min-height: 46px; padding: 12px;
+ border: 1px solid #d8d8d8; border-radius: 0; background: #fff;
+ color: #211e19; font: inherit; font-size: 14px; box-sizing: border-box;
 }
 .newsletter-consent {
-  display: flex; align-items: flex-start; gap: 9px;
-  color: #625b52; font-size: 11px; line-height: 1.5;
+ display: flex; align-items: flex-start; gap: 9px;
+ color: #625b52; font-size: 11px; line-height: 1.5;
 }
 .newsletter-consent input { margin-top: 3px; flex: 0 0 auto; }
 .newsletter-popup-submit {
-  width: 100%; min-height: 48px; padding: 13px 16px;
-  border: 1px solid #211e19; border-radius: 0; background: #211e19;
-  color: #fff; font: inherit; font-size: 12px; letter-spacing: 1px; cursor: pointer;
+ width: 100%; min-height: 48px; padding: 13px 16px;
+ border: 1px solid #211e19; border-radius: 0; background: #211e19;
+ color: #fff; font: inherit; font-size: 12px; letter-spacing: 1px; cursor: pointer;
 }
 .newsletter-popup-no-thanks {
-  display: block; margin: 13px auto 0; padding: 7px 12px;
-  border: 0; background: transparent; color: #625b52;
-  text-decoration: underline; font: inherit; font-size: 12px; cursor: pointer;
+ display: block; margin: 13px auto 0; padding: 7px 12px;
+ border: 0; background: transparent; color: #625b52;
+ text-decoration: underline; font: inherit; font-size: 12px; cursor: pointer;
 }
 .newsletter-popup-note {
-  margin: 12px 0 0; color: #625b52; text-align: center;
-  font-size: 11px; line-height: 1.5;
+ margin: 12px 0 0; color: #625b52; text-align: center;
+ font-size: 11px; line-height: 1.5;
 }
 body.newsletter-popup-open { overflow: hidden; }
 @media (max-width: 480px) {
-  .newsletter-popup { padding: 34px 20px 22px; }
+ .newsletter-popup { padding: 34px 20px 22px; }
 }
-
+ 
 #footer-subscribe-button {
-  display: block;
-  margin: 10px auto 20px;
-  padding: 0;
-  background: transparent;
-  color: #211e19;
-  border: none;
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-decoration: underline;
-  cursor: pointer;
+ display: block;
+ margin: 10px auto 20px;
+ padding: 0;
+ background: transparent;
+ color: #211e19;
+ border: none;
+ font-size: 11px;
+ letter-spacing: 1.5px;
+ text-decoration: underline;
+ cursor: pointer;
 }
-    
-  </style>
+   
+ </style>
 </head>
 <body>
-  <header class="header">
-    <a class="logo" href="#home">POP THE LOOK</a>
-    <nav class="navigation" aria-label="Main navigation">
-      <a class="active" href="#home" onclick="resetHomeFilter()">Home</a>
-      <a href="frontend/pages/about.html">About</a>
-      <a href="frontend/pages/contact.html">Contact</a>
-      <a id="signin-signup-button" class="auth-link" href="frontend/pages/signin.html">Sign in / Sign up</a>
-    </nav>
-    <div class="header-actions">
-      
+ <header class="header">
+   <a class="logo" href="#home">POP THE LOOK</a>
+   <nav class="navigation" aria-label="Main navigation">
+     <a class="active" href="#home" onclick="resetHomeFilter()">Home</a>
+     <a href="frontend/pages/about.html">About</a>
+     <a href="frontend/pages/contact.html">Contact</a>
+     <a id="signin-signup-button" class="auth-link" href="frontend/pages/signin.html">Sign in / Sign up</a>
+   </nav>
+   <div class="header-actions">
+     
 <div class="header-search">
-  <button class="icon-button" id="search-toggle" type="button"
-    aria-label="Search products" aria-expanded="false">
-    <svg viewBox="0 0 24 24">
-      <circle cx="10.8" cy="10.8" r="7.2"/>
-      <path d="m16 16 5 5"/>
-    </svg>
-  </button>
-  <input id="search-input" type="search" placeholder="Search products..."
-    aria-label="Search products" hidden>
+ <button class="icon-button" id="search-toggle" type="button"
+   aria-label="Search products" aria-expanded="false">
+   <svg viewBox="0 0 24 24">
+     <circle cx="10.8" cy="10.8" r="7.2"/>
+     <path d="m16 16 5 5"/>
+   </svg>
+ </button>
+ <input id="search-input" type="search" placeholder="Search products..."
+   aria-label="Search products" hidden>
 </div>
-
-        <svg viewBox="0 0 24 24">
-          <circle cx="10.8" cy="10.8" r="7.2"/>
-          <path d="m16 16 5 5"/>
-        </svg>
-      </a>
-      <a class="icon-button" id="account-icon" href="frontend/pages/signin.html" aria-label="Sign in or create an account">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="7.5" r="3.5"/>
-          <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
-        </svg>
-      </a>
-      <a class="icon-button" href="frontend/pages/cart.html" aria-label="Shopping cart">
-        <svg viewBox="0 0 24 24">
-          <path d="M4 8h16l-1 13H5L4 8Z"/>
-          <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
-        </svg>
-        <span class="cart-count">0</span>
-      </a>
-    </div>
-  </header>
-  <main>
-    <section class="hero" id="home">
-      <div class="hero-content">
-        <div class="eyebrow">THE NEW COLLECTION</div>
-        <h1>Style that<br>speaks softly.</h1>
-        <p class="hero-description">
-          Timeless pieces. Effortless elegance.<br>
-          Discover your next favourite look.
-        </p>
-        <a class="hero-cta" href="#shop">
-          EXPLORE THE COLLECTION
-          <svg viewBox="0 0 24 24">
-            <path d="M4 12h15M13 5l7 7-7 7"/>
-          </svg>
-        </a>
-      </div>
-    </section>
-    <section class="intro" id="shop">
-      <p class="intro-label">POP THE LOOK</p>
-      <h2>Your wardrobe, reimagined.</h2>
-      <div class="shop-toolbar">
-        <div class="shop-menu">
-          <button id="shop-menu-toggle" class="shop-menu-toggle" type="button"
-            aria-expanded="false" aria-controls="shop-menu-panel" aria-label="Open shop menu">
-            <span aria-hidden="true">☰</span>
-          </button>
-          <div id="shop-menu-panel" class="shop-menu-panel" hidden>
-            <button type="button" class="shop-department-button" data-department="women" aria-pressed="false">Women</button>
-            <button type="button" class="shop-department-button" data-department="men" aria-pressed="false">Men — Coming Soon</button>
-            <button type="button" class="shop-department-button" data-department="kids" aria-pressed="false">Kids — Coming Soon</button>
-            <div id="shop-category-filters" class="shop-category-filters" hidden></div>
-          </div>
-        </div>
-      </div>
-      <div id="products-grid" class="products-grid"></div>
-    </section>
-  <footer id="about">
-  <p>© 2026 POP THE LOOK. All rights reserved.</p>
-
-  <button type="button" id="footer-subscribe-button">
-    SUBSCRIBE
-  </button>
+ 
+       <svg viewBox="0 0 24 24">
+         <circle cx="10.8" cy="10.8" r="7.2"/>
+         <path d="m16 16 5 5"/>
+       </svg>
+     </a>
+     <a class="icon-button" id="account-icon" href="frontend/pages/signin.html" aria-label="Sign in or create an account">
+       <svg viewBox="0 0 24 24">
+         <circle cx="12" cy="7.5" r="3.5"/>
+         <path d="M5 21v-2a7 7 0 0 1 14 0v2"/>
+       </svg>
+     </a>
+     <a class="icon-button" href="frontend/pages/cart.html" aria-label="Shopping cart">
+       <svg viewBox="0 0 24 24">
+         <path d="M4 8h16l-1 13H5L4 8Z"/>
+         <path d="M9 8V6a3 3 0 0 1 6 0v2"/>
+       </svg>
+       <span class="cart-count">0</span>
+     </a>
+   </div>
+ </header>
+ <main>
+   <section class="hero" id="home">
+     <div class="hero-content">
+       <div class="eyebrow">THE NEW COLLECTION</div>
+       <h1>Style that<br>speaks softly.</h1>
+       <p class="hero-description">
+         Timeless pieces. Effortless elegance.<br>
+         Discover your next favourite look.
+       </p>
+       <a class="hero-cta" href="#shop">
+         EXPLORE THE COLLECTION
+         <svg viewBox="0 0 24 24">
+           <path d="M4 12h15M13 5l7 7-7 7"/>
+         </svg>
+       </a>
+     </div>
+   </section>
+   <section class="intro" id="shop">
+     <p class="intro-label">POP THE LOOK</p>
+     <h2>Your wardrobe, reimagined.</h2>
+     <div class="shop-toolbar">
+       <div class="shop-menu">
+         <button id="shop-menu-toggle" class="shop-menu-toggle" type="button"
+           aria-expanded="false" aria-controls="shop-menu-panel" aria-label="Open shop menu">
+           <span aria-hidden="true">☰</span>
+         </button>
+         <div id="shop-menu-panel" class="shop-menu-panel" hidden>
+           <button type="button" class="shop-department-button" data-department="women" aria-pressed="false">Women</button>
+           <button type="button" class="shop-department-button" data-department="men" aria-pressed="false">Men — Coming Soon</button>
+           <button type="button" class="shop-department-button" data-department="kids" aria-pressed="false">Kids — Coming Soon</button>
+           <div id="shop-category-filters" class="shop-category-filters" hidden></div>
+         </div>
+       </div>
+     </div>
+     <div id="products-grid" class="products-grid"></div>
+   </section>
+ <footer id="about">
+ <p>© 2026 POP THE LOOK. All rights reserved.</p>
+ 
+ <button type="button" id="footer-subscribe-button">
+   SUBSCRIBE
+ </button>
 </footer>
-    <div id="newsletter-popup-overlay" class="newsletter-popup-overlay" hidden>
-    <section class="newsletter-popup" role="dialog" aria-modal="true" aria-labelledby="newsletter-popup-title">
-      <button type="button" id="newsletter-popup-close" class="newsletter-popup-close" aria-label="Close newsletter popup">×</button>
-      <p class="newsletter-popup-eyebrow">POP THE LOOK NEWSLETTER</p>
-      <h2 id="newsletter-popup-title">Be First to Discover</h2>
-      <p class="newsletter-popup-description">Discover new arrivals, special offers and the latest looks. Choose how you would like to hear from us.</p>
-      <form id="newsletter-popup-form" class="newsletter-popup-form">
-        <div>
-          <label for="newsletter-popup-email">Email address</label>
-          <input id="newsletter-popup-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <label class="newsletter-consent">
-          <input id="newsletter-popup-email-consent" type="checkbox">
-          <span>I'd like to receive new arrivals and offers by email.</span>
-        </label>
-        <div>
-          <label for="newsletter-popup-whatsapp">WhatsApp number (include country code)</label>
-          <input id="newsletter-popup-whatsapp" name="whatsapp" type="tel" placeholder="+44 7..." autocomplete="tel">
-        </div>
-        <label class="newsletter-consent">
-          <input id="newsletter-popup-whatsapp-consent" type="checkbox">
-          <span>I'd like to receive new arrivals and offers through WhatsApp.</span>
-        </label>
-        <button class="newsletter-popup-submit" type="submit">SIGN ME UP</button>
-      </form>
-      <p id="newsletter-popup-note" class="newsletter-popup-note">Choose at least one contact method and tick its consent box. You can opt out at any time.</p>
-      <button type="button" id="newsletter-popup-no-thanks" class="newsletter-popup-no-thanks">No thanks</button>
-    </section>
-  </div>
-  </main>
-
+   <div id="newsletter-popup-overlay" class="newsletter-popup-overlay" hidden>
+   <section class="newsletter-popup" role="dialog" aria-modal="true" aria-labelledby="newsletter-popup-title">
+     <button type="button" id="newsletter-popup-close" class="newsletter-popup-close" aria-label="Close newsletter popup">×</button>
+     <p class="newsletter-popup-eyebrow">POP THE LOOK NEWSLETTER</p>
+     <h2 id="newsletter-popup-title">Be First to Discover</h2>
+     <p class="newsletter-popup-description">Discover new arrivals, special offers and the latest looks. Choose how you would like to hear from us.</p>
+     <form id="newsletter-popup-form" class="newsletter-popup-form">
+       <div>
+         <label for="newsletter-popup-email">Email address</label>
+         <input id="newsletter-popup-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
+       </div>
+       <label class="newsletter-consent">
+         <input id="newsletter-popup-email-consent" type="checkbox">
+         <span>I'd like to receive new arrivals and offers by email.</span>
+       </label>
+       <div>
+         <label for="newsletter-popup-whatsapp">WhatsApp number (include country code)</label>
+         <input id="newsletter-popup-whatsapp" name="whatsapp" type="tel" placeholder="+44 7..." autocomplete="tel">
+       </div>
+       <label class="newsletter-consent">
+         <input id="newsletter-popup-whatsapp-consent" type="checkbox">
+         <span>I'd like to receive new arrivals and offers through WhatsApp.</span>
+       </label>
+       <button class="newsletter-popup-submit" type="submit">SIGN ME UP</button>
+     </form>
+     <p id="newsletter-popup-note" class="newsletter-popup-note">Choose at least one contact method and tick its consent box. You can opt out at any time.</p>
+     <button type="button" id="newsletter-popup-no-thanks" class="newsletter-popup-no-thanks">No thanks</button>
+   </section>
+ </div>
+ </main>
+ 
 <script type="module">
-  import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
-
-  const supabase = createClient(
-    "https://imkkafqtlvuzloalcfvk.supabase.co",
-    "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
-  );
-
-  const productsGrid = document.getElementById("products-grid");
-  const searchToggle = document.getElementById("search-toggle");
+ import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+ 
+ const supabase = createClient(
+   "https://imkkafqtlvuzloalcfvk.supabase.co",
+   "sb_publishable_aetzVolyZMx-vTdoaZ9zXw_OtEefK-N"
+ );
+ 
+ const productsGrid = document.getElementById("products-grid");
+ const searchToggle = document.getElementById("search-toggle");
 const searchInput = document.getElementById("search-input");
 let productColorsById = {};
-  const categoryFilters = document.getElementById("shop-category-filters");
-  const menuToggle = document.getElementById("shop-menu-toggle");
-  const menuPanel = document.getElementById("shop-menu-panel");
-  const departmentButtons = document.querySelectorAll(".shop-department-button");
-
-  let allProducts = [];
-  let activeCategory = "all";
-  let activeDepartment = "";
-
-  function resetHomeFilter() {
-  activeCategory = "all";
-  activeDepartment = "";
-  renderProducts();
+ const categoryFilters = document.getElementById("shop-category-filters");
+ const menuToggle = document.getElementById("shop-menu-toggle");
+ const menuPanel = document.getElementById("shop-menu-panel");
+ const departmentButtons = document.querySelectorAll(".shop-department-button");
+ 
+ let allProducts = [];
+ let activeCategory = "all";
+ let activeDepartment = "";
+ 
+ function resetHomeFilter() {
+ activeCategory = "all";
+ activeDepartment = "";
+ renderProducts();
 }
-  
-  const categoryGroups = [
-  { name: "New In", categories: ["All New In", "New In"] },
-
-  { name: "Dresses", categories: [
-    "All Dresses", "Midi", "Maxi", "Mini", "Wedding Guest Dresses",
-    "Party Dresses", "Short Sleeve", "Long Sleeve", "Linen Dresses"
-  ]},
-
-  { name: "Tops & T-Shirts", categories: [
-    "All Tops & T-Shirts", "New In Tops & T-Shirts", "Blouses",
-    "Body suit", "Cardigan", "Jumper", "Shirts", "Tops", "T-Shirts",
-    "Vest Tops", "Short Sleeve", "Long Sleeve", "Sleeveless"
-  ]},
-
-  { name: "Jackets & Coats", categories: [
-    "All Jackets", "Biker Jacket", "Racer Jackets",
-    "Bomber Jackets", "Denim Jackets", "Fleece Jackets", "Long Jackets",
-    "Puffer Jackets", "Faux Fur Coats", "Long Coats",
-    "Parkas", "Capes", "Ponchos", "Blazers"
-  ]},
-
-  { name: "Knitwears", categories: ["All Knitwears", "Knitwears"] },
-  { name: "Leggings", categories: ["All Leggings", "Leggings"] },
-  { name: "Shorts", categories: ["All Shorts", "Shorts"] },
-  { name: "Skirts", categories: ["All Skirts", "Skirts"] },
-  { name: "Trousers", categories: ["All Trousers", "Trousers"] },
-
-  { name: "Jeans", categories: [
-    "All Jeans", "Boyfriend Jeans", "Cropped Jeans", "Flared Jeans",
-    "High Waisted Jeans", "Ripped Jeans", "Skinny Jeans", "Straight Jeans"
-  ]},
-
-  { name: "Nightwears", categories: ["All Nightwears", "Nightwears"] },
-  { name: "Jumpsuits", categories: ["All Jumpsuits", "Jumpsuits"] },
-  { name: "Playsuits", categories: ["All Playsuits", "Playsuits"] },
-  { name: "Tracksuits", categories: ["All Tracksuits", "Tracksuits"] },
-  { name: "Underwears", categories: ["All Underwears", "Underwears"] },
-  { name: "Bags", categories: ["All Bags", "Bags"] },
-  { name: "Accessories & Jewellery", categories: [
-    "All Accessories & Jewellery", "Accessories & Jewellery"
-  ]},
-  { name: "Sportswear", categories: ["All Sportswear", "Sportswear"] },
-  { name: "Beauty", categories: ["All Beauty", "Beauty"] },
-  { name: "Fragrance", categories: ["All Fragrance", "Fragrance"] }
+ 
+ const categoryGroups = [
+ { name: "New In", categories: ["All New In", "New In"] },
+ 
+ { name: "Dresses", categories: [
+   "All Dresses", "Midi", "Maxi", "Mini", "Wedding Guest Dresses",
+   "Party Dresses", "Short Sleeve", "Long Sleeve", "Linen Dresses"
+ ]},
+ 
+ { name: "Tops & T-Shirts", categories: [
+   "All Tops & T-Shirts", "New In Tops & T-Shirts", "Blouses",
+   "Body suit", "Cardigan", "Jumper", "Shirts", "Tops", "T-Shirts",
+   "Vest Tops", "Short Sleeve", "Long Sleeve", "Sleeveless"
+ ]},
+ 
+ { name: "Jackets & Coats", categories: [
+   "All Jackets", "Biker Jacket", "Racer Jackets",
+   "Bomber Jackets", "Denim Jackets", "Fleece Jackets", "Long Jackets",
+   "Puffer Jackets", "Faux Fur Coats", "Long Coats",
+   "Parkas", "Capes", "Ponchos", "Blazers"
+ ]},
+ 
+ { name: "Knitwears", categories: ["All Knitwears", "Knitwears"] },
+ { name: "Leggings", categories: ["All Leggings", "Leggings"] },
+ { name: "Shorts", categories: ["All Shorts", "Shorts"] },
+ { name: "Skirts", categories: ["All Skirts", "Skirts"] },
+ { name: "Trousers", categories: ["All Trousers", "Trousers"] },
+ 
+ { name: "Jeans", categories: [
+   "All Jeans", "Boyfriend Jeans", "Cropped Jeans", "Flared Jeans",
+   "High Waisted Jeans", "Ripped Jeans", "Skinny Jeans", "Straight Jeans"
+ ]},
+ 
+ { name: "Nightwears", categories: ["All Nightwears", "Nightwears"] },
+ { name: "Jumpsuits", categories: ["All Jumpsuits", "Jumpsuits"] },
+ { name: "Playsuits", categories: ["All Playsuits", "Playsuits"] },
+ { name: "Tracksuits", categories: ["All Tracksuits", "Tracksuits"] },
+ { name: "Underwears", categories: ["All Underwears", "Underwears"] },
+ { name: "Bags", categories: ["All Bags", "Bags"] },
+ { name: "Accessories & Jewellery", categories: [
+   "All Accessories & Jewellery", "Accessories & Jewellery"
+ ]},
+ { name: "Sportswear", categories: ["All Sportswear", "Sportswear"] },
+ { name: "Beauty", categories: ["All Beauty", "Beauty"] },
+ { name: "Fragrance", categories: ["All Fragrance", "Fragrance"] }
 ];
-
-  const formatPrice = value => new Intl.NumberFormat("en-GB", {
-    style: "currency",
-    currency: "GBP"
-  }).format(Number(value) || 0);
-
-  menuToggle?.addEventListener("click", (event) => {
-    event.stopPropagation();
-
-    const isOpening = menuPanel.hidden;
-    menuPanel.hidden = !isOpening;
-
-    menuToggle.setAttribute("aria-expanded", String(isOpening));
-    menuToggle.setAttribute(
-      "aria-label",
-      isOpening ? "Close shop menu" : "Open shop menu"
-    );
-
-    if (!isOpening) {
-      categoryFilters.hidden = true;
-      categoryFilters.querySelectorAll("details").forEach(group => {
-        group.open = false;
-      });
-    }
-  });
-
-  menuPanel?.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
-
-  document.addEventListener("click", (event) => {
-    if (
-      menuPanel &&
-      menuToggle &&
-      !menuPanel.hidden &&
-      !menuPanel.contains(event.target) &&
-      !menuToggle.contains(event.target)
-    ) {
-      menuPanel.hidden = true;
-      menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Open shop menu");
-      categoryFilters.hidden = true;
-
-      categoryFilters.querySelectorAll("details").forEach(group => {
-        group.open = false;
-      });
-    }
-  });
-
-  function renderCategoryFilters() {
-    if (!categoryFilters) return;
-    categoryFilters.replaceChildren();
-    categoryFilters.hidden = activeDepartment !== "women";
-    if (activeDepartment !== "women") return;
-
-    const allButton = document.createElement("button");
-    allButton.type = "button";
-    allButton.className = "shop-category-all";
-    allButton.textContent = "All Products";
-    allButton.classList.toggle("active", activeCategory === "all");
-    allButton.addEventListener("click", () => {
-      activeCategory = "all";
-      renderCategoryFilters();
-      renderProducts();
-    });
-    categoryFilters.appendChild(allButton);
-
-    categoryGroups.forEach(({ name, categories }) => {
-      const group = document.createElement("details");
-      group.className = "shop-category-group";
-
-      const heading = document.createElement("summary");
-      heading.textContent = name;
-      group.appendChild(heading);
-
-      const options = document.createElement("div");
-      options.className = "shop-category-options";
-
-      categories.forEach(category => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = "shop-category-button";
-        button.textContent = category;
-        button.classList.toggle("active", activeCategory === category);
-        button.addEventListener("click", () => {
-  window.location.href =
-    `frontend/pages/category.html?category=${encodeURIComponent(category)}`;
+ 
+ const formatPrice = value => new Intl.NumberFormat("en-GB", {
+   style: "currency",
+   currency: "GBP"
+ }).format(Number(value) || 0);
+ 
+ menuToggle?.addEventListener("click", (event) => {
+   event.stopPropagation();
+ 
+   const isOpening = menuPanel.hidden;
+   menuPanel.hidden = !isOpening;
+ 
+   menuToggle.setAttribute("aria-expanded", String(isOpening));
+   menuToggle.setAttribute(
+     "aria-label",
+     isOpening ? "Close shop menu" : "Open shop menu"
+   );
+ 
+   if (!isOpening) {
+     categoryFilters.hidden = true;
+     categoryFilters.querySelectorAll("details").forEach(group => {
+       group.open = false;
+     });
+   }
+ });
+ 
+ menuPanel?.addEventListener("click", (event) => {
+   event.stopPropagation();
+ });
+ 
+ document.addEventListener("click", (event) => {
+   if (
+     menuPanel &&
+     menuToggle &&
+     !menuPanel.hidden &&
+     !menuPanel.contains(event.target) &&
+     !menuToggle.contains(event.target)
+   ) {
+     menuPanel.hidden = true;
+     menuToggle.setAttribute("aria-expanded", "false");
+     menuToggle.setAttribute("aria-label", "Open shop menu");
+     categoryFilters.hidden = true;
+ 
+     categoryFilters.querySelectorAll("details").forEach(group => {
+       group.open = false;
+     });
+   }
+ });
+ 
+ function renderCategoryFilters() {
+   if (!categoryFilters) return;
+   categoryFilters.replaceChildren();
+   categoryFilters.hidden = activeDepartment !== "women";
+   if (activeDepartment !== "women") return;
+ 
+   const allButton = document.createElement("button");
+   allButton.type = "button";
+   allButton.className = "shop-category-all";
+   allButton.textContent = "All Products";
+   allButton.classList.toggle("active", activeCategory === "all");
+   allButton.addEventListener("click", () => {
+     activeCategory = "all";
+     renderCategoryFilters();
+     renderProducts();
+   });
+   categoryFilters.appendChild(allButton);
+ 
+   categoryGroups.forEach(({ name, categories }) => {
+     const group = document.createElement("details");
+     group.className = "shop-category-group";
+ 
+     const heading = document.createElement("summary");
+     heading.textContent = name;
+     group.appendChild(heading);
+ 
+     const options = document.createElement("div");
+     options.className = "shop-category-options";
+ 
+     categories.forEach(category => {
+       const button = document.createElement("button");
+       button.type = "button";
+       button.className = "shop-category-button";
+       button.textContent = category;
+       button.classList.toggle("active", activeCategory === category);
+       button.addEventListener("click", () => {
+ window.location.href =
+   `frontend/pages/category.html?category=${encodeURIComponent(category)}`;
 });
-        options.appendChild(button);
-      });
-
-      group.appendChild(options);
-      categoryFilters.appendChild(group);
-    });
-  }
-
-  departmentButtons.forEach(button => {
-    button.addEventListener("click", () => {
-      const department = button.dataset.department;
-
-      if (department !== "women") {
-        alert(department === "men" ? "Men — Coming Soon" : "Kids — Coming Soon");
-        return;
-      }
-
-      activeDepartment = "women";
-      activeCategory = "all";
-      departmentButtons.forEach(item => {
-        item.setAttribute("aria-pressed", String(item === button));
-      });
-      renderCategoryFilters();
-    });
-  });
-
-  function renderProducts() {
-  if (!productsGrid) return;
-  productsGrid.replaceChildren();
-
-  const query = (searchInput?.value || "").trim().toLowerCase();
-  const colourWords = [
-    "black", "white", "red", "blue", "green", "pink",
-    "beige", "brown", "grey", "gray", "cream", "navy",
-    "yellow", "orange", "purple"
-  ];
-
-  const words = query.split(/\s+/).filter(Boolean);
-  const colourTerms = words.filter(word => colourWords.includes(word));
-  const textTerms = words.filter(word => !colourWords.includes(word));
-
-  const filteredProducts = allProducts.filter(product => {
-    const category = (product.category || "").trim().toLowerCase();
-
-        const productName = (product.name || "").trim().toLowerCase();
+       options.appendChild(button);
+     });
+ 
+     group.appendChild(options);
+     categoryFilters.appendChild(group);
+   });
+ }
+ 
+ departmentButtons.forEach(button => {
+   button.addEventListener("click", () => {
+     const department = button.dataset.department;
+ 
+     if (department !== "women") {
+       alert(department === "men" ? "Men — Coming Soon" : "Kids — Coming Soon");
+       return;
+     }
+ 
+     activeDepartment = "women";
+     activeCategory = "all";
+     departmentButtons.forEach(item => {
+       item.setAttribute("aria-pressed", String(item === button));
+     });
+     renderCategoryFilters();
+   });
+ });
+ 
+ function renderProducts() {
+ if (!productsGrid) return;
+ productsGrid.replaceChildren();
+ 
+ const query = (searchInput?.value || "").trim().toLowerCase();
+ const colourWords = [
+   "black", "white", "red", "blue", "green", "pink",
+   "beige", "brown", "grey", "gray", "cream", "navy",
+   "yellow", "orange", "purple"
+ ];
+ 
+ const words = query.split(/\s+/).filter(Boolean);
+ const colourTerms = words.filter(word => colourWords.includes(word));
+ const textTerms = words.filter(word => !colourWords.includes(word));
+ 
+ const filteredProducts = allProducts.filter(product => {
+   const category = (product.category || "").trim().toLowerCase();
+ 
+       const productName = (product.name || "").trim().toLowerCase();
 const selected = activeCategory.trim().toLowerCase();
-
+ 
 const normalize = value => (value || "")
-  .toLowerCase()
-  .trim()
-  .replace(/&/g, "and")
-  .replace(/[^a-z0-9]+/g, " ")
-  .trim();
-
+ .toLowerCase()
+ .trim()
+ .replace(/&/g, "and")
+ .replace(/[^a-z0-9]+/g, " ")
+ .trim();
+ 
 const nameText = normalize(product.name);
 const categoryText = normalize(product.category);
 const selectedText = normalize(activeCategory);
-
+ 
 const categoryAliases = {
-  "new in": ["new in"],
-  "all new in": ["new in"],
-
-  "all dresses": ["dress", "dresses"],
-  "midi": ["midi dress", "midi dresses"],
-  "maxi": ["maxi dress", "maxi dresses"],
-  "mini": ["mini dress", "mini dresses"],
-  "wedding guest dresses": ["wedding guest dress", "wedding guest dresses"],
-  "party dresses": ["party dress", "party dresses"],
-  "short sleeve": ["short sleeve", "short sleeves"],
-  "long sleeve": ["long sleeve", "long sleeves"],
-  "linen dresses": ["linen dress", "linen dresses"],
-
-  "all tops and t shirts": ["top", "tops", "t shirt", "t shirts"],
-  "new in tops and t shirts": ["new in top", "new in tops"],
-  "blouses": ["blouse", "blouses"],
-  "body suit": ["body suit", "bodysuit", "bodysuits"],
-  "cardigan": ["cardigan", "cardigans"],
-  "jumper": ["jumper", "jumpers"],
-  "shirts": ["shirt", "shirts"],
-  "tops": ["top", "tops"],
-  "t shirts": ["t shirt", "t shirts", "tshirt", "tshirts"],
-  "vest tops": ["vest top", "vest tops"],
-  "sleeveless": ["sleeveless"],
-
-  "all jackets": [
-    "jacket", "jackets", "coat", "coats", "blazer", "blazers",
-    "parka", "parkas", "cape", "capes", "poncho", "ponchos"
-  ],
-  "biker jacket": ["biker jacket", "biker jackets"],
-  "racer jackets": ["racer jacket", "racer jackets"],
-  "bomber jackets": ["bomber jacket", "bomber jackets"],
-  "denim jackets": ["denim jacket", "denim jackets"],
-  "fleece jackets": ["fleece jacket", "fleece jackets"],
-  "long jackets": ["long jacket", "long jackets"],
-  "puffer jackets": ["puffer jacket", "puffer jackets"],
-  "faux fur coats": ["faux fur coat", "faux fur coats"],
-  "long coats": ["long coat", "long coats"],
-  "parkas": ["parka", "parkas"],
-  "capes": ["cape", "capes"],
-  "ponchos": ["poncho", "ponchos"],
-  "blazers": ["blazer", "blazers"],
-
-  "all knitwears": ["knitwear", "knitwears"],
-  "knitwears": ["knitwear", "knitwears"],
-  "all leggings": ["legging", "leggings"],
-  "leggings": ["legging", "leggings"],
-  "all shorts": ["shorts"],
-  "shorts": ["shorts"],
-  "all skirts": ["skirt", "skirts"],
-  "skirts": ["skirt", "skirts"],
-  "all trousers": ["trouser", "trousers"],
-  "trousers": ["trouser", "trousers"],
-
-  "all jeans": ["jean", "jeans"],
-  "boyfriend jeans": ["boyfriend jean", "boyfriend jeans"],
-  "cropped jeans": ["cropped jean", "cropped jeans"],
-  "flared jeans": ["flared jean", "flared jeans"],
-  "high waisted jeans": ["high waisted jean", "high waisted jeans"],
-  "ripped jeans": ["ripped jean", "ripped jeans"],
-  "skinny jeans": ["skinny jean", "skinny jeans"],
-  "straight jeans": ["straight jean", "straight jeans"],
-
-  "all nightwears": ["nightwear", "nightwears"],
-  "nightwears": ["nightwear", "nightwears"],
-  "all jumpsuits": ["jumpsuit", "jumpsuits"],
-  "jumpsuits": ["jumpsuit", "jumpsuits"],
-  "all playsuits": ["playsuit", "playsuits"],
-  "playsuits": ["playsuit", "playsuits"],
-  "all tracksuits": ["tracksuit", "tracksuits"],
-  "tracksuits": ["tracksuit", "tracksuits"],
-  "all underwears": ["underwear"],
-  "underwears": ["underwear"],
-
-  "all bags": ["bag", "bags"],
-  "bags": ["bag", "bags"],
-  "all accessories and jewellery": [
-    "accessory", "accessories", "jewellery", "jewelry"
-  ],
-  "accessories and jewellery": [
-    "accessory", "accessories", "jewellery", "jewelry"
-  ],
-  "all sportswear": ["sportswear"],
-  "sportswear": ["sportswear"],
-  "all beauty": ["beauty"],
-  "beauty": ["beauty"],
-  "all fragrance": ["fragrance", "perfume"],
-  "fragrance": ["fragrance", "perfume"]
+ "new in": ["new in"],
+ "all new in": ["new in"],
+ 
+ "all dresses": ["dress", "dresses"],
+ "midi": ["midi dress", "midi dresses"],
+ "maxi": ["maxi dress", "maxi dresses"],
+ "mini": ["mini dress", "mini dresses"],
+ "wedding guest dresses": ["wedding guest dress", "wedding guest dresses"],
+ "party dresses": ["party dress", "party dresses"],
+ "short sleeve": ["short sleeve", "short sleeves"],
+ "long sleeve": ["long sleeve", "long sleeves"],
+ "linen dresses": ["linen dress", "linen dresses"],
+ 
+ "all tops and t shirts": ["top", "tops", "t shirt", "t shirts"],
+ "new in tops and t shirts": ["new in top", "new in tops"],
+ "blouses": ["blouse", "blouses"],
+ "body suit": ["body suit", "bodysuit", "bodysuits"],
+ "cardigan": ["cardigan", "cardigans"],
+ "jumper": ["jumper", "jumpers"],
+ "shirts": ["shirt", "shirts"],
+ "tops": ["top", "tops"],
+ "t shirts": ["t shirt", "t shirts", "tshirt", "tshirts"],
+ "vest tops": ["vest top", "vest tops"],
+ "sleeveless": ["sleeveless"],
+ 
+ "all jackets": [
+   "jacket", "jackets", "coat", "coats", "blazer", "blazers",
+   "parka", "parkas", "cape", "capes", "poncho", "ponchos"
+ ],
+ "biker jacket": ["biker jacket", "biker jackets"],
+ "racer jackets": ["racer jacket", "racer jackets"],
+ "bomber jackets": ["bomber jacket", "bomber jackets"],
+ "denim jackets": ["denim jacket", "denim jackets"],
+ "fleece jackets": ["fleece jacket", "fleece jackets"],
+ "long jackets": ["long jacket", "long jackets"],
+ "puffer jackets": ["puffer jacket", "puffer jackets"],
+ "faux fur coats": ["faux fur coat", "faux fur coats"],
+ "long coats": ["long coat", "long coats"],
+ "parkas": ["parka", "parkas"],
+ "capes": ["cape", "capes"],
+ "ponchos": ["poncho", "ponchos"],
+ "blazers": ["blazer", "blazers"],
+ 
+ "all knitwears": ["knitwear", "knitwears"],
+ "knitwears": ["knitwear", "knitwears"],
+ "all leggings": ["legging", "leggings"],
+ "leggings": ["legging", "leggings"],
+ "all shorts": ["shorts"],
+ "shorts": ["shorts"],
+ "all skirts": ["skirt", "skirts"],
+ "skirts": ["skirt", "skirts"],
+ "all trousers": ["trouser", "trousers"],
+ "trousers": ["trouser", "trousers"],
+ 
+ "all jeans": ["jean", "jeans"],
+ "boyfriend jeans": ["boyfriend jean", "boyfriend jeans"],
+ "cropped jeans": ["cropped jean", "cropped jeans"],
+ "flared jeans": ["flared jean", "flared jeans"],
+ "high waisted jeans": ["high waisted jean", "high waisted jeans"],
+ "ripped jeans": ["ripped jean", "ripped jeans"],
+ "skinny jeans": ["skinny jean", "skinny jeans"],
+ "straight jeans": ["straight jean", "straight jeans"],
+ 
+ "all nightwears": ["nightwear", "nightwears"],
+ "nightwears": ["nightwear", "nightwears"],
+ "all jumpsuits": ["jumpsuit", "jumpsuits"],
+ "jumpsuits": ["jumpsuit", "jumpsuits"],
+ "all playsuits": ["playsuit", "playsuits"],
+ "playsuits": ["playsuit", "playsuits"],
+ "all tracksuits": ["tracksuit", "tracksuits"],
+ "tracksuits": ["tracksuit", "tracksuits"],
+ "all underwears": ["underwear"],
+ "underwears": ["underwear"],
+ 
+ "all bags": ["bag", "bags"],
+ "bags": ["bag", "bags"],
+ "all accessories and jewellery": [
+   "accessory", "accessories", "jewellery", "jewelry"
+ ],
+ "accessories and jewellery": [
+   "accessory", "accessories", "jewellery", "jewelry"
+ ],
+ "all sportswear": ["sportswear"],
+ "sportswear": ["sportswear"],
+ "all beauty": ["beauty"],
+ "beauty": ["beauty"],
+ "all fragrance": ["fragrance", "perfume"],
+ "fragrance": ["fragrance", "perfume"]
 };
-
+ 
 const allCategoryGroups = {
-  "all dresses": ["dresses"],
-  "all tops and t shirts": ["tops", "t shirts", "tops and t shirts"],
-  "all jackets": ["jackets", "jackets and coats"],
-  "all knitwears": ["knitwears", "knitwear"],
-  "all leggings": ["leggings"],
-  "all shorts": ["shorts"],
-  "all skirts": ["skirts"],
-  "all trousers": ["trousers"],
-  "all jeans": ["jeans"],
-  "all nightwears": ["nightwears", "nightwear"],
-  "all jumpsuits": ["jumpsuits"],
-  "all playsuits": ["playsuits"],
-  "all tracksuits": ["tracksuits"],
-  "all underwears": ["underwears", "underwear"],
-  "all bags": ["bags"],
-  "all accessories and jewellery": ["accessories and jewellery"],
-  "all sportswear": ["sportswear"],
-  "all beauty": ["beauty"],
-  "all fragrance": ["fragrance"]
+ "all dresses": ["dresses"],
+ "all tops and t shirts": ["tops", "t shirts", "tops and t shirts"],
+ "all jackets": ["jackets", "jackets and coats"],
+ "all knitwears": ["knitwears", "knitwear"],
+ "all leggings": ["leggings"],
+ "all shorts": ["shorts"],
+ "all skirts": ["skirts"],
+ "all trousers": ["trousers"],
+ "all jeans": ["jeans"],
+ "all nightwears": ["nightwears", "nightwear"],
+ "all jumpsuits": ["jumpsuits"],
+ "all playsuits": ["playsuits"],
+ "all tracksuits": ["tracksuits"],
+ "all underwears": ["underwears", "underwear"],
+ "all bags": ["bags"],
+ "all accessories and jewellery": ["accessories and jewellery"],
+ "all sportswear": ["sportswear"],
+ "all beauty": ["beauty"],
+ "all fragrance": ["fragrance"]
 };
-
+ 
 const matchesCategory = (() => {
-  if (selected === "all") return true;
-
-  const selectedAliases = categoryAliases[selectedText] || [
-    selectedText
-  ];
-
-  if (selectedText.startsWith("all ")) {
-    const groupAliases = allCategoryGroups[selectedText] || [
-      selectedText.replace(/^all /, "")
-    ];
-
-    return groupAliases.some(group =>
-      categoryText.includes(normalize(group))
-    ) || selectedAliases.some(term =>
-      nameText.includes(normalize(term)) ||
-      categoryText.includes(normalize(term))
-    );
-  }
-
-  return selectedAliases.some(term =>
-    nameText.includes(normalize(term)) ||
-    categoryText.includes(normalize(term))
-  );
+ if (selected === "all") return true;
+ 
+ const selectedAliases = categoryAliases[selectedText] || [
+   selectedText
+ ];
+ 
+ if (selectedText.startsWith("all ")) {
+   const groupAliases = allCategoryGroups[selectedText] || [
+     selectedText.replace(/^all /, "")
+   ];
+ 
+   return groupAliases.some(group =>
+     categoryText.includes(normalize(group))
+   ) || selectedAliases.some(term =>
+     nameText.includes(normalize(term)) ||
+     categoryText.includes(normalize(term))
+   );
+ }
+ 
+ return selectedAliases.some(term =>
+   nameText.includes(normalize(term)) ||
+   categoryText.includes(normalize(term))
+ );
 })();
-
-    const productText =
-      `${product.name || ""} ${product.category || ""}`.toLowerCase();
-
-    const matchesText = textTerms.every(term => productText.includes(term));
-
-    const productColours = productColorsById?.[product.id] || [];
-    const matchesColour = colourTerms.every(term =>
-      productColours.some(colour => colour.toLowerCase().includes(term))
-    );
-
-    return matchesCategory && matchesText && matchesColour;
-  });
-
-  if (filteredProducts.length === 0) {
-    const message = document.createElement("p");
-    message.className = "shop-empty-message";
-    message.textContent = "No matching products found.";
-    productsGrid.appendChild(message);
-    return;
-  }
-
-  filteredProducts.forEach(product => {
-    const card = document.createElement("article");
-    card.className = "product-card";
-    card.style.cursor = "pointer";
-
-    if (product.image_url) {
-      const image = document.createElement("img");
-      image.alt = product.name || "Fashion product";
-      image.loading = "lazy";
-      image.src = product.image_url;
-      card.appendChild(image);
-    }
-
-    const name = document.createElement("h3");
-    name.textContent = product.name || "Untitled product";
-    card.appendChild(name);
-
-    const prices = document.createElement("div");
-    prices.className = "product-prices";
-    const currentPrice = Number(product.price) || 0;
-    const compareAtPrice = Number(product.compare_at_price);
-
-    if (
-      product.compare_at_price !== null &&
-      product.compare_at_price !== "" &&
-      Number.isFinite(compareAtPrice) &&
-      compareAtPrice > currentPrice
-    ) {
-      const oldPrice = document.createElement("span");
-      oldPrice.className = "product-price-old";
-      oldPrice.textContent = formatPrice(compareAtPrice);
-      oldPrice.setAttribute("aria-label", "Old price");
-      prices.appendChild(oldPrice);
-    }
-
-    const currentPriceElement = document.createElement("span");
-    currentPriceElement.className = "product-price-current";
-    currentPriceElement.textContent = formatPrice(currentPrice);
-    currentPriceElement.setAttribute("aria-label", "Now price");
-    prices.appendChild(currentPriceElement);
-    card.appendChild(prices);
-
-    card.addEventListener("click", event => {
-      if (event.target.closest("select, label, button, summary")) return;
-      window.location.href =
-        `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
-    });
-
-    productsGrid.appendChild(card);
-  });
+ 
+   const productText =
+     `${product.name || ""} ${product.category || ""}`.toLowerCase();
+ 
+   const matchesText = textTerms.every(term => productText.includes(term));
+ 
+   const productColours = productColorsById?.[product.id] || [];
+   const matchesColour = colourTerms.every(term =>
+     productColours.some(colour => colour.toLowerCase().includes(term))
+   );
+ 
+   return matchesCategory && matchesText && matchesColour;
+ });
+ 
+ if (filteredProducts.length === 0) {
+   const message = document.createElement("p");
+   message.className = "shop-empty-message";
+   message.textContent = "No matching products found.";
+   productsGrid.appendChild(message);
+   return;
+ }
+ 
+ filteredProducts.forEach(product => {
+   const card = document.createElement("article");
+   card.className = "product-card";
+   card.style.cursor = "pointer";
+ 
+   if (product.image_url) {
+     const image = document.createElement("img");
+     image.alt = product.name || "Fashion product";
+     image.loading = "lazy";
+     image.src = product.image_url;
+     card.appendChild(image);
+   }
+ 
+   const name = document.createElement("h3");
+   name.textContent = product.name || "Untitled product";
+   card.appendChild(name);
+ 
+   const prices = document.createElement("div");
+   prices.className = "product-prices";
+   const currentPrice = Number(product.price) || 0;
+   const compareAtPrice = Number(product.compare_at_price);
+ 
+   if (
+     product.compare_at_price !== null &&
+     product.compare_at_price !== "" &&
+     Number.isFinite(compareAtPrice) &&
+     compareAtPrice > currentPrice
+   ) {
+     const oldPrice = document.createElement("span");
+     oldPrice.className = "product-price-old";
+     oldPrice.textContent = formatPrice(compareAtPrice);
+     oldPrice.setAttribute("aria-label", "Old price");
+     prices.appendChild(oldPrice);
+   }
+ 
+   const currentPriceElement = document.createElement("span");
+   currentPriceElement.className = "product-price-current";
+   currentPriceElement.textContent = formatPrice(currentPrice);
+   currentPriceElement.setAttribute("aria-label", "Now price");
+   prices.appendChild(currentPriceElement);
+   card.appendChild(prices);
+ 
+   card.addEventListener("click", event => {
+     if (event.target.closest("select, label, button, summary")) return;
+     window.location.href =
+       `frontend/pages/product.html?id=${encodeURIComponent(product.id)}`;
+   });
+ 
+   productsGrid.appendChild(card);
+ });
 }
-
-  async function loadStoreProducts() {
-    if (!productsGrid) return;
-    const { data: products, error } = await supabase
-      .from("products")
-      .select("id, name, price, compare_at_price, category, image_url, is_active")
-      .eq("is_active", true)
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Products error:", error);
-      productsGrid.textContent = "Products could not be loaded.";
-      return;
-    }
-
-    allProducts = products || [];
-
+ 
+ async function loadStoreProducts() {
+   if (!productsGrid) return;
+   const { data: products, error } = await supabase
+     .from("products")
+     .select("id, name, price, compare_at_price, category, image_url, is_active")
+     .eq("is_active", true)
+     .order("created_at", { ascending: false });
+ 
+   if (error) {
+     console.error("Products error:", error);
+     productsGrid.textContent = "Products could not be loaded.";
+     return;
+   }
+ 
+   allProducts = products || [];
+ 
 const { data: variants, error: variantsError } = await supabase
-  .from("product_variants")
-  .select("product_id, color_name");
-
+ .from("product_variants")
+ .select("product_id, color_name");
+ 
 if (variantsError) {
-  console.error("Product colours error:", variantsError);
+ console.error("Product colours error:", variantsError);
 } else {
-  productColorsById = {};
-
-  (variants || []).forEach(variant => {
-    if (!productColorsById[variant.product_id]) {
-      productColorsById[variant.product_id] = [];
-    }
-
-    if (variant.color_name) {
-      productColorsById[variant.product_id].push(variant.color_name);
-    }
-  });
+ productColorsById = {};
+ 
+ (variants || []).forEach(variant => {
+   if (!productColorsById[variant.product_id]) {
+     productColorsById[variant.product_id] = [];
+   }
+ 
+   if (variant.color_name) {
+     productColorsById[variant.product_id].push(variant.color_name);
+   }
+ });
 }
-
+ 
 renderProducts();
-  }
+ }
 searchToggle?.addEventListener("click", (event) => {
-  event.stopPropagation();
-
-  const isOpening = searchInput.hidden;
-  searchInput.hidden = !isOpening;
-  searchToggle.setAttribute("aria-expanded", String(isOpening));
-
-  if (isOpening) searchInput.focus();
+ event.stopPropagation();
+ 
+ const isOpening = searchInput.hidden;
+ searchInput.hidden = !isOpening;
+ searchToggle.setAttribute("aria-expanded", String(isOpening));
+ 
+ if (isOpening) searchInput.focus();
 });
-
+ 
 searchInput?.addEventListener("click", (event) => {
-  event.stopPropagation();
+ event.stopPropagation();
 });
-
+ 
 document.addEventListener("click", (event) => {
-  const searchBox = document.querySelector(".header-search");
-
-  if (searchBox && !searchBox.contains(event.target)) {
-    searchInput.hidden = true;
-    searchToggle.setAttribute("aria-expanded", "false");
-  }
+ const searchBox = document.querySelector(".header-search");
+ 
+ if (searchBox && !searchBox.contains(event.target)) {
+   searchInput.hidden = true;
+   searchToggle.setAttribute("aria-expanded", "false");
+ }
 });
-
+ 
 searchInput?.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-
-    const query = searchInput.value.trim();
-    if (!query) return;
-
-    window.location.href =
-      `frontend/pages/search.html?q=${encodeURIComponent(query)}`;
-  }
+ if (event.key === "Enter") {
+   event.preventDefault();
+ 
+   const query = searchInput.value.trim();
+   if (!query) return;
+ 
+   window.location.href =
+     `frontend/pages/search.html?q=${encodeURIComponent(query)}`;
+ }
 });
-  loadStoreProducts();
-
-  
+ loadStoreProducts();
+ 
+ 
 const accountIcon = document.getElementById("account-icon");
 const signInSignUpButton = document.getElementById("signin-signup-button");
-
+ 
 let dropdown = document.getElementById("account-dropdown");
-
+ 
 if (!dropdown && accountIcon?.parentElement) {
-  dropdown = document.createElement("div");
-  dropdown.id = "account-dropdown";
-
-  Object.assign(dropdown.style, {
-    display: "none",
-    position: "absolute",
-    right: "0",
-    top: "100%",
-    minWidth: "180px",
-    background: "#ffffff",
-    color: "#211e19",
-    zIndex: "1000",
-    boxShadow: "0 4px 12px #0002",
-    border: "1px solid #dedede",
-    font: "inherit"
-  });
-
-  dropdown.innerHTML = `
-    <a href="frontend/pages/profile.html"
-       style="display:block;padding:13px 16px;color:#211e19;text-decoration:none;border-bottom:1px solid #eeeeee;">
-       Profile
-    </a>
-    <a href="#"
-       id="account-orders-link"
-       style="display:block;padding:13px 16px;color:#211e19;text-decoration:none;border-bottom:1px solid #eeeeee;">
-       Orders
-    </a>
-    <button type="button"
-       id="account-signout-button"
-       style="display:block;width:100%;text-align:left;padding:13px 16px;background:#ffffff;color:#211e19;border:0;cursor:pointer;font:inherit;">
-       Sign out
-    </button>
-  `;
-
-  accountIcon.parentElement.style.position = "relative";
-  accountIcon.parentElement.appendChild(dropdown);
+ dropdown = document.createElement("div");
+ dropdown.id = "account-dropdown";
+ 
+ Object.assign(dropdown.style, {
+   display: "none",
+   position: "absolute",
+   right: "0",
+   top: "100%",
+   minWidth: "180px",
+   background: "#ffffff",
+   color: "#211e19",
+   zIndex: "1000",
+   boxShadow: "0 4px 12px #0002",
+   border: "1px solid #dedede",
+   font: "inherit"
+ });
+ 
+ dropdown.innerHTML = `
+   <a href="frontend/pages/profile.html"
+      style="display:block;padding:13px 16px;color:#211e19;text-decoration:none;border-bottom:1px solid #eeeeee;">
+      Profile
+   </a>
+   <a href="#"
+      id="account-orders-link"
+      style="display:block;padding:13px 16px;color:#211e19;text-decoration:none;border-bottom:1px solid #eeeeee;">
+      Orders
+   </a>
+   <button type="button"
+      id="account-signout-button"
+      style="display:block;width:100%;text-align:left;padding:13px 16px;background:#ffffff;color:#211e19;border:0;cursor:pointer;font:inherit;">
+      Sign out
+   </button>
+ `;
+ 
+ accountIcon.parentElement.style.position = "relative";
+ accountIcon.parentElement.appendChild(dropdown);
 }
-
+ 
 function updateAccountUI(session) {
-  const signedIn = Boolean(session);
-
-  if (accountIcon) {
-    accountIcon.href = signedIn ? "#" : "frontend/pages/signin.html";
-    accountIcon.setAttribute(
-      "aria-label",
-      signedIn ? "Account menu" : "Sign in or create an account"
-    );
-  }
-
-  if (signInSignUpButton) {
-    signInSignUpButton.textContent = signedIn
-      ? "Sign out"
-      : "Sign in / Sign up";
-
-    signInSignUpButton.href = signedIn
-      ? "#home"
-      : "frontend/pages/signin.html";
-  }
-
-  if (!signedIn && dropdown) {
-    dropdown.style.display = "none";
-  }
+ const signedIn = Boolean(session);
+ 
+ if (accountIcon) {
+   accountIcon.href = signedIn ? "#" : "frontend/pages/signin.html";
+   accountIcon.setAttribute(
+     "aria-label",
+     signedIn ? "Account menu" : "Sign in or create an account"
+   );
+ }
+ 
+ if (signInSignUpButton) {
+   signInSignUpButton.textContent = signedIn
+     ? "Sign out"
+     : "Sign in / Sign up";
+ 
+   signInSignUpButton.href = signedIn
+     ? "#home"
+     : "frontend/pages/signin.html";
+ }
+ 
+ if (!signedIn && dropdown) {
+   dropdown.style.display = "none";
+ }
 }
-
+ 
 const { data: { session } } = await supabase.auth.getSession();
 updateAccountUI(session);
-
+ 
 accountIcon?.addEventListener("click", async event => {
-  const { data: { session: currentSession } } =
-    await supabase.auth.getSession();
-
-  if (!currentSession) return;
-
-  event.preventDefault();
-
-  if (dropdown) {
-    dropdown.style.display =
-      dropdown.style.display === "none" ? "block" : "none";
-  }
+ const { data: { session: currentSession } } =
+   await supabase.auth.getSession();
+ 
+ if (!currentSession) return;
+ 
+ event.preventDefault();
+ 
+ if (dropdown) {
+   dropdown.style.display =
+     dropdown.style.display === "none" ? "block" : "none";
+ }
 });
-
+ 
 async function signOutAndStayHome(event) {
-  event.preventDefault();
-
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  if (dropdown) dropdown.style.display = "none";
-
-  updateAccountUI(null);
-  window.location.hash = "home";
+ event.preventDefault();
+ 
+ const { error } = await supabase.auth.signOut();
+ 
+ if (error) {
+   alert(error.message);
+   return;
+ }
+ 
+ if (dropdown) dropdown.style.display = "none";
+ 
+ updateAccountUI(null);
+ window.location.hash = "home";
 }
-
+ 
 document
-  .getElementById("account-signout-button")
-  ?.addEventListener("click", signOutAndStayHome);
-
+ .getElementById("account-signout-button")
+ ?.addEventListener("click", signOutAndStayHome);
+ 
 document
-  .getElementById("account-orders-link")
-  ?.addEventListener("click", event => {
-    event.preventDefault();
-    alert("Orders will be available in a later stage.");
-  });
-
+ .getElementById("account-orders-link")
+ ?.addEventListener("click", event => {
+   event.preventDefault();
+   alert("Orders will be available in a later stage.");
+ });
+ 
 signInSignUpButton?.addEventListener("click", async event => {
-  const { data: { session: currentSession } } =
-    await supabase.auth.getSession();
-
-  if (!currentSession) return;
-
-  await signOutAndStayHome(event);
+ const { data: { session: currentSession } } =
+   await supabase.auth.getSession();
+ 
+ if (!currentSession) return;
+ 
+ await signOutAndStayHome(event);
 });
-
+ 
 supabase.auth.onAuthStateChange((_event, session) => {
-  updateAccountUI(session);
+ updateAccountUI(session);
 });
-
-  
+ 
+ 
 document.addEventListener("click", event => {
-  if (
-    dropdown &&
-    dropdown.style.display !== "none" &&
-    !dropdown.contains(event.target) &&
-    !accountIcon.contains(event.target)
-  ) {
-    dropdown.style.display = "none";
-  }
+ if (
+   dropdown &&
+   dropdown.style.display !== "none" &&
+   !dropdown.contains(event.target) &&
+   !accountIcon.contains(event.target)
+ ) {
+   dropdown.style.display = "none";
+ }
 });
-
+ 
 dropdown?.querySelector('a[href="frontend/pages/profile.html"]')
-  ?.addEventListener("click", () => {
-    dropdown.style.display = "none";
-  });
-
-
-
+ ?.addEventListener("click", () => {
+   dropdown.style.display = "none";
+ });
+ 
+ 
+ 
 function updateCartCount() {
-  try {
-    const cart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
-    const count = Array.isArray(cart)
-      ? cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
-      : 0;
-
-    document.querySelectorAll(".cart-count").forEach(element => {
-      element.textContent = count;
-    });
-  } catch {
-    document.querySelectorAll(".cart-count").forEach(element => {
-      element.textContent = "0";
-    });
-  }
+ try {
+   const cart = JSON.parse(localStorage.getItem("popTheLookCart") || "[]");
+   const count = Array.isArray(cart)
+     ? cart.reduce((sum, item) => sum + (Number(item.quantity) || 0), 0)
+     : 0;
+ 
+   document.querySelectorAll(".cart-count").forEach(element => {
+     element.textContent = count;
+   });
+ } catch {
+   document.querySelectorAll(".cart-count").forEach(element => {
+     element.textContent = "0";
+   });
+ }
 }
-
+ 
 updateCartCount();
 window.addEventListener("storage", updateCartCount);
-
-  /* Newsletter popup: 5 saniye sonra, tarayıcı başına bir kez gösterilir.
-     Abonelik henüz kaydedilmez; backend aşamasında bağlanacak. */
-  const newsletterOverlay = document.getElementById("newsletter-popup-overlay");
-  const newsletterForm = document.getElementById("newsletter-popup-form");
-  const newsletterEmail = document.getElementById("newsletter-popup-email");
-  const newsletterEmailConsent = document.getElementById("newsletter-popup-email-consent");
-  const newsletterWhatsapp = document.getElementById("newsletter-popup-whatsapp");
-  const newsletterWhatsappConsent = document.getElementById("newsletter-popup-whatsapp-consent");
-  const newsletterNote = document.getElementById("newsletter-popup-note");
-  const newsletterPopupKey = "popTheLookNewsletterPopupDismissed";
-
-  function closeNewsletterPopup() {
-    newsletterOverlay.hidden = true;
-    document.body.classList.remove("newsletter-popup-open");
-    try { localStorage.setItem(newsletterPopupKey, "yes"); } catch {}
-  }
-
-  function openNewsletterPopup() {
-    newsletterOverlay.hidden = false;
-    document.body.classList.add("newsletter-popup-open");
-    document.getElementById("newsletter-popup-close")?.focus();
-  }
-
-  document
-  .getElementById("footer-subscribe-button")
-  ?.addEventListener("click", openNewsletterPopup);
-
-  let popupWasDismissed = false;
-  try { popupWasDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
-  if (!popupWasDismissed) {
-    window.setTimeout(() => {
-      let alreadyDismissed = false;
-      try { alreadyDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
-      if (!alreadyDismissed) openNewsletterPopup();
-    }, 5000);
-  }
-
-  document.getElementById("newsletter-popup-close")?.addEventListener("click", closeNewsletterPopup);
-  document.getElementById("newsletter-popup-no-thanks")?.addEventListener("click", closeNewsletterPopup);
-  newsletterOverlay?.addEventListener("click", event => {
-    if (event.target === newsletterOverlay) closeNewsletterPopup();
-  });
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape" && newsletterOverlay && !newsletterOverlay.hidden) closeNewsletterPopup();
-  });
-
-  newsletterForm?.addEventListener("submit", event => {
-    event.preventDefault();
-    const email = newsletterEmail.value.trim();
-    const whatsapp = newsletterWhatsapp.value.trim();
-    const emailChosen = newsletterEmailConsent.checked && Boolean(email);
-    const whatsappChosen = newsletterWhatsappConsent.checked && Boolean(whatsapp);
-
-    if (!emailChosen && !whatsappChosen) {
-      newsletterNote.textContent = "Enter an email and tick email consent, or enter a WhatsApp number and tick WhatsApp consent. You can choose either or both.";
-      return;
-    }
-    if (newsletterEmailConsent.checked && !email) {
-      newsletterNote.textContent = "Please enter your email address for email updates.";
-      newsletterEmail.focus();
-      return;
-    }
-    if (newsletterWhatsappConsent.checked && !whatsapp) {
-      newsletterNote.textContent = "Please enter your WhatsApp number for WhatsApp updates.";
-      newsletterWhatsapp.focus();
-      return;
-    }
-    newsletterNote.textContent = "Thanks! This sign-up preview is not connected yet, so your details have not been saved. We'll connect subscriptions and messaging during the backend stage.";
-  });
-  
+ 
+ /* Newsletter popup: 5 saniye sonra, tarayıcı başına bir kez gösterilir.
+    Abonelik henüz kaydedilmez; backend aşamasında bağlanacak. */
+ const newsletterOverlay = document.getElementById("newsletter-popup-overlay");
+ const newsletterForm = document.getElementById("newsletter-popup-form");
+ const newsletterEmail = document.getElementById("newsletter-popup-email");
+ const newsletterEmailConsent = document.getElementById("newsletter-popup-email-consent");
+ const newsletterWhatsapp = document.getElementById("newsletter-popup-whatsapp");
+ const newsletterWhatsappConsent = document.getElementById("newsletter-popup-whatsapp-consent");
+ const newsletterNote = document.getElementById("newsletter-popup-note");
+ const newsletterPopupKey = "popTheLookNewsletterPopupDismissed";
+ 
+ function closeNewsletterPopup() {
+   newsletterOverlay.hidden = true;
+   document.body.classList.remove("newsletter-popup-open");
+   try { localStorage.setItem(newsletterPopupKey, "yes"); } catch {}
+ }
+ 
+ function openNewsletterPopup() {
+   newsletterOverlay.hidden = false;
+   document.body.classList.add("newsletter-popup-open");
+   document.getElementById("newsletter-popup-close")?.focus();
+ }
+ 
+ document
+ .getElementById("footer-subscribe-button")
+ ?.addEventListener("click", openNewsletterPopup);
+ 
+ let popupWasDismissed = false;
+ try { popupWasDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
+ if (!popupWasDismissed) {
+   window.setTimeout(() => {
+     let alreadyDismissed = false;
+     try { alreadyDismissed = localStorage.getItem(newsletterPopupKey) === "yes"; } catch {}
+     if (!alreadyDismissed) openNewsletterPopup();
+   }, 5000);
+ }
+ 
+ document.getElementById("newsletter-popup-close")?.addEventListener("click", closeNewsletterPopup);
+ document.getElementById("newsletter-popup-no-thanks")?.addEventListener("click", closeNewsletterPopup);
+ newsletterOverlay?.addEventListener("click", event => {
+   if (event.target === newsletterOverlay) closeNewsletterPopup();
+ });
+ document.addEventListener("keydown", event => {
+   if (event.key === "Escape" && newsletterOverlay && !newsletterOverlay.hidden) closeNewsletterPopup();
+ });
+ 
+ newsletterForm?.addEventListener("submit", event => {
+   event.preventDefault();
+   const email = newsletterEmail.value.trim();
+   const whatsapp = newsletterWhatsapp.value.trim();
+   const emailChosen = newsletterEmailConsent.checked && Boolean(email);
+   const whatsappChosen = newsletterWhatsappConsent.checked && Boolean(whatsapp);
+ 
+   if (!emailChosen && !whatsappChosen) {
+     newsletterNote.textContent = "Enter an email and tick email consent, or enter a WhatsApp number and tick WhatsApp consent. You can choose either or both.";
+     return;
+   }
+   if (newsletterEmailConsent.checked && !email) {
+     newsletterNote.textContent = "Please enter your email address for email updates.";
+     newsletterEmail.focus();
+     return;
+   }
+   if (newsletterWhatsappConsent.checked && !whatsapp) {
+     newsletterNote.textContent = "Please enter your WhatsApp number for WhatsApp updates.";
+     newsletterWhatsapp.focus();
+     return;
+   }
+   newsletterNote.textContent = "Thanks! This sign-up preview is not connected yet, so your details have not been saved. We'll connect subscriptions and messaging during the backend stage.";
+ });
+ 
 </script>
 </body>
 </html>
