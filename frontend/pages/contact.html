@@ -177,62 +177,70 @@
       }
     }
 
-    async function loadContactDetails() {
-      const loading = document.getElementById("loading-message");
-      const error = document.getElementById("error-message");
+    
+async function loadContactDetails() {
+  const loading = document.getElementById("loading-message");
+  const error = document.getElementById("error-message");
 
-      try {
-        if (!window.supabaseClient && typeof supabaseClient === "undefined") {
-          throw new Error("Supabase client was not initialized.");
-        }
+  try {
+    const client = window.supabaseClient;
 
-        const { data, error: queryError } = await supabaseClient
-          .from("store_contact_settings")
-          .select("phone, email, hours, office_address, return_address, return_instructions")
-          .eq("id", 1)
-          .maybeSingle();
-
-        if (queryError) throw queryError;
-        if (!data) throw new Error("Contact settings were not found.");
-
-        showTextRow("phone-row", "phone-value", data.phone);
-        const phone = (data.phone || "").trim();
-        if (phone) {
-          const phoneLink = document.getElementById("phone-value");
-          phoneLink.href = "tel:" + phone.replace(/[^\d+]/g, "");
-        }
-
-        showTextRow("email-row", "email-value", data.email);
-        const email = (data.email || "").trim();
-        if (email) {
-          document.getElementById("email-value").href = "mailto:" + email;
-        }
-
-        showTextRow("hours-row", "hours-value", data.hours);
-
-        const officeAddress = (data.office_address || "").trim();
-        document.getElementById("office-value").textContent = officeAddress || "Not provided";
-
-        const returnAddress = (data.return_address || "").trim();
-        if (returnAddress) {
-          document.getElementById("return-address-value").textContent = returnAddress;
-          document.getElementById("return-address-row").hidden = false;
-        }
-
-        document.getElementById("return-instructions-value").textContent =
-          (data.return_instructions || "").trim();
-
-        document.getElementById("contact-details").hidden = false;
-        loading.hidden = true;
-      } catch (err) {
-        console.error("Could not load contact settings:", err);
-        loading.hidden = true;
-        error.textContent = "Error: " + (err.message || String(err));
-error.style.display = "block";
-      }
+    if (!client) {
+      throw new Error("Supabase client was not initialized.");
     }
 
-    loadContactDetails();
+    const { data, error: queryError } = await client
+      .from("store_contact_settings")
+      .select("phone, email, hours, office_address, return_address, return_instructions")
+      .eq("id", 1)
+      .maybeSingle();
+
+    if (queryError) throw queryError;
+    if (!data) throw new Error("Contact settings were not found.");
+
+    showTextRow("phone-row", "phone-value", data.phone);
+
+    const phone = (data.phone || "").trim();
+    if (phone) {
+      const phoneLink = document.getElementById("phone-value");
+      phoneLink.href = "tel:" + phone.replace(/[^\d+]/g, "");
+    }
+
+    showTextRow("email-row", "email-value", data.email);
+
+    const email = (data.email || "").trim();
+    if (email) {
+      document.getElementById("email-value").href = "mailto:" + email;
+    }
+
+    showTextRow("hours-row", "hours-value", data.hours);
+
+    const officeAddress = (data.office_address || "").trim();
+    document.getElementById("office-value").textContent =
+      officeAddress || "Not provided";
+
+    const returnAddress = (data.return_address || "").trim();
+    if (returnAddress) {
+      document.getElementById("return-address-value").textContent = returnAddress;
+      document.getElementById("return-address-row").hidden = false;
+    }
+
+    document.getElementById("return-instructions-value").textContent =
+      (data.return_instructions || "").trim();
+
+    document.getElementById("contact-details").hidden = false;
+    loading.hidden = true;
+
+  } catch (err) {
+    console.error("Could not load contact settings:", err);
+    loading.hidden = true;
+    error.textContent = "Error: " + (err.message || String(err));
+    error.style.display = "block";
+  }
+}
+
+loadContactDetails();
+
   </script>
 </body>
 </html>
