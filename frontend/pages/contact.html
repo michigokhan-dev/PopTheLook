@@ -227,7 +227,8 @@
       } catch (err) {
         console.error("Could not load contact settings:", err);
         loading.hidden = true;
-        error.style.display = "block";
+        error.textContent = "Error: " + (err.message || String(err));
+error.style.display = "block";
       }
     }
 
