@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contacts Settings | POP THE LOOK</title>
+<style>
+*{box-sizing:border-box}:root{--ink:#211e19;--line:#dedede;--muted:#696969}
+body{margin:0;font-family:Arial,sans-serif;background:#fff;color:var(--ink)}
+header{padding:18px 5%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font:normal 23px Georgia,serif;letter-spacing:1.5px}header a{color:#fff}
+main{max-width:900px;margin:28px auto;padding:0 16px}.panel{border:1px solid var(--line);padding:22px;margin:18px 0}
+h2{font:normal 27px Georgia,serif;margin-top:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.full{grid-column:1/-1}
+label{display:block;font-size:13px;margin-bottom:6px}input,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:2px;font:inherit;background:#fff;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}button{padding:12px 17px;background:var(--ink);color:#fff;border:1px solid var(--ink);font:inherit;cursor:pointer}
+.secondary{background:#fff;color:var(--ink)}#message{font-size:14px;line-height:1.5;overflow-wrap:anywhere}.hint{font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.panel{padding:15px}header h1{font-size:19px}}
+</style></head><body>
+<header><h1>POP THE LOOK</h1><strong>CONTACTS SETTINGS</strong><a href="./index.html">Back to Admin</a></header>
+<main><section class="panel"><h2>Contact &amp; Returns Details</h2>
+<p class="hint">Update the information customers see on the public Contact page. Leave a field blank if it is not final yet.</p>
+<form id="contacts-form"><div class="grid">
+<div><label for="phone">Customer Service Phone</label><input id="phone" name="phone" type="tel" maxlength="80"></div>
+<div><label for="email">Customer Service Email</label><input id="email" name="email" type="email" maxlength="200"></div>
+<div class="full"><label for="hours">Working Hours</label><input id="hours" name="hours" maxlength="300" placeholder="e.g. Monday–Friday, 9am–5pm"></div>
+<div class="full"><label for="office_address">Office Address</label><textarea id="office_address" name="office_address" maxlength="1000"></textarea></div>
+<div class="full"><label for="return_address">Returns Address</label><textarea id="return_address" name="return_address" maxlength="1000"></textarea></div>
+<div class="full"><label for="return_instructions">Return Instructions</label><textarea id="return_instructions" name="return_instructions" maxlength="3000"></textarea></div>
+</div><p id="message" role="status" aria-live="polite">Checking admin access…</p>
+<button id="save-button" type="submit" disabled>Save Contact Details</button>
+</form></section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="../frontend/scripts/supabase.js"></script>
+<script>
+(()=>{"use strict";
+const form=document.getElementById("contacts-form"),message=document.getElementById("message"),saveButton=document.getElementById("save-button");
+const fields=["phone","email","hours","office_address","return_address","return_instructions"];
+function setMessage(text){message.textContent=text}
+async function init(){try{
+if(typeof supabaseClient==="undefined"||!supabaseClient)throw new Error("Supabase client was not found.");
+const {data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();if(sessionError)throw sessionError;
+if(!sessionData.session){window.location.replace("./signin.html");return}
+const user=sessionData.session.user;
+const {data:adminRecord,error:adminError}=await supabaseClient.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
+if(adminError)throw adminError;if(!adminRecord){setMessage("Access denied. Admin account required.");await supabaseClient.auth.signOut();window.location.replace("./signin.html");return}
+const {data,error}=await supabaseClient.from("store_contact_settings").select("*").eq("id",1).maybeSingle();if(error)throw error;
+if(data)fields.forEach(field=>document.getElementById(field).value=data[field]||"");
+saveButton.disabled=false;setMessage("Admin access verified. You can edit and save these details.")
+}catch(error){setMessage("Could not load contact settings: "+error.message)}}
+form.addEventListener("submit",async event=>{event.preventDefault();saveButton.disabled=true;try{
+const payload={id:1};fields.forEach(field=>payload[field]=document.getElementById(field).value.trim());
+const {error}=await supabaseClient.from("store_contact_settings").upsert(payload,{onConflict:"id"});if(error)throw error;
+setMessage("Contact details saved successfully.")
+}catch(error){setMessage("Save failed: "+error.message)}finally{saveButton.disabled=false}});
+init()})();
+</script>
+</body>
+</html>
