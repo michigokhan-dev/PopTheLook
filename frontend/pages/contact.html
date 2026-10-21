@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | POP THE LOOK</title>
+  <meta name="description" content="Contact POP THE LOOK customer service and find our returns information.">
+  <style>
+    :root {
+      --ink: #211e19;
+      --muted: #796b58;
+      --line: #ded5c7;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--white);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.7;
+    }
+
+    .topbar {
+      padding: 24px 6%;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .back-link {
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 13px;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    main {
+      width: min(900px, 88%);
+      margin: 60px auto 80px;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(36px, 6vw, 54px);
+      font-weight: 400;
+      letter-spacing: -1px;
+    }
+
+    .intro {
+      margin: 0 0 38px;
+      color: var(--muted);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .info-card {
+      border: 1px solid var(--line);
+      padding: 24px;
+      min-width: 0;
+    }
+
+    .info-card h2 {
+      margin: 0 0 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 23px;
+      font-weight: 400;
+    }
+
+    .info-card p {
+      margin: 5px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .info-card a {
+      color: var(--ink);
+      text-underline-offset: 3px;
+    }
+
+    .wide {
+      grid-column: 1 / -1;
+    }
+
+    #loading-message {
+      color: var(--muted);
+    }
+
+    #error-message {
+      display: none;
+      color: #8b2e2e;
+    }
+
+    footer {
+      padding: 24px 6%;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      main {
+        margin-top: 38px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .wide {
+        grid-column: auto;
+      }
+
+      .info-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="back-link" href="../../index.html">← Back to Home</a>
+  </header>
+
+  <main>
+    <h1>Contact Us</h1>
+    <p class="intro">We’re here to help. Find our customer service and returns information below.</p>
+
+    <p id="loading-message">Loading contact details…</p>
+    <p id="error-message">Contact details could not be loaded right now. Please try again later.</p>
+
+    <div class="contact-grid" id="contact-details" hidden>
+      <section class="info-card">
+        <h2>Customer Service</h2>
+        <p id="phone-row" hidden><strong>Phone:</strong> <a id="phone-value"></a></p>
+        <p id="email-row" hidden><strong>Email:</strong> <a id="email-value"></a></p>
+        <p id="hours-row" hidden><strong>Working hours:</strong> <span id="hours-value"></span></p>
+      </section>
+
+      <section class="info-card">
+        <h2>Office Address</h2>
+        <p id="office-value">Not provided</p>
+      </section>
+
+      <section class="info-card wide">
+        <h2>Returns</h2>
+        <p id="return-address-row" hidden><strong>Return address:</strong> <span id="return-address-value"></span></p>
+        <p id="return-instructions-value"></p>
+      </section>
+    </div>
+  </main>
+
+  <footer>© <span id="year"></span> POP THE LOOK</footer>
+
+  <script src="../scripts/supabase.js"></script>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function showTextRow(rowId, valueId, value) {
+      const row = document.getElementById(rowId);
+      const target = document.getElementById(valueId);
+      const cleanValue = (value || "").trim();
+
+      if (cleanValue) {
+        target.textContent = cleanValue;
+        row.hidden = false;
+      }
+    }
+
+    async function loadContactDetails() {
+      const loading = document.getElementById("loading-message");
+      const error = document.getElementById("error-message");
+
+      try {
+        if (typeof supabaseClient === "undefined") {
+          throw new Error("Supabase client was not initialized.");
+        }
+
+        const { data, error: queryError } = await supabaseClient
+          .from("store_contact_settings")
+          .select("phone, email, hours, office_address, return_address, return_instructions")
+          .eq("id", 1)
+          .maybeSingle();
+
+        if (queryError) throw queryError;
+        if (!data) throw new Error("Contact settings were not found.");
+
+        showTextRow("phone-row", "phone-value", data.phone);
+        const phone = (data.phone || "").trim();
+        if (phone) {
+          const phoneLink = document.getElementById("phone-value");
+          phoneLink.href = "tel:" + phone.replace(/[^\d+]/g, "");
+        }
+
+        showTextRow("email-row", "email-value", data.email);
+        const email = (data.email || "").trim();
+        if (email) {
+          document.getElementById("email-value").href = "mailto:" + email;
+        }
+
+        showTextRow("hours-row", "hours-value", data.hours);
+
+        const officeAddress = (data.office_address || "").trim();
+        document.getElementById("office-value").textContent = officeAddress || "Not provided";
+
+        const returnAddress = (data.return_address || "").trim();
+        if (returnAddress) {
+          document.getElementById("return-address-value").textContent = returnAddress;
+          document.getElementById("return-address-row").hidden = false;
+        }
+
+        document.getElementById("return-instructions-value").textContent =
+          (data.return_instructions || "").trim();
+
+        document.getElementById("contact-details").hidden = false;
+        loading.hidden = true;
+      } catch (err) {
+        console.error("Could not load contact settings:", err);
+        loading.hidden = true;
+        error.style.display = "block";
+      }
+    }
+
+    loadContactDetails();
+  </script>
+</body>
+</html>
