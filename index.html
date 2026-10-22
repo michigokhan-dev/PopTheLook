@@ -1155,41 +1155,64 @@ window.addEventListener("storage", updateCartCount);
   const close = document.getElementById("michi-close");
   const form = document.getElementById("michi-form");
   const input = document.getElementById("michi-input");
+
   if (!toggle || !chat) return;
 
   function setChat(open) {
     chat.hidden = !open;
     toggle.setAttribute("aria-expanded", String(open));
+
     if (open) {
       toggle.classList.add("michi-paused");
-      input?.focus();
     } else {
       toggle.classList.remove("michi-paused");
     }
   }
-  toggle.addEventListener("click", () => setChat(chat.hidden));
-  close?.addEventListener("click", () => setChat(false));
 
+  // Michi'ye dokununca popup açılır; klavye otomatik açılmaz.
+  toggle.addEventListener("click", () => {
+    setChat(chat.hidden);
+  });
+
+  // Kapatma düğmesi
+  close?.addEventListener("click", () => {
+    setChat(false);
+  });
+
+  // Mesaj ve önizleme cevabı
   function showPreviewReply(text) {
     const body = chat.querySelector(".michi-chat-body");
+    if (!body) return;
+
     const customer = document.createElement("p");
     customer.className = "michi-message michi-message-user";
     customer.textContent = text;
+
     const reply = document.createElement("p");
     reply.className = "michi-message";
-    reply.textContent = "Thanks for asking! My live AI replies are coming soon. For now, please use the Contact page for help. 🐾";
+    reply.textContent =
+      "Thanks for asking! My live AI replies are coming soon. For now, please use the Contact page for help. 🐾";
+
     body.append(customer, reply);
     body.scrollTop = body.scrollHeight;
   }
+
+  // Mesaj gönderme
   form?.addEventListener("submit", event => {
     event.preventDefault();
-    const value = input.value.trim();
+
+    const value = input?.value.trim();
     if (!value) return;
+
     showPreviewReply(value);
     input.value = "";
   });
+
+  // Hazır soru düğmeleri
   chat.querySelectorAll("[data-michi-prompt]").forEach(button => {
-    button.addEventListener("click", () => showPreviewReply(button.dataset.michiPrompt));
+    button.addEventListener("click", () => {
+      showPreviewReply(button.dataset.michiPrompt);
+    });
   });
 })();
 </script>
