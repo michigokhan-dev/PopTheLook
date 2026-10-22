@@ -567,3 +567,121 @@
   background-color: #ffffff !important;
 }
 
+
+/* MICHI — floating mascot preview */
+#michi-widget {
+  position: fixed;
+  right: max(18px, env(safe-area-inset-right));
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 9990;
+  font-family: "DM Sans", Arial, sans-serif;
+}
+.michi-toggle {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  width: 76px;
+  height: 82px;
+  padding: 5px 7px 7px;
+  border: 1px solid #eee5dc;
+  border-radius: 24px;
+  background: #fff;
+  color: #211e19;
+  box-shadow: 0 7px 24px rgba(33,30,25,.16);
+  cursor: pointer;
+  animation: michi-wander 5.5s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+}
+.michi-cat { font-size: 39px; line-height: 1.05; filter: drop-shadow(0 2px 1px rgba(0,0,0,.08)); }
+.michi-name { font-size: 11px; font-weight: 600; letter-spacing: .2px; }
+.michi-sparkle {
+  position: absolute; top: 3px; right: 7px;
+  color: #b28a55; font-size: 14px;
+  animation: michi-twinkle 1.8s ease-in-out infinite;
+}
+.michi-toggle:hover { box-shadow: 0 10px 28px rgba(33,30,25,.22); }
+.michi-toggle.michi-paused { animation: none; }
+.michi-chat {
+  position: absolute;
+  right: 0;
+  bottom: 94px;
+  width: min(350px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid #ece7e1;
+  border-radius: 18px;
+  background: #fff;
+  color: #211e19;
+  box-shadow: 0 14px 45px rgba(33,30,25,.18);
+}
+.michi-chat[hidden] { display: none !important; }
+.michi-chat-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 15px; border-bottom: 1px solid #eee;
+}
+.michi-avatar {
+  display: grid; place-items: center; flex: 0 0 42px;
+  width: 42px; height: 42px; border-radius: 50%;
+  background: #f7f3ef; font-size: 26px;
+}
+.michi-chat-header strong { display: block; font-size: 14px; }
+.michi-chat-header small { display: block; margin-top: 3px; color: #777; font-size: 11px; }
+#michi-close {
+  margin-left: auto; border: 0; background: transparent;
+  color: #211e19; font-size: 25px; cursor: pointer;
+}
+.michi-chat-body {
+  max-height: 245px; overflow-y: auto; padding: 15px;
+  font-size: 13px; line-height: 1.5;
+}
+.michi-message {
+  width: fit-content; max-width: 95%; margin: 0 0 9px;
+  padding: 10px 12px; border-radius: 14px 14px 14px 4px;
+  background: #f5f5f4;
+}
+.michi-message-user {
+  margin-left: auto; background: #211e19; color: #fff;
+  border-radius: 14px 14px 4px 14px;
+}
+.michi-preview-note { color: #777; font-size: 11px; }
+.michi-chat-shortcuts {
+  display: flex; flex-wrap: wrap; gap: 6px; padding: 0 13px 12px;
+}
+.michi-chat-shortcuts button {
+  padding: 8px 10px; border: 1px solid #e4dfd9; border-radius: 18px;
+  background: #fff; color: #211e19; font: inherit; font-size: 11px; cursor: pointer;
+}
+.michi-chat-input {
+  display: flex; gap: 8px; padding: 11px;
+  border-top: 1px solid #eee;
+}
+.michi-chat-input input {
+  min-width: 0; flex: 1; height: 40px; padding: 0 12px;
+  border: 1px solid #e2ded9; border-radius: 22px;
+  background: #fff; color: #211e19; font: inherit; font-size: 13px;
+}
+.michi-chat-input button {
+  width: 40px; height: 40px; border: 0; border-radius: 50%;
+  background: #211e19; color: #fff; font-size: 18px; cursor: pointer;
+}
+@keyframes michi-wander {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  22% { transform: translate(-9px, -7px) rotate(-3deg); }
+  48% { transform: translate(-3px, 2px) rotate(2deg); }
+  72% { transform: translate(7px, -5px) rotate(0); }
+}
+@keyframes michi-twinkle {
+  0%, 100% { transform: scale(1) rotate(0); opacity: .75; }
+  50% { transform: scale(1.25) rotate(12deg); opacity: 1; }
+}
+@media (max-width: 480px) {
+  #michi-widget { right: max(12px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); }
+  .michi-toggle { width: 66px; height: 72px; border-radius: 21px; }
+  .michi-cat { font-size: 33px; }
+  .michi-chat { bottom: 82px; width: min(350px, calc(100vw - 24px)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .michi-toggle, .michi-sparkle { animation: none !important; }
+}
