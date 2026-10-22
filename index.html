@@ -1120,5 +1120,81 @@ window.addEventListener("storage", updateCartCount);
   });
   
 </script>
+
+<!-- Michi AI mascot preview -->
+<div id="michi-widget" aria-label="Michi, POP THE LOOK assistant">
+  <section id="michi-chat" class="michi-chat" role="dialog" aria-label="Chat with Michi" hidden>
+    <div class="michi-chat-header">
+      <span class="michi-avatar" aria-hidden="true">🐱</span>
+      <div><strong>Michi</strong><small>POP THE LOOK assistant</small></div>
+      <button type="button" id="michi-close" aria-label="Close Michi chat">×</button>
+    </div>
+    <div class="michi-chat-body">
+      <p class="michi-message">Hi! I'm Michi 🐾</p>
+      <p class="michi-message">I’m still learning, but I’ll soon help you find outfits, discover products and answer delivery or returns questions.</p>
+      <p class="michi-preview-note">Chat replies will be connected in a later update.</p>
+    </div>
+    <div class="michi-chat-shortcuts">
+      <button type="button" data-michi-prompt="Help me find an outfit">Find an outfit</button>
+      <button type="button" data-michi-prompt="I have a question about delivery">Delivery help</button>
+      <button type="button" data-michi-prompt="I have a question about returns">Returns</button>
+    </div>
+    <form id="michi-form" class="michi-chat-input">
+      <input id="michi-input" type="text" placeholder="Say hello to Michi..." aria-label="Message Michi">
+      <button type="submit" aria-label="Send message">➤</button>
+    </form>
+  </section>
+  <button type="button" id="michi-toggle" class="michi-toggle" aria-label="Chat with Michi" aria-expanded="false">
+    <span class="michi-cat" aria-hidden="true">🐱</span>
+    <span class="michi-name">Michi</span>
+    <span class="michi-sparkle" aria-hidden="true">✦</span>
+  </button>
+</div>
+<script>
+(() => {
+  const toggle = document.getElementById("michi-toggle");
+  const chat = document.getElementById("michi-chat");
+  const close = document.getElementById("michi-close");
+  const form = document.getElementById("michi-form");
+  const input = document.getElementById("michi-input");
+  if (!toggle || !chat) return;
+
+  function setChat(open) {
+    chat.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+    if (open) {
+      toggle.classList.add("michi-paused");
+      input?.focus();
+    } else {
+      toggle.classList.remove("michi-paused");
+    }
+  }
+  toggle.addEventListener("click", () => setChat(chat.hidden));
+  close?.addEventListener("click", () => setChat(false));
+
+  function showPreviewReply(text) {
+    const body = chat.querySelector(".michi-chat-body");
+    const customer = document.createElement("p");
+    customer.className = "michi-message michi-message-user";
+    customer.textContent = text;
+    const reply = document.createElement("p");
+    reply.className = "michi-message";
+    reply.textContent = "Thanks for asking! My live AI replies are coming soon. For now, please use the Contact page for help. 🐾";
+    body.append(customer, reply);
+    body.scrollTop = body.scrollHeight;
+  }
+  form?.addEventListener("submit", event => {
+    event.preventDefault();
+    const value = input.value.trim();
+    if (!value) return;
+    showPreviewReply(value);
+    input.value = "";
+  });
+  chat.querySelectorAll("[data-michi-prompt]").forEach(button => {
+    button.addEventListener("click", () => showPreviewReply(button.dataset.michiPrompt));
+  });
+})();
+</script>
+
 </body>
 </html>
