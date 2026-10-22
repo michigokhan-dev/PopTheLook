@@ -679,3 +679,77 @@
 @media (prefers-reduced-motion: reduce) {
   .michi-toggle, .michi-sparkle { animation: none !important; }
 }
+
+
+/* MICHI — FIX TRANSPARENT MASCOT AND MOBILE CHAT POPUP */
+#michi-widget {
+  position: fixed !important;
+  right: 12px !important;
+  bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+  z-index: 9990 !important;
+  width: auto !important;
+  max-width: calc(100vw - 24px) !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.michi-toggle {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+  touch-action: manipulation;
+}
+
+.michi-toggle:hover,
+.michi-toggle:focus,
+.michi-toggle:active {
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.michi-mascot-image {
+  display: block;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.michi-chat {
+  position: fixed !important;
+  right: 12px !important;
+  bottom: calc(125px + env(safe-area-inset-bottom)) !important;
+  top: auto !important;
+  left: auto !important;
+  width: min(360px, calc(100vw - 24px)) !important;
+  max-height: min(70dvh, 560px) !important;
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  border-radius: 20px !important;
+  background: #fff !important;
+  box-shadow: 0 8px 30px rgba(0,0,0,.16) !important;
+}
+
+.michi-chat[hidden] {
+  display: none !important;
+}
+
+.michi-chat-input input {
+  font-size: 16px !important;
+}
+
+@media (max-width: 480px) {
+  .michi-chat {
+    right: 12px !important;
+    bottom: calc(118px + env(safe-area-inset-bottom)) !important;
+    width: calc(100vw - 24px) !important;
+    max-height: 65dvh !important;
+  }
+
+  .michi-toggle:hover {
+    box-shadow: none !important;
+  }
+}
