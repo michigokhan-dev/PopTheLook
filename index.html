@@ -1055,8 +1055,8 @@ function updateCartCount() {
 updateCartCount();
 window.addEventListener("storage", updateCartCount);
 
-  /* Newsletter popup: ana sayfa açıldıktan 5 saniye sonra gösterilir.
-     Abonelik henüz kaydedilmez; backend aşamasında bağlanacak. */
+  /* Newsletter popup: ana sayfada oturum başına bir kez, 1 saniye sonra gösterilir.
+     Abonelik ve unsubscribe işlemleri backend aşamasında bağlanacaktır. */
   const newsletterOverlay = document.getElementById("newsletter-popup-overlay");
   const newsletterForm = document.getElementById("newsletter-popup-form");
   const newsletterEmail = document.getElementById("newsletter-popup-email");
@@ -1065,6 +1065,7 @@ window.addEventListener("storage", updateCartCount);
   const newsletterWhatsappConsent = document.getElementById("newsletter-popup-whatsapp-consent");
   const newsletterNote = document.getElementById("newsletter-popup-note");
   const newsletterPopupKey = "popTheLookNewsletterPopupDismissed";
+  const newsletterPopupShownKey = "popTheLookNewsletterPopupShownThisSession";
 
   function closeNewsletterPopup() {
     newsletterOverlay.hidden = true;
@@ -1082,9 +1083,23 @@ window.addEventListener("storage", updateCartCount);
   .getElementById("footer-subscribe-button")
   ?.addEventListener("click", openNewsletterPopup);
 
-  window.setTimeout(() => {
-    if (newsletterOverlay) openNewsletterPopup();
-  }, 5000);
+  // Sayfa gezinmesi veya yenileme popup'ı aynı oturumda tekrar açmasın.
+  // Kullanıcı daha önce kapattıysa da otomatik olarak tekrar gösterme.
+  try {
+    if (
+      newsletterOverlay &&
+      localStorage.getItem(newsletterPopupKey) !== "yes" &&
+      sessionStorage.getItem(newsletterPopupShownKey) !== "yes"
+    ) {
+      sessionStorage.setItem(newsletterPopupShownKey, "yes");
+      window.setTimeout(() => {
+        if (newsletterOverlay) openNewsletterPopup();
+      }, 1000);
+    }
+  } catch {
+    // Depolama kapalıysa popup yine de bu sayfa yüklemesinde bir kez gösterilir.
+    if (newsletterOverlay) window.setTimeout(openNewsletterPopup, 1000);
+  }
 
   document.getElementById("newsletter-popup-close")?.addEventListener("click", closeNewsletterPopup);
   document.getElementById("newsletter-popup-no-thanks")?.addEventListener("click", closeNewsletterPopup);
@@ -1155,64 +1170,41 @@ window.addEventListener("storage", updateCartCount);
   const close = document.getElementById("michi-close");
   const form = document.getElementById("michi-form");
   const input = document.getElementById("michi-input");
-
   if (!toggle || !chat) return;
 
   function setChat(open) {
     chat.hidden = !open;
     toggle.setAttribute("aria-expanded", String(open));
-
     if (open) {
       toggle.classList.add("michi-paused");
+      input?.focus();
     } else {
       toggle.classList.remove("michi-paused");
     }
   }
+  toggle.addEventListener("click", () => setChat(chat.hidden));
+  close?.addEventListener("click", () => setChat(false));
 
-  // Michi'ye dokununca popup açılır; klavye otomatik açılmaz.
-  toggle.addEventListener("click", () => {
-    setChat(chat.hidden);
-  });
-
-  // Kapatma düğmesi
-  close?.addEventListener("click", () => {
-    setChat(false);
-  });
-
-  // Mesaj ve önizleme cevabı
   function showPreviewReply(text) {
     const body = chat.querySelector(".michi-chat-body");
-    if (!body) return;
-
     const customer = document.createElement("p");
     customer.className = "michi-message michi-message-user";
     customer.textContent = text;
-
     const reply = document.createElement("p");
     reply.className = "michi-message";
-    reply.textContent =
-      "Thanks for asking! My live AI replies are coming soon. For now, please use the Contact page for help. 🐾";
-
+    reply.textContent = "Thanks for asking! My live AI replies are coming soon. For now, please use the Contact page for help. 🐾";
     body.append(customer, reply);
     body.scrollTop = body.scrollHeight;
   }
-
-  // Mesaj gönderme
   form?.addEventListener("submit", event => {
     event.preventDefault();
-
-    const value = input?.value.trim();
+    const value = input.value.trim();
     if (!value) return;
-
     showPreviewReply(value);
     input.value = "";
   });
-
-  // Hazır soru düğmeleri
   chat.querySelectorAll("[data-michi-prompt]").forEach(button => {
-    button.addEventListener("click", () => {
-      showPreviewReply(button.dataset.michiPrompt);
-    });
+    button.addEventListener("click", () => showPreviewReply(button.dataset.michiPrompt));
   });
 })();
 </script>
