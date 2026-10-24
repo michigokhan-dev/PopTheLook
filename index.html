@@ -258,7 +258,23 @@ body.newsletter-popup-open { overflow: hidden; }
   text-decoration: underline;
   cursor: pointer;
 }
-    
+    /* Michi AI — fixed bottom-right position */
+#michi-widget {
+  position: fixed !important;
+  left: auto !important;
+  right: 18px !important;
+  bottom: 18px !important;
+  top: auto !important;
+  z-index: 99999 !important;
+  transform: none !important;
+}
+
+@media (max-width: 480px) {
+  #michi-widget {
+    right: 12px !important;
+    bottom: 12px !important;
+  }
+}
   </style>
 </head>
 <body>
